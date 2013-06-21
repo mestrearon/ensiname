@@ -1,0 +1,27 @@
+{% for warning in app.session.flashbag.get('warning') %}
+<div class="alert">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	{{ warning }}
+</div>
+{% endfor %}
+
+{% for error in app.session.flashbag.get('error') %}
+<div class="alert alert-error">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	{{ error }}
+</div>
+{% endfor %}
+
+{% for success in app.session.flashbag.get('success') %}
+<div class="alert alert-success">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	{{ success }}
+</div>
+{% endfor %}
+
+{% for info in app.session.flashbag.get('info') %}
+<div class="alert alert-info">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	{{ info }}
+</div>
+{% endfor %}

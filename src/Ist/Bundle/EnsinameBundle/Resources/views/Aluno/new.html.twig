@@ -1,0 +1,71 @@
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
+
+{% block content %}
+<form action="{{ path('aluno_create') }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
+    {{ form_errors(form) }}
+    <fieldset>
+        <legend>novo aluno</legend>
+        <div class="control-group">
+            <label class="control-label" for="nome">nome</label>
+            <div class="controls">
+                {{ form_widget(form.nome) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="nascimento">nascimento</label>
+            <div class="controls">
+                {{ form_widget(form.nascimento) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="linguas">linguas</label>
+            <div class="controls">
+                {% for lingua in linguas %}
+                <label class="checkbox">
+                    <input type="checkbox" name="linguas[]" value="{{ lingua.id }}">
+                    {{ lingua.titulo }}
+                </label>
+                {% else %}
+                <p>nenhuma lingua cadastrada...</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="estudo">estudo</label>
+            <div class="controls">
+                {{ form_widget(form.estudo) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="fone">fone</label>
+            <div class="controls">
+                {{ form_widget(form.fone) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="email">email</label>
+            <div class="controls">
+                {{ form_widget(form.email) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="status">status</label>
+            <div class="controls">
+                {{ form_widget(form.status) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="observacao">observacao</label>
+            <div class="controls">
+                {{ form_widget(form.observacao) }}
+            </div>
+        </div>
+        {{ form_widget(form._token) }}
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">criar</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
+
+{% block content %}
+<p>
+    <a href="{{ path('aluno_new') }}" class="btn btn-primary">novo</a>
+    <span class="pull-right">
+        filtros:
+        <select id="estudo" class="input-small filtro">
+            <option>estudo</option>
+            <option>grupo</option>
+            <option>individual</option>
+        </select>
+        <select id="linguas" class="input-small filtro">
+            <option>linguas</option>
+            {% for lingua in linguas %}
+            <option>{{ lingua.titulo }}</option>
+            {% endfor %}
+        </select>
+        <select id="grupos" class="input-small muted filtro">
+            <option>grupos</option>
+        </select>
+        <select id="status" class="input-small filtro">
+            <option>status</option>
+            <option>ativo</option>
+            <option>pausa</option>
+            <option>desativo</option>
+        </select>
+    </span>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Nascimento</th>
+            <th>Fone</th>
+            <th>Email</th>
+            <th>Estudo</th>
+            <th>Linguas</th>
+            <th>Grupos</th>
+            <th>Status</th>
+            <th>Observacao</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.nome }}</td>
+            <td>{% if entity.nascimento %}{{ entity.nascimento|date('Y-m-d') }}{% endif %}</td>
+            <td>{{ entity.fone }}</td>
+            <td>{{ entity.email }}</td>
+            <td>{{ entity.estudo|replace({'g': 'grupo', 'i': 'individual'}) }}</td>
+            <td>{{ entity.linguas }}</td>
+            <td>-</td>
+            <td>{{ entity.status|replace({'a': 'ativo', 'p': 'pausa', 'd': 'desativo'}) }}</td>
+            <td>{{ entity.observacao }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $('.filtro').change(function(){
+        $('table tbody tr').each(function(){
+            $(this).show();
+        });
+        $('.filtro').each(function(){
+            if ($(this).attr('id') !== $(this).val()) {
+                var campo = $(this).attr('id');
+                var filtro = $(this).val();
+                var coluna = 1;
+                if (campo == 'estudo')
+                    coluna = 5;
+                if (campo == 'linguas')
+                    coluna = 6;
+                if (campo == 'grupos')
+                    coluna = 7;
+                if (campo == 'status')
+                    coluna = 8;
+                $('table tbody tr').each(function(){
+                    var linha = $(this);
+                    var celula = 1;
+                    linha.children().each(function(){
+                        if (celula == coluna){
+                            if ($(this).html().indexOf(filtro) < 0){
+                                linha.hide();
+                            }
+                        }
+                        celula++;
+                    });
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

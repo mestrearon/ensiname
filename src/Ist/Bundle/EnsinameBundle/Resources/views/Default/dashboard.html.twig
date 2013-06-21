@@ -1,0 +1,9 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+{{ include('IstEnsinameBundle:Default:nav.html.twig') }}
+<div class="container">
+	{{ include('IstEnsinameBundle:Default:alert.html.twig') }}
+	{% block content %}{% endblock %}
+</div>
+{% endblock %}
