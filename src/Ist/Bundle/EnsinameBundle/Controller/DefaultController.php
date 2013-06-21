@@ -13,25 +13,9 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->redirect($this->generateUrl(true ? 'login' : 'dashboard')); //todo user check
-    }
-
-    /**
-     * @Route("/login", name="login")
-     * @Template()
-     */
-    public function loginAction()
-    {
-        return array();
-    }
-
-    /**
-     * @Route("/check", name="check")
-     * @Template()
-     */
-    public function checkAction()
-    {
-        return array();
+        return $this->redirect($this->generateUrl(
+            $this->get('security.context')->isGranted('ROLE_ADMIN') ?
+                'dashboard' : 'login'));
     }
 
     /**
@@ -40,6 +24,10 @@ class DefaultController extends Controller
      */
     public function dashboardAction()
     {
+
+        if (isset($_SERVER['HTTP_REFERER']) && substr($_SERVER['HTTP_REFERER'], -5) == 'login')
+            $this->get('session')->getFlashBag()->add('success', 'bem vindo, admin!');
+
         return array();
     }
 }

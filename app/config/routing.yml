@@ -1,5 +1,4 @@
 ist_ensiname:
     resource: "@IstEnsinameBundle/Controller/"
-    type:     annotation
-    prefix:   /
-
+    type: annotation
+    prefix: /
