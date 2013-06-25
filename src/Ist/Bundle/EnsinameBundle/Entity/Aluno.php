@@ -52,7 +52,7 @@ class Aluno
     /**
      * @var integer
      *
-     * @ORM\Column(name="fone", type="smallint")
+     * @ORM\Column(name="fone", type="string", length=65)
      */
     private $fone;
 
