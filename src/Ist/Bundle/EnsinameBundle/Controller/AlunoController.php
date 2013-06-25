@@ -64,10 +64,10 @@ class AlunoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'aluno cadastrado com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Студент успешно зарегистрирован!');
             return $this->redirect($this->generateUrl('aluno'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'falha ao cadastrar aluno! (dados inválidos)');
+            $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать студента!');
         }
 
         return array(

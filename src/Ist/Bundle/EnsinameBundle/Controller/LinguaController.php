@@ -54,11 +54,11 @@ class LinguaController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'língua cadastrada com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Язык успешно зарегистрирован!');
 
             return $this->redirect($this->generateUrl('lingua_new'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'falha ao cadastrar língua! (dados inválidos)');
+            $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать язык!');
         }
 
         return array(

@@ -27,7 +27,7 @@ class SecurityController extends Controller
         }
 
         if ($error)
-            $this->get('session')->getFlashBag()->add('error', 'falha no acesso!');
+            $this->get('session')->getFlashBag()->add('error', 'Не удается войти!');
 
         return array();
     }

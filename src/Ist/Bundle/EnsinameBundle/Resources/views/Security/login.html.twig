@@ -5,13 +5,13 @@
 <div class="container">
 	<div class="row">
 		<div class="span4 offset4 well">
-			<legend>acesso</legend>
+			<legend>Доступ</legend>
 			{{ include('IstEnsinameBundle:Default:alert.html.twig') }}
 			<form action="{{ path('login_check') }}" method="post" accept-charset="UTF-8">
 				<input type="hidden" name="_target_path" value="/dashboard" />
-				<input type="text" id="username" class="span4" name="_username" placeholder="login">
-				<input type="password" id="password" class="span4" name="_password" placeholder="senha">    
-				<button type="submit" name="submit" class="btn btn-info btn-block">entrar</button>
+				<input type="text" id="username" class="span4" name="_username" placeholder="Логин">
+				<input type="password" id="password" class="span4" name="_password" placeholder="Пароль">    
+				<button type="submit" name="submit" class="btn btn-info btn-block">Вход</button>
 			</form>    
 		</div>
 	</div>

@@ -4,21 +4,21 @@
 <form action="{{ path('aluno_create') }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
     {{ form_errors(form) }}
     <fieldset>
-        <legend>novo aluno</legend>
+        <legend>Добавить студента</legend>
         <div class="control-group">
-            <label class="control-label" for="nome">nome</label>
+            <label class="control-label" for="nome">ФИО</label>
             <div class="controls">
                 {{ form_widget(form.nome) }}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="nascimento">nascimento</label>
+            <label class="control-label" for="nascimento">дата рождения</label>
             <div class="controls">
                 {{ form_widget(form.nascimento) }}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="linguas">linguas</label>
+            <label class="control-label" for="linguas">изучаемый язык</label>
             <div class="controls">
                 {% for lingua in linguas %}
                 <label class="checkbox">
@@ -31,13 +31,13 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="estudo">estudo</label>
+            <label class="control-label" for="estudo">форма обучения</label>
             <div class="controls">
                 {{ form_widget(form.estudo) }}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="fone">fone</label>
+            <label class="control-label" for="fone">телефон</label>
             <div class="controls">
                 {{ form_widget(form.fone) }}
             </div>
@@ -49,13 +49,13 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="status">status</label>
+            <label class="control-label" for="status">статус</label>
             <div class="controls">
                 {{ form_widget(form.status) }}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="observacao">observacao</label>
+            <label class="control-label" for="observacao">примечания</label>
             <div class="controls">
                 {{ form_widget(form.observacao) }}
             </div>

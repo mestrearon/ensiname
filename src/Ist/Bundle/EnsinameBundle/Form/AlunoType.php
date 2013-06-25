@@ -18,12 +18,12 @@ class AlunoType extends AbstractType
                 'format' => 'yyyy-MM-dd',))
             //->add('linguas')
             ->add('estudo', 'choice', array(
-                'choices' => array('g' => 'grupo', 'i' => 'individual'),
+                'choices' => array('g' => 'в группе', 'i' => 'индивидуально'),
                 'required' => true,))
             ->add('fone', 'text')
             ->add('email', 'email')
             ->add('status', 'choice', array(
-                'choices' => array('a' => 'ativo', 'p' => 'pausa', 'd' => 'desativo'),
+                'choices' => array('a' => 'активен', 'p' => 'пауза', 'd' => 'не активен'),
                 'required' => true,))
             ->add('observacao')
         ;

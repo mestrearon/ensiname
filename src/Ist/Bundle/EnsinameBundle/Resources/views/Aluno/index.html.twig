@@ -6,39 +6,39 @@
     <span class="pull-right">
         filtros:
         <select id="estudo" class="input-small filtro">
-            <option>estudo</option>
-            <option>grupo</option>
-            <option>individual</option>
+            <option>форма обучения</option>
+            <option value="grupo">в группе</option>
+            <option value="individual">индивидуально</option>
         </select>
         <select id="linguas" class="input-small filtro">
-            <option>linguas</option>
+            <option>языки</option>
             {% for lingua in linguas %}
             <option>{{ lingua.titulo }}</option>
             {% endfor %}
         </select>
         <select id="grupos" class="input-small muted filtro">
-            <option>grupos</option>
+            <option>группы</option>
         </select>
         <select id="status" class="input-small filtro">
-            <option>status</option>
-            <option>ativo</option>
-            <option>pausa</option>
-            <option>desativo</option>
+            <option>статус</option>
+            <option value="ativo">активен</option>
+            <option value="pausa">пауза</option>
+            <option value="desativo">не активен</option>
         </select>
     </span>
 </p>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>Nome</th>
-            <th>Nascimento</th>
-            <th>Fone</th>
+            <th>ФИО</th>
+            <th>дата рождения</th>
+            <th>телефон</th>
             <th>Email</th>
-            <th>Estudo</th>
-            <th>Linguas</th>
-            <th>Grupos</th>
-            <th>Status</th>
-            <th>Observacao</th>
+            <th>форма обучения</th>
+            <th>языки</th>
+            <th>группы</th>
+            <th>статус</th>
+            <th>примечания</th>
         </tr>
     </thead>
     <tbody>
