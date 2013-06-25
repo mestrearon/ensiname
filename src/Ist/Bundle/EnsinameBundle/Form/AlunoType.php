@@ -20,7 +20,7 @@ class AlunoType extends AbstractType
             ->add('estudo', 'choice', array(
                 'choices' => array('g' => 'grupo', 'i' => 'individual'),
                 'required' => true,))
-            ->add('fone')
+            ->add('fone', 'text')
             ->add('email', 'email')
             ->add('status', 'choice', array(
                 'choices' => array('a' => 'ativo', 'p' => 'pausa', 'd' => 'desativo'),
