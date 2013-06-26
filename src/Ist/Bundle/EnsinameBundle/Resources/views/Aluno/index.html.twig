@@ -6,24 +6,24 @@
     <span class="pull-right">
         filtros:
         <select id="estudo" class="input-small filtro">
-            <option>форма обучения</option>
-            <option value="grupo">в группе</option>
-            <option value="individual">индивидуально</option>
+            <option value="0">форма обучения</option>
+            <option>в группе</option>
+            <option>индивидуально</option>
         </select>
         <select id="linguas" class="input-small filtro">
-            <option>языки</option>
+            <option value="0">языки</option>
             {% for lingua in linguas %}
             <option>{{ lingua.titulo }}</option>
             {% endfor %}
         </select>
         <select id="grupos" class="input-small muted filtro">
-            <option>группы</option>
+            <option value="0">группы</option>
         </select>
         <select id="status" class="input-small filtro">
-            <option>статус</option>
-            <option value="ativo">активен</option>
-            <option value="pausa">пауза</option>
-            <option value="desativo">не активен</option>
+            <option value="0">статус</option>
+            <option>активен</option>
+            <option>пауза</option>
+            <option>не активен</option>
         </select>
     </span>
 </p>
@@ -48,10 +48,10 @@
             <td>{% if entity.nascimento %}{{ entity.nascimento|date('Y-m-d') }}{% endif %}</td>
             <td>{{ entity.fone }}</td>
             <td>{{ entity.email }}</td>
-            <td>{{ entity.estudo|replace({'g': 'grupo', 'i': 'individual'}) }}</td>
+            <td>{{ entity.estudo|replace({'g': 'в группе', 'i': 'индивидуально'}) }}</td>
             <td>{{ entity.linguas }}</td>
             <td>-</td>
-            <td>{{ entity.status|replace({'a': 'ativo', 'p': 'pausa', 'd': 'desativo'}) }}</td>
+            <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен'}) }}</td>
             <td>{{ entity.observacao }}</td>
         </tr>
     {% endfor %}
@@ -65,28 +65,21 @@
             $(this).show();
         });
         $('.filtro').each(function(){
-            if ($(this).attr('id') !== $(this).val()) {
-                var campo = $(this).attr('id');
-                var filtro = $(this).val();
-                var coluna = 1;
-                if (campo == 'estudo')
-                    coluna = 5;
-                if (campo == 'linguas')
-                    coluna = 6;
-                if (campo == 'grupos')
-                    coluna = 7;
-                if (campo == 'status')
-                    coluna = 8;
+            var filtro = $(this).attr('id');
+            var valor = $(this).val();
+            if (valor != '0') {
+                var coluna = (filtro == 'estudo') ? 5 : (
+                    (filtro == 'linguas') ? 6 : (
+                        (filtro == 'grupos') ? 7 : (
+                            (filtro == 'status') ? 8 : 0)));
                 $('table tbody tr').each(function(){
                     var linha = $(this);
-                    var celula = 1;
+                    var atual = 0;
                     linha.children().each(function(){
-                        if (celula == coluna){
-                            if ($(this).html().indexOf(filtro) < 0){
-                                linha.hide();
-                            }
+                        var celula = $(this).html();
+                        if ((coluna == ++atual) && (celula.indexOf(valor) < 0)){
+                            linha.hide();
                         }
-                        celula++;
                     });
                 });
             }
