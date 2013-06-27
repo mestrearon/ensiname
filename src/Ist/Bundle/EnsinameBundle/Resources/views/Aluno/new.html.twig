@@ -14,20 +14,13 @@
         <div class="control-group">
             <label class="control-label" for="nascimento">дата рождения</label>
             <div class="controls">
-                {{ form_widget(form.nascimento) }}
+                {{ form_widget(form.nascimento, {'attr': {'class': 'date'}}) }}
             </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="linguas">изучаемый язык</label>
             <div class="controls">
-                {% for lingua in linguas %}
-                <label class="checkbox">
-                    <input type="checkbox" name="linguas[]" value="{{ lingua.id }}">
-                    {{ lingua.titulo }}
-                </label>
-                {% else %}
-                <p>nenhuma lingua cadastrada...</p>
-                {% endfor %}
+                {{ form_widget(form.linguas) }}
             </div>
         </div>
         <div class="control-group">
@@ -68,4 +61,11 @@
         </div>
     </fieldset>
 </form>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript" src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js">
+</script>
+<script type="text/javascript">
+    $('.date').mask('11/11/1111');
+</script>
 {% endblock %}

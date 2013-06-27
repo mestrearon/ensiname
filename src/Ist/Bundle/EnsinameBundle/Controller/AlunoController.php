@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ist\Bundle\EnsinameBundle\Entity\Aluno;
+use Ist\Bundle\EnsinameBundle\Entity\Lingua;
 use Ist\Bundle\EnsinameBundle\Form\AlunoType;
 
 /**
@@ -28,9 +29,9 @@ class AlunoController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        //$entities = $em->getRepository('IstEnsinameBundle:Aluno')->findAll();
         $entities = $em->getRepository('IstEnsinameBundle:Aluno')->createQueryBuilder('a')->orderBy('a.nome', 'ASC')->getQuery()->getResult();
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+
         return array(
             'entities' => $entities,
             'linguas' => $linguas);
@@ -45,21 +46,40 @@ class AlunoController extends Controller
     public function createAction(Request $request)
     {
         $entity  = new Aluno();
-        $form = $this->createForm(new AlunoType(), $entity);
+        $form = $this->createForm(new AlunoType($this->getLinguas()), $entity);
         $form->bind($request);
 
-        if ($form->isValid()) {
-            //$nascimento = $request->request->get('nascimento', date('Y/m/d'));
-            //$entity->setNascimento($nascimento);
+        $isValid = true;
 
-            $em = $this->getDoctrine()->getManager();
-            foreach ($request->request->get('linguas', array()) as $lingua) {
-                $_lingua = $em->getRepository('IstEnsinameBundle:Lingua')->find($lingua);
-                $linguas[] = $_lingua->getTitulo();
+        $data = $request->request->get($form->getName());
+        if (isset($data['linguas'])) {
+            if (is_array($data['linguas'])) {
+                foreach ($data['linguas'] as $lingua_id) {
+                    $lingua = $this->getDoctrine()->getManager()->getRepository('IstEnsinameBundle:Lingua')->find($lingua_id);
+                    if ($lingua instanceof Lingua) {
+                        $linguas[] = $lingua->getTitulo();
+                    } else {
+                            #throw new \Exception('invalid data value 1');
+                        $isValid = false;
+                    }
+                }
+            } else {
+                    #throw new \Exception('invalid data type 1');
+                $isValid = false;
             }
-            $linguas = isset($linguas) ? implode(", ", $linguas) : '-';
-            $entity->setLinguas($linguas);
+            $entity->setLinguas(implode(',', $linguas));
+        }
 
+        if (isset($data['nascimento'])) {
+            if (preg_match('/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $data['nascimento'], $matches)) {
+                $entity->setNascimento($matches[1] .'/'. $matches[2] .'/'. $matches[3]);
+            } else {
+                    #throw new \Exception('invalid data value 2');
+                $isValid = false;
+            }
+        }
+
+        if ($form->isValid() && $isValid) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -76,6 +96,14 @@ class AlunoController extends Controller
         );
     }
 
+    private function getLinguas() {
+        $em = $this->getDoctrine()->getManager();
+        $items = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+        foreach ($items as $item)
+            $linguas[$item->getId()] = $item->getTitulo();
+        return $linguas;
+    }
+
     /**
      * Displays a form to create a new Aluno entity.
      *
@@ -86,7 +114,7 @@ class AlunoController extends Controller
     public function newAction()
     {
         $entity = new Aluno();
-        $form   = $this->createForm(new AlunoType(), $entity);
+        $form   = $this->createForm(new AlunoType($this->getLinguas()), $entity);
 
         $em = $this->getDoctrine()->getManager();
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
@@ -140,7 +168,7 @@ class AlunoController extends Controller
             throw $this->createNotFoundException('Unable to find Aluno entity.');
         }
 
-        $editForm = $this->createForm(new AlunoType(), $entity);
+        $editForm = $this->createForm(new AlunoType($this->getLinguas()), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -168,7 +196,7 @@ class AlunoController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new AlunoType(), $entity);
+        $editForm = $this->createForm(new AlunoType($this->getLinguas()), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {

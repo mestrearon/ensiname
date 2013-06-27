@@ -31,14 +31,14 @@ class Aluno
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nascimento", type="date")
+     * @ORM\Column(name="nascimento", type="string", length=255)
      */
     private $nascimento;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="linguas", type="text")
+     * @ORM\Column(name="linguas", type="text", nullable=true)
      */
     private $linguas;
 
@@ -52,7 +52,7 @@ class Aluno
     /**
      * @var integer
      *
-     * @ORM\Column(name="fone", type="string", length=65)
+     * @ORM\Column(name="fone", type="string", length=255)
      */
     private $fone;
 
@@ -76,7 +76,6 @@ class Aluno
      * @ORM\Column(name="observacao", type="text", nullable=true)
      */
     private $observacao;
-
 
     /**
      * Get id
@@ -114,7 +113,7 @@ class Aluno
     /**
      * Set nascimento
      *
-     * @param \DateTime $nascimento
+     * @param string $nascimento
      * @return Aluno
      */
     public function setNascimento($nascimento)
@@ -127,7 +126,7 @@ class Aluno
     /**
      * Get nascimento
      *
-     * @return \DateTime 
+     * @return string 
      */
     public function getNascimento()
     {
@@ -183,7 +182,7 @@ class Aluno
     /**
      * Set fone
      *
-     * @param integer $fone
+     * @param string $fone
      * @return Aluno
      */
     public function setFone($fone)
@@ -196,7 +195,7 @@ class Aluno
     /**
      * Get fone
      *
-     * @return integer 
+     * @return string 
      */
     public function getFone()
     {

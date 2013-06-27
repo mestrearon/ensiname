@@ -8,15 +8,22 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AlunoType extends AbstractType
 {
+    public $linguas;
+
+    public function __construct(array $linguas) {
+        $this->linguas = $linguas;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('nome')
-            ->add('nascimento', 'birthday', array(
-                'widget' => 'single_text',
-                'input' => 'datetime',
-                'format' => 'yyyy-MM-dd',))
-            //->add('linguas')
+            ->add('nascimento', 'text')
+            ->add('linguas', 'choice', array(
+                'choices'   => $this->linguas,
+                'multiple'  => true,
+                'expanded'  => true,
+            ))
             ->add('estudo', 'choice', array(
                 'choices' => array('g' => 'в группе', 'i' => 'индивидуально'),
                 'required' => true,))
