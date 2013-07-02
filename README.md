@@ -51,5 +51,5 @@ For more information visit [the Symfony site][13]
 [9]: http://symfony.com/doc/current/cookbook/deployment-tools.html#c-clear-your-symfony-cache
 [10]: https://github.com/willystadnick/ensiname/blob/master/app/config/parameters.yml.dist
 [11]: http://symfony.com/doc/current/book/doctrine.html#console-commands
-[12]: http://bit.ly/11VQuQI
+[12]: http://bit.ly/160DRl7
 [13]: http://symfony.com/
