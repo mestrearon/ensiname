@@ -2,25 +2,25 @@
 
 ## 1. Configure the server
 
-  a. Upload the code ([ZIP][1], [HTTPS][2] or [GIT][3]) to the destination folder on the server
+  1. Upload the code ([ZIP][1], [HTTPS][2] or [GIT][3]) to the destination folder on the server;
 
-  b. Point [the document root][4] to [the web directory][5]
+  2. Point [the document root][4] to [the web directory][5];
 
-  c. Adhere to [the requirements][6]
+  3. Adhere to [the requirements][6].
 
 ## 2. Configure the application
 
-  a. Dump [the assets][7]
+  1. Dump [the assets][7];
 
-  b. Update [the vendors][8]
+  2. Update [the vendors][8];
 
-  c. Clear [the cache][9]
+  3. Clear [the cache][9].
 
 ## 3. Configure the database
 
-  a. Create and/or edit [app/config/parameters.yml][10] file
+  1. Create and/or edit [app/config/parameters.yml][10] file;
 
-  b. Create and/or update [the database][11]
+  2. Create and/or update [the database][11]:
 
     ```
     # create
@@ -32,13 +32,13 @@
 
 ## 4. Publish the application
 
-  a. Execute the adminstrative tasks to publish the application and apply the desired domain, based on [the server specifications][http://bit.ly/11VQuQI]
+  1. Execute the adminstrative tasks to publish the application and apply the desired domain, based on [the server specifications][12].
 
 ## 5. Test the application
 
-  a. Visit the published domain with your prefered device
+  1. Visit the published domain with your prefered device.
 
-For more information visit [the Symfony site][12]
+For more information visit [the Symfony site][13]
 
 [1]: https://github.com/willystadnick/ensiname/archive/master.zip
 [2]: https://github.com/willystadnick/ensiname.git
@@ -51,4 +51,5 @@ For more information visit [the Symfony site][12]
 [9]: http://symfony.com/doc/current/cookbook/deployment-tools.html#c-clear-your-symfony-cache
 [10]: https://github.com/willystadnick/ensiname/blob/master/app/config/parameters.yml.dist
 [11]: http://symfony.com/doc/current/book/doctrine.html#console-commands
-[12]: http://symfony.com/
+[12]: http://bit.ly/11VQuQI
+[13]: http://symfony.com/
