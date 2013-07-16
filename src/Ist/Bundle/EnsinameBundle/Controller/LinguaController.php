@@ -50,13 +50,18 @@ class LinguaController extends Controller
         $form->bind($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($entity);
-            $em->flush();
+            try {
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($entity);
+                $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Язык успешно зарегистрирован!');
+                $this->get('session')->getFlashBag()->add('success', 'Язык успешно зарегистрирован!');
 
-            return $this->redirect($this->generateUrl('lingua_new'));
+                return $this->redirect($this->generateUrl('lingua_new'));
+            }
+            catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'Não é possível cadastrar língua duplicada!');
+            }
         } else {
             $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать язык!');
         }

@@ -24,7 +24,7 @@ class Lingua
     /**
      * @var string
      *
-     * @ORM\Column(name="titulo", type="string", length=255)
+     * @ORM\Column(name="titulo", type="string", length=255, unique=true)
      */
     private $titulo;
 
