@@ -55,15 +55,15 @@ class LinguaController extends Controller
                 $em->persist($entity);
                 $em->flush();
 
-                $this->get('session')->getFlashBag()->add('success', 'Язык успешно зарегистрирован!');
+                $this->get('session')->getFlashBag()->add('success', 'Язык успешно зарегистрирован');
 
                 return $this->redirect($this->generateUrl('lingua_new'));
             }
             catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', 'Não é possível cadastrar língua duplicada!');
+                $this->get('session')->getFlashBag()->add('error', 'Язык уже существует');
             }
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать язык!');
+            $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать язык');
         }
 
         return array(
