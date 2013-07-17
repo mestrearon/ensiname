@@ -1,0 +1,54 @@
+<form action="{{ action }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
+    <input type="hidden" name="_method" value="{{ method }}" />
+    <fieldset>
+        <legend>{{ legend }}</legend>
+        <div class="control-group">
+            <label class="control-label" for="nome">ФИО</label>
+            <div class="controls">
+                {{ form_widget(form.nome) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="nascimento">дата рождения</label>
+            <div class="controls">
+                {{ form_widget(form.nascimento, {'attr': {'class': 'date'}}) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="linguas">изучаемый язык</label>
+            <div class="controls">
+                {{ form_widget(form.linguas) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="fone">телефон</label>
+            <div class="controls">
+                {{ form_widget(form.fone) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="email">email</label>
+            <div class="controls">
+                {{ form_widget(form.email) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="horario">horario</label>
+            <div class="controls">
+                {{ form_widget(form.horario) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="observacao">примечания</label>
+            <div class="controls">
+                {{ form_widget(form.observacao) }}
+            </div>
+        </div>
+        {{ form_widget(form._token) }}
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Добавить</button>
+            </div>
+        </div>
+    </fieldset>
+</form>

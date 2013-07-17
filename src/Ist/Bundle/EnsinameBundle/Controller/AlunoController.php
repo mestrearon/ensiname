@@ -66,19 +66,18 @@ class AlunoController extends Controller
         $form = $this->createForm(new AlunoType($linguas), $entity);
         $form->bind($request);
 
-        $isValid = true;
-
         $post = $request->request->get($form->getName());
         if (isset($post['linguas']))
             foreach ($post['linguas'] as &$lingua)
                 $lingua = $linguas[(int) $lingua]->getId();
         $entity->setLinguas(implode(',', isset($post['linguas']) ? $post['linguas'] : array()));
+        
+        $isValid = true;
 
-        if (isset($data['nascimento'])) {
-            if (preg_match('/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $data['nascimento'], $matches)) {
+        if (isset($post['nascimento'])) {
+            if (preg_match('/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $post['nascimento'], $matches)) {
                 $entity->setNascimento($matches[1] .'/'. $matches[2] .'/'. $matches[3]);
             } else {
-                    #throw new \Exception('invalid data value 2');
                 $isValid = false;
             }
         }
@@ -89,6 +88,7 @@ class AlunoController extends Controller
             $em->flush();
 
             $this->get('session')->getFlashBag()->add('success', 'Студент успешно зарегистрирован!');
+
             return $this->redirect($this->generateUrl('aluno'));
         } else {
             $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать студента!');
