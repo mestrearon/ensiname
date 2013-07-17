@@ -32,10 +32,23 @@ class AlunoController extends Controller
         $entities = $em->getRepository('IstEnsinameBundle:Aluno')->createQueryBuilder('a')->orderBy('a.nome', 'ASC')->getQuery()->getResult();
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
 
+        if (!empty($entities))
+            foreach ($entities as &$entity) {
+                foreach (explode(',', $entity->getLinguas()) as $lingua_ent)
+                    if (!empty($lingua_ent) &&!empty($linguas))
+                        foreach ($linguas as $lingua)
+                            if ($lingua_ent == $lingua->getId())
+                                $lingua_new[] = $lingua->getTitulo();
+                $lingua_new = isset($lingua_new) ? $lingua_new : array();
+                $entity->setLinguas(implode(',', $lingua_new));
+                unset($lingua_new);
+            }
+
         return array(
             'entities' => $entities,
             'linguas' => $linguas);
     }
+
     /**
      * Creates a new Aluno entity.
      *
@@ -45,30 +58,21 @@ class AlunoController extends Controller
      */
     public function createAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+
         $entity  = new Aluno();
-        $form = $this->createForm(new AlunoType($this->getLinguas()), $entity);
+
+        $form = $this->createForm(new AlunoType($linguas), $entity);
         $form->bind($request);
 
         $isValid = true;
 
-        $data = $request->request->get($form->getName());
-        if (isset($data['linguas'])) {
-            if (is_array($data['linguas'])) {
-                foreach ($data['linguas'] as $lingua_id) {
-                    $lingua = $this->getDoctrine()->getManager()->getRepository('IstEnsinameBundle:Lingua')->find($lingua_id);
-                    if ($lingua instanceof Lingua) {
-                        $linguas[] = $lingua->getTitulo();
-                    } else {
-                            #throw new \Exception('invalid data value 1');
-                        $isValid = false;
-                    }
-                }
-            } else {
-                    #throw new \Exception('invalid data type 1');
-                $isValid = false;
-            }
-            $entity->setLinguas(implode(',', $linguas));
-        }
+        $post = $request->request->get($form->getName());
+        if (isset($post['linguas']))
+            foreach ($post['linguas'] as &$lingua)
+                $lingua = $linguas[(int) $lingua]->getId();
+        $entity->setLinguas(implode(',', isset($post['linguas']) ? $post['linguas'] : array()));
 
         if (isset($data['nascimento'])) {
             if (preg_match('/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $data['nascimento'], $matches)) {
@@ -96,14 +100,6 @@ class AlunoController extends Controller
         );
     }
 
-    private function getLinguas() {
-        $em = $this->getDoctrine()->getManager();
-        $items = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
-        foreach ($items as $item)
-            $linguas[$item->getId()] = $item->getTitulo();
-        return $linguas;
-    }
-
     /**
      * Displays a form to create a new Aluno entity.
      *
@@ -113,16 +109,16 @@ class AlunoController extends Controller
      */
     public function newAction()
     {
-        $entity = new Aluno();
-        $form   = $this->createForm(new AlunoType($this->getLinguas()), $entity);
-
         $em = $this->getDoctrine()->getManager();
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+
+        $entity = new Aluno();
+
+        $form = $this->createForm(new AlunoType($linguas), $entity);
 
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
-            'linguas' => $linguas,
         );
     }
 
@@ -161,20 +157,23 @@ class AlunoController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Aluno')->find($id);
 
-        if (!$entity) {
+        if (!$entity)
             throw $this->createNotFoundException('Unable to find Aluno entity.');
-        }
 
-        $editForm = $this->createForm(new AlunoType($this->getLinguas()), $entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $linguas = explode(',', $entity->getLinguas());
+        foreach ($linguas as &$lingua)
+            $lingua = (int) $lingua;
+        $entity->setLinguas($linguas);
+
+        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+
+        $form = $this->createForm(new AlunoType($linguas), $entity);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $form->createView(),
         );
     }
 
@@ -191,24 +190,39 @@ class AlunoController extends Controller
 
         $entity = $em->getRepository('IstEnsinameBundle:Aluno')->find($id);
 
-        if (!$entity) {
+        if (!$entity)
             throw $this->createNotFoundException('Unable to find Aluno entity.');
-        }
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new AlunoType($this->getLinguas()), $entity);
-        $editForm->bind($request);
+        $linguas = explode(',', $entity->getLinguas());
+        foreach ($linguas as &$lingua)
+            $lingua = (int) $lingua;
+        $entity->setLinguas($linguas);
 
-        if ($editForm->isValid()) {
+        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+
+        $form = $this->createForm(new AlunoType($linguas), $entity);
+        $form->bind($request);
+
+        if ($form->isValid())
+        {
+            $post = $request->request->get($form->getName());
+            if (isset($post['linguas']))
+                foreach ($post['linguas'] as &$lingua)
+                    $lingua = $linguas[(int) $lingua]->getId();
+            $entity->setLinguas(implode(',', isset($post['linguas']) ? $post['linguas'] : array()));
+            
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('aluno_edit', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add('success', 'Студент успешно edited!');
+            return $this->redirect($this->generateUrl('aluno'));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', 'invalid data!');
         }
 
         return array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
+            'edit_form'   => $form->createView(),
             'delete_form' => $deleteForm->createView(),
         );
     }

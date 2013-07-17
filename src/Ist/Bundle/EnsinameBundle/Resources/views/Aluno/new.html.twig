@@ -1,71 +1,10 @@
 {% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
 {% block content %}
-<form action="{{ path('aluno_create') }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
-    {{ form_errors(form) }}
-    <fieldset>
-        <legend>Добавить студента</legend>
-        <div class="control-group">
-            <label class="control-label" for="nome">ФИО</label>
-            <div class="controls">
-                {{ form_widget(form.nome) }}
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="nascimento">дата рождения</label>
-            <div class="controls">
-                {{ form_widget(form.nascimento, {'attr': {'class': 'date'}}) }}
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="linguas">изучаемый язык</label>
-            <div class="controls">
-                {{ form_widget(form.linguas) }}
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="estudo">форма обучения</label>
-            <div class="controls">
-                {{ form_widget(form.estudo) }}
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="fone">телефон</label>
-            <div class="controls">
-                {{ form_widget(form.fone) }}
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="email">email</label>
-            <div class="controls">
-                {{ form_widget(form.email) }}
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="status">статус</label>
-            <div class="controls">
-                {{ form_widget(form.status) }}
-            </div>
-        </div>
-        <div class="control-group">
-            <label class="control-label" for="observacao">примечания</label>
-            <div class="controls">
-                {{ form_widget(form.observacao) }}
-            </div>
-        </div>
-        {{ form_widget(form._token) }}
-        <div class="control-group">
-            <div class="controls">
-                <button type="submit" class="btn">Добавить</button>
-            </div>
-        </div>
-    </fieldset>
-</form>
+{{ include('IstEnsinameBundle:Aluno:form.html.twig', { 'action': path('aluno_create'), 'form': form, 'legend': 'Добавить студента', 'method': 'POST' }) }}
 {% endblock %}
+
 {% block javascripts %}
-<script type="text/javascript" src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js">
-</script>
-<script type="text/javascript">
-    $('.date').mask('11/11/1111');
-</script>
+<script type="text/javascript" src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+<script type="text/javascript"> $('.date').mask('11/11/1111'); </script>
 {% endblock %}

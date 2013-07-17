@@ -44,7 +44,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td>{{ entity.nome }}</td>
+            <td><a href="{{ path('aluno_edit', { 'id': entity.id }) }}">{{ entity.nome }}</a></td>
             <td>{% if entity.nascimento %}{{ entity.nascimento }}{% endif %}</td>
             <td>{{ entity.fone }}</td>
             <td>{{ entity.email }}</td>

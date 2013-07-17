@@ -8,9 +8,10 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class AlunoType extends AbstractType
 {
-    public $linguas;
+    protected $linguas;
 
-    public function __construct(array $linguas) {
+    function __construct($linguas)
+    {
         $this->linguas = $linguas;
     }
 
@@ -20,7 +21,7 @@ class AlunoType extends AbstractType
             ->add('nome')
             ->add('nascimento', 'text')
             ->add('linguas', 'choice', array(
-                'choices'   => $this->linguas,
+                'choice_list' => new LinguaChoiceList($this->linguas),
                 'multiple'  => true,
                 'expanded'  => true,
             ))
