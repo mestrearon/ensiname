@@ -28,9 +28,7 @@ class ProfessorController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $entities = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
-
         return array(
             'entities' => $entities,
         );
@@ -45,32 +43,20 @@ class ProfessorController extends Controller
      */
     public function createAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
-
         $entity  = new Professor();
-
-        $form = $this->createForm(new ProfessorType($linguas), $entity);
+        $form = $this->createForm(new ProfessorType(), $entity);
         $form->bind($request);
-
         $post = $request->request->get($form->getName());
-        if (isset($post['linguas']))
-            foreach ($post['linguas'] as &$lingua)
-                $lingua = $linguas[(int) $lingua]->getId();
-        $entity->setLinguas(implode(',', isset($post['linguas']) ? $post['linguas'] : array()));
-
+        $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-
             $this->get('session')->getFlashBag()->add('success', 'Professor cadastrado com sucesso! ');
-
             return $this->redirect($this->generateUrl('professor_new'));
         } else {
             $this->get('session')->getFlashBag()->add('error', 'Falha ao cadastrar professor!');
         }
-
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -86,13 +72,8 @@ class ProfessorController extends Controller
      */
     public function newAction()
     {
-        $em = $this->getDoctrine()->getManager();
-        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
-
         $entity = new Professor();
-
-        $form   = $this->createForm(new ProfessorType($linguas), $entity);
-
+        $form   = $this->createForm(new ProfessorType(), $entity);
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),

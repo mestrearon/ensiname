@@ -7,21 +7,21 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Ist\Bundle\EnsinameBundle\Entity\Usuario;
-use Ist\Bundle\EnsinameBundle\Form\UsuarioType;
+use Ist\Bundle\EnsinameBundle\Entity\Grupo;
+use Ist\Bundle\EnsinameBundle\Form\GrupoType;
 
 /**
- * Usuario controller.
+ * Grupo controller.
  *
- * @Route("/usuario")
+ * @Route("/grupo")
  */
-class UsuarioController extends Controller
+class GrupoController extends Controller
 {
 
     /**
-     * Lists all Usuario entities.
+     * Lists all Grupo entities.
      *
-     * @Route("/", name="usuario")
+     * @Route("/", name="grupo")
      * @Method("GET")
      * @Template()
      */
@@ -29,45 +29,35 @@ class UsuarioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('IstEnsinameBundle:Usuario')->findAll();
+        $entities = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
 
         return array(
             'entities' => $entities,
         );
     }
     /**
-     * Creates a new Usuario entity.
+     * Creates a new Grupo entity.
      *
-     * @Route("/", name="usuario_create")
+     * @Route("/", name="grupo_create")
      * @Method("POST")
-     * @Template("IstEnsinameBundle:Usuario:new.html.twig")
+     * @Template("IstEnsinameBundle:Grupo:new.html.twig")
      */
     public function createAction(Request $request)
     {
-        $entity  = new Usuario();
-        $form = $this->createForm(new UsuarioType(), $entity);
+        $entity  = new Grupo();
+        $form = $this->createForm(new GrupoType($alunos), $entity);
         $form->bind($request);
-
         if ($form->isValid()) {
+            $post = $request->request->get($form->getName());
+            $entity->setLingua($post['lingua']);
+            $entity->setProfessor($post['professor']);
+            $entity->setAlunos(isset($post['alunos']) ? implode(',', $post['alunos']) : null);
             $em = $this->getDoctrine()->getManager();
-
-            //die(var_dump($request->request->get('ist_bundle_ensinamebundle_usuariotype')['password']));
-
-            $factory = $this->get('security.encoder_factory');
-            $encoder = $factory->getEncoder($entity);
-            $password = $encoder->encodePassword(
-                //$request->request->get('ist_bundle_ensinamebundle_usuariotype')['password'], 
-                'admin', 
-                $entity->getSalt()
-            );
-            $entity->setPassword($password);
-
             $em->persist($entity);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('usuario_show', array('id' => $entity->getId())));
+            $this->get('session')->getFlashBag()->add('success', 'grupo criado com sucesso!');
+            return $this->redirect($this->generateUrl('grupo_new'));
         }
-
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -75,17 +65,17 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Displays a form to create a new Usuario entity.
+     * Displays a form to create a new Grupo entity.
      *
-     * @Route("/new", name="usuario_new")
+     * @Route("/new", name="grupo_new")
      * @Method("GET")
      * @Template()
      */
     public function newAction()
     {
-        $entity = new Usuario();
-        $form   = $this->createForm(new UsuarioType(), $entity);
-
+        $em = $this->getDoctrine()->getManager();
+        $entity = new Grupo();
+        $form   = $this->createForm(new GrupoType(), $entity);
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
@@ -93,9 +83,9 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Finds and displays a Usuario entity.
+     * Finds and displays a Grupo entity.
      *
-     * @Route("/{id}", name="usuario_show")
+     * @Route("/{id}", name="grupo_show")
      * @Method("GET")
      * @Template()
      */
@@ -103,10 +93,10 @@ class UsuarioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('IstEnsinameBundle:Usuario')->find($id);
+        $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
+            throw $this->createNotFoundException('Unable to find Grupo entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
@@ -118,9 +108,9 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Displays a form to edit an existing Usuario entity.
+     * Displays a form to edit an existing Grupo entity.
      *
-     * @Route("/{id}/edit", name="usuario_edit")
+     * @Route("/{id}/edit", name="grupo_edit")
      * @Method("GET")
      * @Template()
      */
@@ -128,13 +118,13 @@ class UsuarioController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('IstEnsinameBundle:Usuario')->find($id);
+        $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
+            throw $this->createNotFoundException('Unable to find Grupo entity.');
         }
 
-        $editForm = $this->createForm(new UsuarioType(), $entity);
+        $editForm = $this->createForm(new GrupoType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -145,31 +135,31 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Edits an existing Usuario entity.
+     * Edits an existing Grupo entity.
      *
-     * @Route("/{id}", name="usuario_update")
+     * @Route("/{id}", name="grupo_update")
      * @Method("PUT")
-     * @Template("IstEnsinameBundle:Usuario:edit.html.twig")
+     * @Template("IstEnsinameBundle:Grupo:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('IstEnsinameBundle:Usuario')->find($id);
+        $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Usuario entity.');
+            throw $this->createNotFoundException('Unable to find Grupo entity.');
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new UsuarioType(), $entity);
+        $editForm = $this->createForm(new GrupoType(), $entity);
         $editForm->bind($request);
 
         if ($editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('usuario_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('grupo_edit', array('id' => $id)));
         }
 
         return array(
@@ -179,9 +169,9 @@ class UsuarioController extends Controller
         );
     }
     /**
-     * Deletes a Usuario entity.
+     * Deletes a Grupo entity.
      *
-     * @Route("/{id}", name="usuario_delete")
+     * @Route("/{id}", name="grupo_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, $id)
@@ -191,21 +181,21 @@ class UsuarioController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('IstEnsinameBundle:Usuario')->find($id);
+            $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
             if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Usuario entity.');
+                throw $this->createNotFoundException('Unable to find Grupo entity.');
             }
 
             $em->remove($entity);
             $em->flush();
         }
 
-        return $this->redirect($this->generateUrl('usuario'));
+        return $this->redirect($this->generateUrl('grupo'));
     }
 
     /**
-     * Creates a form to delete a Usuario entity by id.
+     * Creates a form to delete a Grupo entity by id.
      *
      * @param mixed $id The entity id
      *

@@ -157,6 +157,16 @@ class Aluno
     }
 
     /**
+     * Has linguas
+     *
+     * @return string 
+     */
+    public function hasLinguas()
+    {
+        return !empty($this->linguas);
+    }
+
+    /**
      * Set estudo
      *
      * @param string $estudo

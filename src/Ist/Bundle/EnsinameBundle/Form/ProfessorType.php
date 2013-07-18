@@ -8,22 +8,17 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class ProfessorType extends AbstractType
 {
-    protected $linguas;
-
-    function __construct($linguas)
-    {
-        $this->linguas = $linguas;
-    }
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('nome')
             ->add('nascimento', 'text')
-            ->add('linguas', 'choice', array(
-                'choice_list' => new LinguaChoiceList($this->linguas),
-                'multiple'  => true,
-                'expanded'  => true,
+            ->add('linguas', 'entity', array(
+                'class' => 'IstEnsinameBundle:Lingua',
+                'property' => 'titulo',
+                'required' => true,
+                'expanded' => true,
+                'multiple' => true,
             ))
             ->add('fone', 'text')
             ->add('email', 'email')
