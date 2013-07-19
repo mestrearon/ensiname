@@ -32,6 +32,7 @@ class AlunoController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('IstEnsinameBundle:Aluno')->createQueryBuilder('a')->orderBy('a.nome', 'ASC')->getQuery()->getResult();
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+        $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
         if (!empty($entities))
             foreach ($entities as &$entity) {
                 foreach (explode(',', $entity->getLinguas()) as $lingua_ent)
@@ -42,11 +43,21 @@ class AlunoController extends Controller
                 $lingua_new = isset($lingua_new) ? $lingua_new : array();
                 $entity->setLinguas(implode(',', $lingua_new));
                 unset($lingua_new);
+                if (!empty($grupos))
+                    foreach ($grupos as $grupo)
+                        foreach (explode(',', $grupo->getAlunos()) as $aluno)
+                            if ($aluno == $entity->getId())
+                                $grupo_new[] = $grupo->getTitulo();
+                $grupo_new = isset($grupo_new) ? $grupo_new : array();
+                $alunos[$entity->getId()] = implode(',', $grupo_new);
+                unset($grupo_new);
             }
 
         return array(
             'entities' => $entities,
-            'linguas' => $linguas
+            'linguas' => $linguas,
+            'grupos' => $grupos,
+            'alunos' => $alunos,
         );
     }
 
