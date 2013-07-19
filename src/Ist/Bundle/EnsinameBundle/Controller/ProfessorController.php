@@ -28,9 +28,21 @@ class ProfessorController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
+        $entities = $em->getRepository('IstEnsinameBundle:Professor')->findAll();$linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+        if (!empty($entities))
+            foreach ($entities as &$entity) {
+                foreach (explode(',', $entity->getLinguas()) as $lingua_ent)
+                    if (!empty($lingua_ent) &&!empty($linguas))
+                        foreach ($linguas as $lingua)
+                            if ($lingua_ent == $lingua->getId())
+                                $lingua_new[] = $lingua->getTitulo();
+                $lingua_new = isset($lingua_new) ? $lingua_new : array();
+                $entity->setLinguas(implode(',', $lingua_new));
+                unset($lingua_new);
+            }
         return array(
             'entities' => $entities,
+            'linguas' => $linguas
         );
     }
 
@@ -53,7 +65,7 @@ class ProfessorController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'Professor cadastrado com sucesso! ');
-            return $this->redirect($this->generateUrl('professor_new'));
+            return $this->redirect($this->generateUrl('professor'));
         } else {
             $this->get('session')->getFlashBag()->add('error', 'Falha ao cadastrar professor!');
         }

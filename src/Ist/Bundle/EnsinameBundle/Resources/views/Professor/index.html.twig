@@ -1,53 +1,73 @@
-{% extends '::base.html.twig' %}
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
-{% block body -%}
-    <h1>Professor list</h1>
+{% block content %}
+<p>
+    <a href="{{ path('professor_new') }}" class="btn btn-primary">Новый</a>
+    <span class="pull-right">
+        Филтр:
+        <select id="linguas" class="input-small filtro">
+            <option value="0">языки</option>
+            {% for lingua in linguas %}
+            <option>{{ lingua.titulo }}</option>
+            {% endfor %}
+        </select>
+        <select id="grupos" class="input-small muted filtro">
+            <option value="0">группы</option>
+        </select>
+    </span>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>телефон</th>
+            <th>Email</th>
+            <th>horarios</th>
+            <th>linguas</th>
+            <th>группы</th>
+            <th>примечания</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.nome }}</td>
+            <td>{{ entity.fone }}</td>
+            <td>{{ entity.email }}</td>
+            <td>{{ entity.horario }}</td>
+            <td>{{ entity.linguas }}</td>
+            <td>-</td>
+            <td>{{ entity.observacao }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nome</th>
-                <th>Nascimento</th>
-                <th>Linguas</th>
-                <th>Fone</th>
-                <th>Email</th>
-                <th>Horario</th>
-                <th>Observacao</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('professor_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.nome }}</td>
-                <td>{{ entity.nascimento }}</td>
-                <td>{{ entity.linguas }}</td>
-                <td>{{ entity.fone }}</td>
-                <td>{{ entity.email }}</td>
-                <td>{{ entity.horario }}</td>
-                <td>{{ entity.observacao }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('professor_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('professor_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('professor_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $('.filtro').change(function(){
+        $('table tbody tr').each(function(){
+            $(this).show();
+        });
+        $('.filtro').each(function(){
+            var filtro = $(this).attr('id');
+            var valor = $(this).val();
+            if (valor != '0') {
+                var coluna = (filtro == 'linguas') ? 5 : (
+                        (filtro == 'grupos') ? 6 : 0);
+                $('table tbody tr').each(function(){
+                    var linha = $(this);
+                    var atual = 0;
+                    linha.children().each(function(){
+                        var celula = $(this).html();
+                        if ((coluna == ++atual) && (celula.indexOf(valor) < 0)){
+                            linha.hide();
+                        }
+                    });
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}
