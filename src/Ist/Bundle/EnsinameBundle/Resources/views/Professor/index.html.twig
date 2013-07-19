@@ -11,8 +11,11 @@
             <option>{{ lingua.titulo }}</option>
             {% endfor %}
         </select>
-        <select id="grupos" class="input-small muted filtro">
+        <select id="grupos" class="input-small filtro">
             <option value="0">группы</option>
+            {% for grupo in grupos %}
+            <option>{{ grupo.titulo }}</option>
+            {% endfor %}
         </select>
     </span>
 </p>
@@ -36,7 +39,7 @@
             <td>{{ entity.email }}</td>
             <td>{{ entity.horario }}</td>
             <td>{{ entity.linguas }}</td>
-            <td>-</td>
+            <td>{{ professores[entity.id] }}</td>
             <td>{{ entity.observacao }}</td>
         </tr>
     {% endfor %}

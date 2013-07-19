@@ -27,6 +27,8 @@ class LinguaController extends Controller
      */
     public function indexAction()
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
 
         $em = $this->getDoctrine()->getManager();
 
@@ -99,6 +101,9 @@ class LinguaController extends Controller
      */
     public function showAction($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Lingua')->find($id);
@@ -124,6 +129,9 @@ class LinguaController extends Controller
      */
     public function editAction($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Lingua')->find($id);
@@ -151,6 +159,9 @@ class LinguaController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Lingua')->find($id);
@@ -176,6 +187,7 @@ class LinguaController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+    
     /**
      * Deletes a Lingua entity.
      *
@@ -184,6 +196,9 @@ class LinguaController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -211,6 +226,9 @@ class LinguaController extends Controller
      */
     private function createDeleteForm($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()

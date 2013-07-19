@@ -28,21 +28,32 @@ class ProfessorController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('IstEnsinameBundle:Professor')->findAll();$linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+        $entities = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
+        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+        $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
         if (!empty($entities))
             foreach ($entities as &$entity) {
                 foreach (explode(',', $entity->getLinguas()) as $lingua_ent)
-                    if (!empty($lingua_ent) &&!empty($linguas))
+                    if (!empty($lingua_ent) && !empty($linguas))
                         foreach ($linguas as $lingua)
                             if ($lingua_ent == $lingua->getId())
                                 $lingua_new[] = $lingua->getTitulo();
                 $lingua_new = isset($lingua_new) ? $lingua_new : array();
                 $entity->setLinguas(implode(',', $lingua_new));
                 unset($lingua_new);
+                if (!empty($grupos))
+                    foreach ($grupos as $grupo)
+                        if ($grupo->getProfessor() == $entity->getId())
+                            $grupo_new[] = $grupo->getTitulo();
+                $grupo_new = isset($grupo_new) ? $grupo_new : array();
+                $professores[$entity->getId()] = implode(',', $grupo_new);
+                unset($grupo_new);
             }
         return array(
             'entities' => $entities,
-            'linguas' => $linguas
+            'linguas' => $linguas,
+            'grupos' => $grupos,
+            'professores' => $professores,
         );
     }
 
@@ -101,6 +112,9 @@ class ProfessorController extends Controller
      */
     public function showAction($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Professor')->find($id);
@@ -126,6 +140,9 @@ class ProfessorController extends Controller
      */
     public function editAction($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+        
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Professor')->find($id);
@@ -153,6 +170,9 @@ class ProfessorController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Professor')->find($id);
@@ -186,6 +206,9 @@ class ProfessorController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -213,6 +236,9 @@ class ProfessorController extends Controller
      */
     private function createDeleteForm($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()

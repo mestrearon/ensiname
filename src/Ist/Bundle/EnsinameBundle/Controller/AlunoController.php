@@ -113,6 +113,9 @@ class AlunoController extends Controller
      */
     public function showAction($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Aluno')->find($id);
@@ -199,6 +202,9 @@ class AlunoController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -226,6 +232,9 @@ class AlunoController extends Controller
      */
     private function createDeleteForm($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()
