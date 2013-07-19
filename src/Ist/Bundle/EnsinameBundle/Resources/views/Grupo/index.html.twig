@@ -1,49 +1,70 @@
-{% extends '::base.html.twig' %}
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
-{% block body -%}
-    <h1>Grupo list</h1>
+{% block content %}
+<p>
+    <a href="{{ path('grupo_new') }}" class="btn btn-primary">Новый</a>
+    <span class="pull-right">
+        Филтр:
+        <select id="linguas" class="input-small filtro">
+            <option value="0">языки</option>
+            {% for lingua in linguas %}
+            <option>{{ lingua.titulo }}</option>
+            {% endfor %}
+        </select>
+        <select id="professores" class="input-small filtro">
+            <option value="0">professores</option>
+            {% for professor in professores %}
+            <option>{{ professor.nome }}</option>
+            {% endfor %}
+        </select>
+    </span>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>titulo</th>
+            <th>lingua</th>
+            <th>professor</th>
+            <th>horarios</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.titulo }}</td>
+            <td>{{ entity.lingua }}</td>
+            <td>{{ entity.professor }}</td>
+            <td>{{ entity.horario }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titulo</th>
-                <th>Lingua</th>
-                <th>Professor</th>
-                <th>Alunos</th>
-                <th>Horarios</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('grupo_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.titulo }}</td>
-                <td>{{ entity.lingua }}</td>
-                <td>{{ entity.professor }}</td>
-                <td>{{ entity.alunos }}</td>
-                <td>{{ entity.horarios }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('grupo_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('grupo_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('grupo_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $('.filtro').change(function(){
+        $('table tbody tr').each(function(){
+            $(this).show();
+        });
+        $('.filtro').each(function(){
+            var filtro = $(this).attr('id');
+            var valor = $(this).val();
+            if (valor != '0') {
+                var coluna = (filtro == 'linguas') ? 2 : (
+                        (filtro == 'professores') ? 3 : 0);
+                $('table tbody tr').each(function(){
+                    var linha = $(this);
+                    var atual = 0;
+                    linha.children().each(function(){
+                        var celula = $(this).html();
+                        if ((coluna == ++atual) && (celula.indexOf(valor) < 0)){
+                            linha.hide();
+                        }
+                    });
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}

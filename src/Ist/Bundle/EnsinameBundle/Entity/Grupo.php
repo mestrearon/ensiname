@@ -52,9 +52,9 @@ class Grupo
     /**
      * @var string
      *
-     * @ORM\Column(name="horarios", type="string", length=255)
+     * @ORM\Column(name="horario", type="string", length=255)
      */
-    private $horarios;
+    private $horario;
 
 
     /**
@@ -160,25 +160,25 @@ class Grupo
     }
 
     /**
-     * Set horarios
+     * Set horario
      *
-     * @param string $horarios
+     * @param string $horario
      * @return Grupo
      */
-    public function setHorarios($horarios)
+    public function setHorario($horario)
     {
-        $this->horarios = $horarios;
+        $this->horario = $horario;
     
         return $this;
     }
 
     /**
-     * Get horarios
+     * Get horario
      *
      * @return string 
      */
-    public function getHorarios()
+    public function getHorario()
     {
-        return $this->horarios;
+        return $this->horario;
     }
 }

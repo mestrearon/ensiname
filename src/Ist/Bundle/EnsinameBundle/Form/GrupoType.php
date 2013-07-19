@@ -33,7 +33,7 @@ class GrupoType extends AbstractType
                 'expanded' => true,
                 'multiple' => true,
             ))
-            ->add('horarios')
+            ->add('horario')
         ;
     }
 

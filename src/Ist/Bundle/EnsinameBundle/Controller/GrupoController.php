@@ -28,11 +28,24 @@ class GrupoController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $entities = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
-
+        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+        $professores = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
+        if (!empty($entities))
+            foreach ($entities as &$entity) {
+                if (!empty($linguas))
+                    foreach ($linguas as $lingua)
+                        if ($entity->getLingua() == $lingua->getId())
+                            $entity->setLingua($lingua->getTitulo());
+                if (!empty($professores))
+                    foreach ($professores as $professor)
+                        if ($entity->getProfessor() == $professor->getId())
+                            $entity->setProfessor($professor->getNome());
+            }
         return array(
             'entities' => $entities,
+            'linguas' => $linguas,
+            'professores' => $professores,
         );
     }
     /**
@@ -56,7 +69,7 @@ class GrupoController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'grupo criado com sucesso!');
-            return $this->redirect($this->generateUrl('grupo_new'));
+            return $this->redirect($this->generateUrl('grupo'));
         }
         return array(
             'entity' => $entity,
