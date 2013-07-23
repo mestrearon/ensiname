@@ -2,7 +2,7 @@
 
 {% block content %}
 <p>
-    <a href="{{ path('grupo_new') }}" class="btn btn-primary">Новый</a>
+    <a href="{{ path('grupo_new') }}" class="btn btn-primary">новую</a>
     <span class="pull-right">
         Филтр:
         <select id="linguas" class="input-small filtro">
@@ -12,7 +12,7 @@
             {% endfor %}
         </select>
         <select id="professores" class="input-small filtro">
-            <option value="0">professores</option>
+            <option value="0">преподавател</option>
             {% for professor in professores %}
             <option>{{ professor.nome }}</option>
             {% endfor %}
@@ -22,10 +22,10 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>titulo</th>
-            <th>lingua</th>
-            <th>professor</th>
-            <th>horarios</th>
+            <th>Группа</th>
+            <th>Язык</th>
+            <th>преподавател</th>
+            <th>время</th>
         </tr>
     </thead>
     <tbody>

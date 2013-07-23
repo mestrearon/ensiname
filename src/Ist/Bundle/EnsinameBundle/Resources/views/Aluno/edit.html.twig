@@ -1,7 +1,7 @@
 {% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
 {% block content %}
-{{ include('IstEnsinameBundle:Aluno:form.html.twig', { 'action': path('aluno_update', { 'id': entity.id }), 'form': form, 'legend': 'edit студента', 'method': 'PUT' }) }}
+{{ include('IstEnsinameBundle:Aluno:form.html.twig', { 'action': path('aluno_update', { 'id': entity.id }), 'form': form, 'legend': 'изменить данные', 'method': 'PUT' }) }}
 {% endblock %}
 
 {% block javascripts %}

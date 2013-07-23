@@ -1,7 +1,7 @@
 {% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
 {% block content %}
-{{ include('IstEnsinameBundle:Professor:form.html.twig', { 'action': path('professor_create'), 'form': form, 'legend': 'professor creation', 'method': 'POST' }) }}
+{{ include('IstEnsinameBundle:Professor:form.html.twig', { 'action': path('professor_create'), 'form': form, 'legend': 'Добавить преподавателя', 'method': 'POST' }) }}
 {% endblock %}
 
 {% block javascripts %}
