@@ -31,7 +31,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td>{{ entity.titulo }}</td>
+            <td><a href="{{ path('grupo_show', { 'id': entity.id }) }}">{{ entity.titulo }}</a></td>
             <td>{{ entity.lingua }}</td>
             <td>{{ entity.professor }}</td>
             <td>{{ entity.horario }}</td>

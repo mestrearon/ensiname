@@ -1,54 +1,20 @@
-{% extends '::base.html.twig' %}
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
-{% block body -%}
-    <h1>Grupo</h1>
+{% block content %}
+<dl class="dl-horizontal">
+    <dt>Группа</dt>
+    <dd>{{ entity.titulo }}</dd>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Titulo</th>
-                <td>{{ entity.titulo }}</td>
-            </tr>
-            <tr>
-                <th>Lingua</th>
-                <td>{{ entity.lingua }}</td>
-            </tr>
-            <tr>
-                <th>Professor</th>
-                <td>{{ entity.professor }}</td>
-            </tr>
-            <tr>
-                <th>Alunos</th>
-                <td>{{ entity.alunos }}</td>
-            </tr>
-            <tr>
-                <th>Horarios</th>
-                <td>{{ entity.horarios }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <dt>Язык</dt>
+    <dd>{{ entity.lingua }}</dd>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('grupo') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('grupo_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('grupo_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>
+    <dt>преподаватель</dt>
+    <dd>{{ entity.professor }}</dd>
+
+    <dt>студентам</dt>
+    <dd>{{ entity.alunos }}</dd>
+    
+    <dt>время</dt>
+    <dd>{{ entity.horario }}</dd>
+</dl>
 {% endblock %}

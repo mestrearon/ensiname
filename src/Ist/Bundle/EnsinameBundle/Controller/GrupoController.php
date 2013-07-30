@@ -104,23 +104,29 @@ class GrupoController extends Controller
      */
     public function showAction($id)
     {
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
-        if (!$entity) {
+        if (!$entity)
             throw $this->createNotFoundException('Unable to find Grupo entity.');
+
+        $lingua = $em->getRepository('IstEnsinameBundle:Lingua')->find($entity->getLingua());
+        $entity->setLingua($lingua->getTitulo());
+
+        $professor = $em->getRepository('IstEnsinameBundle:Professor')->find($entity->getProfessor());
+        $entity->setProfessor($professor->getNome());
+
+        $alunos = explode(',', $entity->getAlunos());
+
+        foreach ($alunos as &$aluno)
+        {
+            $_aluno = $em->getRepository('IstEnsinameBundle:Aluno')->find($aluno);
+            $aluno = $_aluno->getNome();
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $entity->setAlunos(implode(',', $alunos));
 
-        return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
-        );
+        return array('entity' => $entity);
     }
 
     /**
