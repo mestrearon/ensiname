@@ -119,18 +119,32 @@ class AulaController extends Controller
     public function showAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
 
-        if (!$entity) {
+        if (!$entity)
             throw $this->createNotFoundException('Unable to find Aula entity.');
+
+        $professor = $em->getRepository('IstEnsinameBundle:Professor')->find($entity->getProfessor());
+        $entity->setProfessor($professor->getNome());
+
+        $grupo = $em->getRepository('IstEnsinameBundle:Grupo')->find($entity->getGrupo());
+        $entity->setGrupo(array(
+            'id' => $grupo->getId(),
+            'titulo' => $grupo->getTitulo(),
+        ));
+
+        $presencas = explode(',', $entity->getPresencas());
+
+        foreach ($presencas as &$presenca)
+        {
+            $_presenca = $em->getRepository('IstEnsinameBundle:Aluno')->find($presenca);
+            $presenca = $_presenca->getNome();
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $entity->setPresencas(implode(',', $presencas));
 
         return array(
             'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
         );
     }
 
@@ -143,6 +157,9 @@ class AulaController extends Controller
      */
     public function editAction($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
@@ -170,6 +187,9 @@ class AulaController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
@@ -203,6 +223,9 @@ class AulaController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         $form = $this->createDeleteForm($id);
         $form->bind($request);
 
@@ -230,6 +253,9 @@ class AulaController extends Controller
      */
     private function createDeleteForm($id)
     {
+        $this->get('session')->getFlashBag()->add('error', 'not implemented');
+        return $this->redirect($this->generateUrl('index'));
+
         return $this->createFormBuilder(array('id' => $id))
             ->add('id', 'hidden')
             ->getForm()

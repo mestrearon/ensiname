@@ -25,7 +25,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td>{{ entity.data }}</td>
+            <td><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.data }}</a></td>
             <td>{{ entity.grupo }}</td>
             <td>{{ entity.dada|replace({'s': 'да', 'n': 'не'}) }}</td>
             <td>{{ entity.observacao }}</td>

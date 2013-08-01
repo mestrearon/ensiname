@@ -1,58 +1,23 @@
-{% extends '::base.html.twig' %}
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
-{% block body -%}
-    <h1>Aula</h1>
+{% block content %}
+<dl class="dl-horizontal">
+    <dt>преподаватель</dt>
+    <dd>{{ entity.professor }}</dd>
 
-    <table class="record_properties">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Professor</th>
-                <td>{{ entity.professor }}</td>
-            </tr>
-            <tr>
-                <th>Data</th>
-                <td>{{ entity.data }}</td>
-            </tr>
-            <tr>
-                <th>Grupo</th>
-                <td>{{ entity.grupo }}</td>
-            </tr>
-            <tr>
-                <th>Presencas</th>
-                <td>{{ entity.presencas }}</td>
-            </tr>
-            <tr>
-                <th>Dada</th>
-                <td>{{ entity.dada }}</td>
-            </tr>
-            <tr>
-                <th>Observacao</th>
-                <td>{{ entity.observacao }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <dt>дате класс</dt>
+    <dd>{{ entity.data }}</dd>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('aula') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('aula_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('aula_delete', { 'id': entity.id }) }}" method="post">
-            <input type="hidden" name="_method" value="DELETE" />
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>
+    <dt>группа</dt>
+    <dd><a href="{{ path('grupo_show', { 'id': entity.grupo.id }) }}">{{ entity.grupo.titulo }}</a></dd>
+
+    <dt>студентам</dt>
+    <dd>{{ entity.presencas }}</dd>
+    
+    <dt>лекции</dt>
+    <dd>{{ entity.dada|replace({'s': 'да', 'n': 'не'}) }}</dd>
+    
+    <dt>примечания</dt>
+    <dd>{{ entity.observacao }}</dd>
+</dl>
 {% endblock %}
