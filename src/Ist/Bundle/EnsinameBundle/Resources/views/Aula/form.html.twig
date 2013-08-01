@@ -1,0 +1,48 @@
+<form action="{{ action }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
+    <input type="hidden" name="_method" value="{{ method }}" />
+    <fieldset>
+        <legend>{{ legend }}</legend>
+        <div class="control-group">
+            <label class="control-label" for="professor">преподаватель</label>
+            <div class="controls">
+                {{ form_widget(form.professor) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="data">дате класс</label>
+            <div class="controls">
+                {{ form_widget(form.data, {'attr': {'class': 'date'}}) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="grupo">группа</label>
+            <div class="controls">
+                {{ form_widget(form.grupo) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="presencas">студентам</label>
+            <div class="controls" id="presencas" style="height:100px;overflow:auto;">
+                {{ form_widget(form.presencas) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="dada">лекции</label>
+            <div class="controls">
+                {{ form_widget(form.dada) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="observacao">примечания</label>
+            <div class="controls">
+                {{ form_widget(form.observacao) }}
+            </div>
+        </div>
+        {{ form_widget(form._token) }}
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Добавить</button>
+            </div>
+        </div>
+    </fieldset>
+</form>

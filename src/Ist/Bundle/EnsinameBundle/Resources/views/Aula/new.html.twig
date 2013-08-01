@@ -1,0 +1,68 @@
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
+
+{% block content %}
+{{ include('IstEnsinameBundle:Aula:form.html.twig', { 'action': path('aula_create'), 'form': form, 'legend': 'Добавить новый класс', 'method': 'POST' }) }}
+<input type="hidden" id="data" value="{{ data }}" />
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
+<script type="text/javascript">
+$('.date').mask('11/11/1111');
+var data = $.parseJSON($('#data').val());
+$('#ist_bundle_ensinamebundle_aulatype_professor option').each(function() {
+    var fica = false;
+    for (professor in data)
+        if ($(this).val() == professor)
+            fica = true
+    if (!fica) {
+        $(this).hide();
+        $(this).attr('disabled', 'disabled');
+    }
+});
+$('#ist_bundle_ensinamebundle_aulatype_grupo').change(function() {
+    var grupoSelecionado = $(this).val();
+    var professorSelecionado = $('#ist_bundle_ensinamebundle_aulatype_professor').val();
+    $('#presencas label').each(function() {
+        $(this).show();
+        var fica = false;
+        for (professor in data)
+            if (professorSelecionado == professor)
+                for (grupo in data[professor])
+                    if (grupoSelecionado == grupo)
+                        for (aluno in data[professor][grupo])
+                            if ($(this).attr('for').split("_").pop() == data[professor][grupo][aluno])
+                                fica = true;
+        if (!fica)
+            $(this).hide();
+    });
+});
+$('#ist_bundle_ensinamebundle_aulatype_professor').change(function() {
+    var professorSelecionado = $(this).val();
+    var primeiro = true;
+    $('#ist_bundle_ensinamebundle_aulatype_grupo option').each(function() {
+        $(this).show();
+        $(this).removeAttr('disabled');
+        $(this).removeAttr('selected');
+        var fica = false;
+        for (professor in data)
+            if (professorSelecionado == professor)
+                for (grupo in data[professor])
+                    if ($(this).val() == grupo)
+                        fica = true;
+        if (!fica) {
+            $(this).hide();
+            $(this).attr('disabled', 'disabled');
+        } else {
+            if (primeiro) {
+                $(this).attr('selected', 'selected');
+                $(this).parent().val($(this).val());
+                primeiro = false;
+            }
+        }
+    });
+    $('#ist_bundle_ensinamebundle_aulatype_grupo').change();
+});
+$('#ist_bundle_ensinamebundle_aulatype_professor').change();
+</script>
+{% endblock %}
