@@ -45,7 +45,7 @@ class Aula
     /**
      * @var string
      *
-     * @ORM\Column(name="presencas", type="text")
+     * @ORM\Column(name="presencas", type="text", nullable=true)
      */
     private $presencas;
 

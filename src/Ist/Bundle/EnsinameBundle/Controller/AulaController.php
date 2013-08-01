@@ -28,11 +28,17 @@ class AulaController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
-
         $entities = $em->getRepository('IstEnsinameBundle:Aula')->findAll();
-
+        $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
+        if (!empty($entities))
+            foreach ($entities as &$entity)
+                if (!empty($grupos))
+                    foreach ($grupos as $grupo)
+                        if ($grupo->getId() == $entity->getGrupo())
+                            $entity->setGrupo($grupo->getTitulo());
         return array(
             'entities' => $entities,
+            'grupos' => $grupos,
         );
     }
 
@@ -51,7 +57,6 @@ class AulaController extends Controller
 
         if ($form->isValid()) {
             $post = $request->request->get($form->getName());
-//die(var_dump($post));
             $entity->setProfessor($post['professor']);
             $entity->setGrupo($post['grupo']);
             $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : null);
@@ -59,7 +64,7 @@ class AulaController extends Controller
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'aula cadastrada com sucesso!');
-            return $this->redirect($this->generateUrl('aula_new'));
+            return $this->redirect($this->generateUrl('aula'));
         }
 
         return array(

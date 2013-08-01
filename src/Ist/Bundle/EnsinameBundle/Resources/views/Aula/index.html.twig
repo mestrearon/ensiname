@@ -1,51 +1,63 @@
-{% extends '::base.html.twig' %}
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
-{% block body -%}
-    <h1>Aula list</h1>
+{% block content %}
+<p>
+    <a href="{{ path('aula_new') }}" class="btn btn-primary">Новый</a>
+    <span class="pull-right">
+        Филтр:
+        <select id="grupos" class="input-small filtro">
+            <option value="0">группы</option>
+            {% for grupo in grupos %}
+            <option>{{ grupo.titulo }}</option>
+            {% endfor %}
+        </select>
+    </span>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>дате класс</th>
+            <th>группы</th>
+            <th>лекции</th>
+            <th>примечания</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.data }}</td>
+            <td>{{ entity.grupo }}</td>
+            <td>{{ entity.dada|replace({'s': 'да', 'n': 'не'}) }}</td>
+            <td>{{ entity.observacao }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Professor</th>
-                <th>Data</th>
-                <th>Grupo</th>
-                <th>Presencas</th>
-                <th>Dada</th>
-                <th>Observacao</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.professor }}</td>
-                <td>{{ entity.data }}</td>
-                <td>{{ entity.grupo }}</td>
-                <td>{{ entity.presencas }}</td>
-                <td>{{ entity.dada }}</td>
-                <td>{{ entity.observacao }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('aula_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('aula_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('aula_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+    $('.filtro').change(function(){
+        $('table tbody tr').each(function(){
+            $(this).show();
+        });
+        $('.filtro').each(function(){
+            var filtro = $(this).attr('id');
+            var valor = $(this).val();
+            if (valor != '0') {
+                var coluna = (filtro == 'grupos') ? 2 : 0;
+                $('table tbody tr').each(function(){
+                    var linha = $(this);
+                    var atual = 0;
+                    linha.children().each(function(){
+                        var celula = $(this).html();
+                        if ((coluna == ++atual) && (celula.indexOf(valor) < 0)){
+                            linha.hide();
+                        }
+                    });
+                });
+            }
+        });
+    });
+</script>
+{% endblock %}
