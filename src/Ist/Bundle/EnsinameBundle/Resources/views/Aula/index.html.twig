@@ -11,6 +11,10 @@
             <option>{{ grupo.titulo }}</option>
             {% endfor %}
         </select>
+        data mínima
+        <input type="text" id="dataMin" class="date input-small" maxlength="10">
+        data máxima
+        <input type="text" id="dataMax" class="date input-small" maxlength="10">
     </span>
 </p>
 <table class="table table-striped">
@@ -36,28 +40,121 @@
 {% endblock %}
 
 {% block javascripts %}
+<script type="text/javascript" src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 <script type="text/javascript">
-    $('.filtro').change(function(){
-        $('table tbody tr').each(function(){
-            $(this).show();
-        });
-        $('.filtro').each(function(){
-            var filtro = $(this).attr('id');
-            var valor = $(this).val();
-            if (valor != '0') {
-                var coluna = (filtro == 'grupos') ? 2 : 0;
-                $('table tbody tr').each(function(){
-                    var linha = $(this);
-                    var atual = 0;
-                    linha.children().each(function(){
-                        var celula = $(this).html();
-                        if ((coluna == ++atual) && (celula.indexOf(valor) < 0)){
-                            linha.hide();
+$('.date').mask('11/11/1111');
+var filtraMin = false, filtraMax = false;
+var filtros = 0;
+function mostraTudo() {
+    $('table tbody tr').each(function() {
+        $(this).show();
+    });
+}
+function controlaFiltro() {
+    filtros++;
+    if (filtros < 2) {
+        return true;
+    } else {
+        filtros = 0;
+        return false;
+    }
+}
+$('#dataMin, #dataMax').keyup(function() {
+    var aplica = false;
+    if ($(this).val().length < 10) {
+        mostraTudo();
+        if ($(this).attr('id') == 'dataMin' && $('#dataMax').val().length == 10) {
+            $('#dataMax').keyup();
+        }
+        if ($(this).attr('id') == 'dataMax' && $('#dataMin').val().length == 10) {
+            $('#dataMin').keyup();
+        }
+        aplica = true;
+    }
+    if ($(this).val().length == 10) {
+        var dataMin = $('#dataMin').val(), dataMax = $('#dataMax').val();
+        if (dataMin.length == 10) {
+            dataMin = dataMin.split('/');
+        }
+        if (dataMax.length == 10) {
+            var dataMax = dataMax.split('/');
+        }
+        $('table tbody tr').each(function() {
+            var data = $(this).children().children().html().split('/');
+            if (dataMin.length = 3) {
+                data[2] = parseInt(data[2]);
+                dataMin[2] = parseInt(dataMin[2]);
+                if (data[2] < dataMin[2]) {
+                    $(this).hide();
+                } else {
+                    if (data[2] == dataMin[2]) {
+                        data[1] = parseInt(data[1]);
+                        dataMin[1] = parseInt(dataMin[1]);
+                        if (data[1] < dataMin[1]) {
+                            $(this).hide();
+                        } else {
+                            if (data[1] == dataMin[1]) {
+                                if (parseInt(data[0]) < parseInt(dataMin[0])) {
+                                    $(this).hide();
+                                }
+                            }
                         }
-                    });
-                });
+                    }
+                }
+            }
+            if (dataMax.length = 3) {
+                data[2] = parseInt(data[2]);
+                dataMax[2] = parseInt(dataMax[2]);
+                if (data[2] > dataMax[2]) {
+                    $(this).hide();
+                } else {
+                    if (data[2] == dataMax[2]) {
+                        data[1] = parseInt(data[1]);
+                        dataMax[1] = parseInt(dataMax[1]);
+                        if (data[1] > dataMax[1]) {
+                            $(this).hide();
+                        } else {
+                            if (data[1] == dataMax[1]) {
+                                if (parseInt(data[0]) > parseInt(dataMax[0])) {
+                                    $(this).hide();
+                                }
+                            }
+                        }
+                    }
+                }
             }
         });
+        aplica = true;
+    }
+    if (aplica && controlaFiltro()) {
+        $('.filtro').change();
+    }
+});
+$('.filtro').change(function() {
+    if ($('.filtro').val() == 0 && filtros == 0) {
+        mostraTudo();
+    }
+    $('.filtro').each(function() {
+        var filtro = $(this).attr('id');
+        var valor = $(this).val();
+        if (valor != '0') {
+            var coluna = (filtro == 'grupos') ? 2 : 0;
+            $('table tbody tr').each(function() {
+                var linha = $(this);
+                var atual = 0;
+                linha.children().each(function() {
+                    var celula = $(this).html();
+                    if ((coluna == ++atual) && (celula.indexOf(valor) < 0)) {
+                        linha.hide();
+                    }
+                });
+            });
+        }
     });
+    if (controlaFiltro()) {
+        $('#dataMin').keyup();
+        $('#dataMax').keyup();
+    }
+});
 </script>
 {% endblock %}
