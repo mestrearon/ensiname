@@ -26,6 +26,7 @@
             <th>Язык</th>
             <th>преподаватель</th>
             <th>время</th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -35,6 +36,7 @@
             <td>{{ entity.lingua }}</td>
             <td>{{ entity.professor }}</td>
             <td>{{ entity.horario }}</td>
+            <td><a href="{{ path('grupo_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a></td>
         </tr>
     {% endfor %}
     </tbody>

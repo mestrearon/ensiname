@@ -196,50 +196,25 @@ class GrupoController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
+
     /**
      * Deletes a Grupo entity.
      *
-     * @Route("/{id}", name="grupo_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="grupo_delete")
+     * @Method("GET")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($id)
     {
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
-        $form = $this->createDeleteForm($id);
-        $form->bind($request);
+        if (!$entity)
+            throw $this->createNotFoundException('Unable to find Grupo entity.');
 
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
+        $em->remove($entity);
+        $em->flush();
 
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Grupo entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
-        }
-
+        $this->get('session')->getFlashBag()->add('success', 'grupo excluido com sucesso!');
         return $this->redirect($this->generateUrl('grupo'));
-    }
-
-    /**
-     * Creates a form to delete a Grupo entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
-        return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
-            ->getForm()
-        ;
     }
 }
