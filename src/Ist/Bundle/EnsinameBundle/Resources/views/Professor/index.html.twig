@@ -29,6 +29,7 @@
             <th>языки</th>
             <th>группы</th>
             <th>примечания</th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -41,6 +42,7 @@
             <td>{{ entity.linguas }}</td>
             <td>{{ professores[entity.id] }}</td>
             <td>{{ entity.observacao }}</td>
+            <td><a href="{{ path('professor_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a></td>
         </tr>
     {% endfor %}
     </tbody>
