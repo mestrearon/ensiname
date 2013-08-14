@@ -24,6 +24,7 @@
             <th>группы</th>
             <th>лекции</th>
             <th>примечания</th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -33,6 +34,7 @@
             <td>{{ entity.grupo }}</td>
             <td>{{ entity.dada|replace({'s': 'да', 'n': 'не'}) }}</td>
             <td>{{ entity.observacao }}</td>
+            <td><a href="{{ path('aula_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a></td>
         </tr>
     {% endfor %}
     </tbody>
