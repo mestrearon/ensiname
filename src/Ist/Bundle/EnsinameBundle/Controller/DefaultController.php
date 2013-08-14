@@ -29,6 +29,7 @@ class DefaultController extends Controller
         if (isset($_SERVER['HTTP_REFERER']) && substr($_SERVER['HTTP_REFERER'], -5) == 'login')
             $this->get('session')->getFlashBag()->add('success', 'Добро пожаловать, ' . $name . '!');
 
-        return array();
+        return $this->redirect($this->generateUrl('aula'));
+
     }
 }
