@@ -128,24 +128,29 @@ class AulaController extends Controller
         $entity->setProfessor($professor->getNome());
 
         $grupo = $em->getRepository('IstEnsinameBundle:Grupo')->find($entity->getGrupo());
-        $entity->setGrupo(array(
-            'id' => $grupo->getId(),
-            'titulo' => $grupo->getTitulo(),
-        ));
+        
+        if ($grupo)
+            $entity->setGrupo(array(
+                'id' => $grupo->getId(),
+                'titulo' => $grupo->getTitulo(),
+            ));
 
-        $presencas = explode(',', $entity->getPresencas());
-
-        foreach ($presencas as &$presenca)
+        if ($entity->getPresencas())
         {
-            $_presenca = $em->getRepository('IstEnsinameBundle:Aluno')->find($presenca);
-            $presenca = $_presenca->getNome();
+            $presencas = explode(',', $entity->getPresencas());
+
+            foreach ($presencas as &$presenca)
+            {
+                $_presenca = $em->getRepository('IstEnsinameBundle:Aluno')->find($presenca);
+                
+                if ($_presenca)
+                    $presenca = $_presenca->getNome();
+            }
+
+            $entity->setPresencas($presencas);
         }
 
-        $entity->setPresencas(implode(',', $presencas));
-
-        return array(
-            'entity'      => $entity,
-        );
+        return array('entity' => $entity);
     }
 
     /**

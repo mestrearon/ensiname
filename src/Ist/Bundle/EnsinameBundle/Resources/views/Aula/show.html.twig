@@ -9,10 +9,24 @@
     <dd>{{ entity.data }}</dd>
 
     <dt>группа</dt>
+    {% if entity.grupo.id is defined %}
     <dd><a href="{{ path('grupo_show', { 'id': entity.grupo.id }) }}">{{ entity.grupo.titulo }}</a></dd>
+    {% else %}
+    <dd>{{ entity.grupo }}</dd>
+    {% endif %}
 
     <dt>студентам</dt>
-    <dd>{{ entity.presencas }}</dd>
+    <dd>
+        {% if entity.presencas %}
+        <ul>
+            {% for presenca in entity.presencas %}
+            <li>{{ presenca }}</li>
+            {% endfor %}
+        <ul>
+        {% else %}
+        &nbsp;
+        {% endif %}
+    </dd>
     
     <dt>лекции</dt>
     <dd>{{ entity.dada|replace({'s': 'да', 'n': 'не'}) }}</dd>
