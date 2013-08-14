@@ -42,6 +42,7 @@
             <th>группы</th>
             <th>статус</th>
             <th>примечания</th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -56,6 +57,7 @@
             <td>{{ alunos[entity.id] }}</td>
             <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен'}) }}</td>
             <td>{{ entity.observacao }}</td>
+            <td><a href="{{ path('aluno_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a></td>
         </tr>
     {% endfor %}
     </tbody>
