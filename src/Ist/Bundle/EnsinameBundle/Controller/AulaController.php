@@ -56,25 +56,27 @@ class AulaController extends Controller
      */
     public function createAction(Request $request)
     {
-        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
-        }
-
         $entity  = new Aula();
         $form = $this->createForm(new AulaType(), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
             $post = $request->request->get($form->getName());
-            $entity->setProfessor($post['professor']);
-            $entity->setGrupo($post['grupo']);
-            $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : null);
+
+            if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
+                $professor = $post['professor'];
+
+            if ($this->get('security.context')->isGranted('ROLE_PROF'))
+                $professor = $this->getUser()->getId();
+
+            $entity->setProfessor($professor);
+            $entity->setGrupo(isset($post['grupo']) ? $post['grupo'] : NULL);
+            $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : NULL);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'aula cadastrada com sucesso!');
-            return $this->redirect($this->generateUrl('aula'));
+            return $this->redirect($this->generateUrl($this->get('security.context')->isGranted('ROLE_ADMIN') ? 'aula' : 'aula_new'));
         }
 
         return array(
@@ -92,20 +94,20 @@ class AulaController extends Controller
      */
     public function newAction()
     {
-        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
-        }
-
         $entity = new Aula();
         $form   = $this->createForm(new AulaType(), $entity);
         $em = $this->getDoctrine()->getManager();
+
         $professores = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
         
         if (empty($professores))
             $professores = array();
 
-        $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
+            $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
+
+        if ($this->get('security.context')->isGranted('ROLE_PROF'))
+            $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findBy(array('professor' => $this->getUser()->getId()));
         
         if (empty($grupos))
             $grupos = array();
@@ -146,10 +148,10 @@ class AulaController extends Controller
 
         $professor = $em->getRepository('IstEnsinameBundle:Professor')->find($entity->getProfessor());
         $entity->setProfessor($professor->getNome());
-
-        $grupo = $em->getRepository('IstEnsinameBundle:Grupo')->find($entity->getGrupo());
+        if ($entity->getGrupo())
+            $grupo = $em->getRepository('IstEnsinameBundle:Grupo')->find($entity->getGrupo());
         
-        if ($grupo)
+        if (isset($grupo))
             $entity->setGrupo(array(
                 'id' => $grupo->getId(),
                 'titulo' => $grupo->getTitulo(),

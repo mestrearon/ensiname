@@ -28,7 +28,7 @@ class GrupoController extends Controller
     public function indexAction()
     {
         if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            $this->get('session')->getFlashBag()->add('error', 'not implemented');
             return $this->redirect($this->generateUrl('index'));
         }
 

@@ -9,6 +9,7 @@
 						<b class="caret"></b>
 					</a>
 					<ul class="dropdown-menu">
+						{% if is_granted('ROLE_ADMIN') %}
 				        <li><a href="{{ path('professor') }}">Преподаватели</a></li>
 				        <li><a href="{{ path('aluno') }}">Студенты</a></li>
 				        <li class="disabled"><a href="#">Заинтересованные лица</a></li>
@@ -16,6 +17,11 @@
 				        <li><a href="{{ path('lingua_new') }}">Языки</a></li>
 				        <li><a href="{{ path('grupo') }}">Группы</a></li>
 				        <li><a href="{{ path('aula') }}">Уроки</a></li>
+						{% endif %}
+						{% if is_granted('ROLE_PROF') %}
+				        <li class="disabled"><a href="#">Группы</a></li>
+				        <li><a href="{{ path('aula_new') }}">Уроки</a></li>
+						{% endif %}
 				    </ul>
 				</li>
 			</ul>
