@@ -38,7 +38,7 @@ class Aula
     /**
      * @var integer
      *
-     * @ORM\Column(name="grupo", type="integer")
+     * @ORM\Column(name="grupo", type="integer", nullable=true)
      */
     private $grupo;
 

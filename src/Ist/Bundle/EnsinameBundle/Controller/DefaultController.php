@@ -25,20 +25,13 @@ class DefaultController extends Controller
      */
     public function dashboardAction()
     {
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
-            $name = 'admin';
-        
-        if ($this->get('security.context')->isGranted('ROLE_PROF'))
-            $name = 'professor';
-
         if (isset($_SERVER['HTTP_REFERER']) && substr($_SERVER['HTTP_REFERER'], -5) == 'login')
-            $this->get('session')->getFlashBag()->add('success', 'Добро пожаловать, '. $name .'!');
+            $this->get('session')->getFlashBag()->add('success', 'Добро пожаловать, '. $user = $this->getUser()->getUsername() .'!');
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
             return $this->redirect($this->generateUrl('aula'));
         
         if ($this->get('security.context')->isGranted('ROLE_PROF'))
-            return array();
-
+            return $this->redirect($this->generateUrl('aula_new'));
     }
 }

@@ -10,6 +10,7 @@
 <script type="text/javascript">
 $('.date').mask('11/11/1111');
 var data = $.parseJSON($('#data').val());
+{% if is_granted('ROLE_ADMIN') %}
 $('#ist_bundle_ensinamebundle_aulatype_professor option').each(function() {
     var fica = false;
     for (professor in data)
@@ -20,9 +21,15 @@ $('#ist_bundle_ensinamebundle_aulatype_professor option').each(function() {
         $(this).attr('disabled', 'disabled');
     }
 });
+{% endif %}
 $('#ist_bundle_ensinamebundle_aulatype_grupo').change(function() {
     var grupoSelecionado = $(this).val();
+    {% if is_granted('ROLE_ADMIN') %}
     var professorSelecionado = $('#ist_bundle_ensinamebundle_aulatype_professor').val();
+    {% endif %}
+    {% if is_granted('ROLE_PROF') %}
+    var professorSelecionado = $('#professor').val();
+    {% endif %}
     $('#presencas label').each(function() {
         $(this).show();
         var fica = false;
@@ -37,8 +44,14 @@ $('#ist_bundle_ensinamebundle_aulatype_grupo').change(function() {
             $(this).hide();
     });
 });
+{% if is_granted('ROLE_ADMIN') %}
 $('#ist_bundle_ensinamebundle_aulatype_professor').change(function() {
     var professorSelecionado = $(this).val();
+{% endif %}
+{% if is_granted('ROLE_PROF') %}
+function controlaGrupo() {
+    var professorSelecionado = $('#professor').val();
+{% endif %}
     var primeiro = true;
     $('#ist_bundle_ensinamebundle_aulatype_grupo option').each(function() {
         $(this).show();
@@ -61,8 +74,21 @@ $('#ist_bundle_ensinamebundle_aulatype_professor').change(function() {
             }
         }
     });
+    if ($('#ist_bundle_ensinamebundle_aulatype_grupo option').size() == $('#ist_bundle_ensinamebundle_aulatype_grupo option[disabled="disabled"]').size()) {
+        $('#ist_bundle_ensinamebundle_aulatype_grupo').parent().append('<span>nenhum grupo cadastrado para o professor</span>');
+        $('#ist_bundle_ensinamebundle_aulatype_grupo').hide();
+        $('#presencas').parent().hide();
+    }
+
     $('#ist_bundle_ensinamebundle_aulatype_grupo').change();
+{% if is_granted('ROLE_ADMIN') %}
 });
 $('#ist_bundle_ensinamebundle_aulatype_professor').change();
+{% endif %}
+{% if is_granted('ROLE_PROF') %}
+};
+controlaGrupo();
+$('#ist_bundle_ensinamebundle_aulatype_grupo').change();
+{% endif %}
 </script>
 {% endblock %}
