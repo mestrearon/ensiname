@@ -3,14 +3,15 @@
 namespace Ist\Bundle\EnsinameBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Professor
  *
  * @ORM\Table()
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Ist\Bundle\EnsinameBundle\Entity\ProfessorRepository")
  */
-class Professor
+class Professor implements UserInterface, \Serializable
 {
     /**
      * @var integer
@@ -69,6 +70,85 @@ class Professor
      * @ORM\Column(name="observacao", type="text", nullable=true)
      */
     private $observacao;
+
+    /**
+     * @ORM\Column(type="string", length=25)
+     */
+    private $username;
+
+    /**
+     * @ORM\Column(type="string", length=32)
+     */
+    private $salt;
+
+    /**
+     * @ORM\Column(type="string", length=40)
+     */
+    private $password;
+
+    public function __construct()
+    {
+        $this->salt = md5(uniqid(null, true));
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getRoles()
+    {
+        return array('ROLE_PROFE');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function eraseCredentials()
+    {
+    }
+
+    /**
+     * @see \Serializable::serialize()
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->id,
+        ));
+    }
+
+    /**
+     * @see \Serializable::unserialize()
+     */
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+        ) = unserialize($serialized);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getUsername()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
 
     /**
      * Get id
@@ -239,5 +319,44 @@ class Professor
     public function getObservacao()
     {
         return $this->observacao;
+    }
+
+    /**
+     * Set username
+     *
+     * @param string $username
+     * @return Professor
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    
+        return $this;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     * @return Professor
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+    
+        return $this;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     * @return Professor
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    
+        return $this;
     }
 }

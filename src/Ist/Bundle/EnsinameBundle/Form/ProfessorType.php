@@ -24,6 +24,8 @@ class ProfessorType extends AbstractType
             ->add('email', 'email')
             ->add('horario', 'text')
             ->add('observacao')
+            ->add('username')
+            ->add('password')
         ;
     }
 

@@ -72,6 +72,15 @@ class ProfessorController extends Controller
         $post = $request->request->get($form->getName());
         $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
         if ($form->isValid()) {
+
+
+            $factory = $this->get('security.encoder_factory');
+            $encoder = $factory->getEncoder($entity);
+            $post = $request->request->get($form->getName());
+            $password = $encoder->encodePassword($post['password'], $entity->getSalt());
+            $entity->setPassword($password);
+
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
