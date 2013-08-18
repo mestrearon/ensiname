@@ -27,6 +27,11 @@ class ProfessorController extends Controller
      */
     public function indexAction()
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
@@ -66,6 +71,11 @@ class ProfessorController extends Controller
      */
     public function createAction(Request $request)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $entity  = new Professor();
         $form = $this->createForm(new ProfessorType(), $entity);
         $form->bind($request);
@@ -104,6 +114,11 @@ class ProfessorController extends Controller
      */
     public function newAction()
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $entity = new Professor();
         $form   = $this->createForm(new ProfessorType(), $entity);
         return array(
@@ -121,6 +136,11 @@ class ProfessorController extends Controller
      */
     public function showAction($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
         
@@ -149,6 +169,11 @@ class ProfessorController extends Controller
      */
     public function editAction($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
         
@@ -179,6 +204,11 @@ class ProfessorController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 
@@ -216,6 +246,11 @@ class ProfessorController extends Controller
      */
     public function deleteAction($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Professor')->find($id);
 

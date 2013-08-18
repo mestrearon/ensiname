@@ -96,7 +96,7 @@ class Professor implements UserInterface, \Serializable
      */
     public function getRoles()
     {
-        return array('ROLE_PROFE');
+        return array('ROLE_PROF');
     }
 
     /**

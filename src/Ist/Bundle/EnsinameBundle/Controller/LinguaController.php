@@ -27,6 +27,11 @@ class LinguaController extends Controller
      */
     public function indexAction()
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 
@@ -47,6 +52,11 @@ class LinguaController extends Controller
      */
     public function createAction(Request $request)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $entity  = new Lingua();
         $form = $this->createForm(new LinguaType(), $entity);
         $form->bind($request);
@@ -83,6 +93,11 @@ class LinguaController extends Controller
      */
     public function newAction()
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $entity = new Lingua();
         $form   = $this->createForm(new LinguaType(), $entity);
 
@@ -101,6 +116,11 @@ class LinguaController extends Controller
      */
     public function showAction($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 
@@ -129,6 +149,11 @@ class LinguaController extends Controller
      */
     public function editAction($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 
@@ -159,6 +184,11 @@ class LinguaController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 
@@ -196,6 +226,11 @@ class LinguaController extends Controller
      */
     public function deleteAction(Request $request, $id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 
@@ -226,6 +261,11 @@ class LinguaController extends Controller
      */
     private function createDeleteForm($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 

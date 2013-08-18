@@ -8,7 +8,7 @@ security:
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
-        ROLE_PROFE:       ROLE_PROFE
+        ROLE_PROF:       ROLE_PROF
         # ROLE_SUPER_ADMIN: [ ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH ]
 
     providers:
@@ -39,5 +39,5 @@ security:
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/, roles: 'ROLE_ADMIN, ROLE_PROFE' }
+        - { path: ^/, roles: 'ROLE_ADMIN, ROLE_PROF' }
         - { path: ^/admin, roles: ROLE_ADMIN }

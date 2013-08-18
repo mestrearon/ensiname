@@ -27,6 +27,11 @@ class AulaController extends Controller
      */
     public function indexAction()
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $em = $this->getDoctrine()->getManager();
         $entities = $em->getRepository('IstEnsinameBundle:Aula')->findAll();
         $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
@@ -51,6 +56,11 @@ class AulaController extends Controller
      */
     public function createAction(Request $request)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $entity  = new Aula();
         $form = $this->createForm(new AulaType(), $entity);
         $form->bind($request);
@@ -82,6 +92,11 @@ class AulaController extends Controller
      */
     public function newAction()
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $entity = new Aula();
         $form   = $this->createForm(new AulaType(), $entity);
         $em = $this->getDoctrine()->getManager();
@@ -118,6 +133,11 @@ class AulaController extends Controller
      */
     public function showAction($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
 
@@ -162,6 +182,11 @@ class AulaController extends Controller
      */
     public function editAction($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 
@@ -192,6 +217,11 @@ class AulaController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
 
@@ -229,6 +259,11 @@ class AulaController extends Controller
      */
     public function deleteAction($id)
     {
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
+
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
 

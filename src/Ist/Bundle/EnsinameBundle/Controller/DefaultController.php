@@ -14,7 +14,8 @@ class DefaultController extends Controller
     public function indexAction()
     {
         return $this->redirect($this->generateUrl(
-            $this->get('security.context')->isGranted('ROLE_ADMIN') ?
+            ($this->get('security.context')->isGranted('ROLE_ADMIN') 
+            || $this->get('security.context')->isGranted('ROLE_PROF')) ?
                 'dashboard' : 'login'));
     }
 
@@ -24,12 +25,20 @@ class DefaultController extends Controller
      */
     public function dashboardAction()
     {
-        $name = 'admin';
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
+            $name = 'admin';
+        
+        if ($this->get('security.context')->isGranted('ROLE_PROF'))
+            $name = 'professor';
 
         if (isset($_SERVER['HTTP_REFERER']) && substr($_SERVER['HTTP_REFERER'], -5) == 'login')
-            $this->get('session')->getFlashBag()->add('success', 'Добро пожаловать, ' . $name . '!');
+            $this->get('session')->getFlashBag()->add('success', 'Добро пожаловать, '. $name .'!');
 
-        return $this->redirect($this->generateUrl('aula'));
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
+            return $this->redirect($this->generateUrl('aula'));
+        
+        if ($this->get('security.context')->isGranted('ROLE_PROF'))
+            return array();
 
     }
 }
