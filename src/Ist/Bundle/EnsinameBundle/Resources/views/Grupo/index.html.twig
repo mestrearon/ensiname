@@ -6,13 +6,13 @@
     <span class="pull-right">
         Филтр:
         <select id="linguas" class="input-small filtro">
-            <option value="0">языки</option>
+            <option value="0">Языки</option>
             {% for lingua in linguas %}
             <option>{{ lingua.titulo }}</option>
             {% endfor %}
         </select>
         <select id="professores" class="input-small filtro">
-            <option value="0">преподаватель</option>
+            <option value="0">Преподаватель</option>
             {% for professor in professores %}
             <option>{{ professor.nome }}</option>
             {% endfor %}
@@ -24,8 +24,8 @@
         <tr>
             <th>Группа</th>
             <th>Язык</th>
-            <th>преподаватель</th>
-            <th>время</th>
+            <th>Преподаватель</th>
+            <th>Расписание</th>
             <th>&nbsp;</th>
         </tr>
     </thead>
