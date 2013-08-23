@@ -2,20 +2,20 @@
 
 {% block content %}
 <dl class="dl-horizontal">
-    <dt>преподаватель</dt>
+    <dt>Преподаватель</dt>
     <dd>{{ entity.professor }}</dd>
 
-    <dt>дате класс</dt>
+    <dt>Дата класса</dt>
     <dd>{{ entity.data }}</dd>
 
-    <dt>группа</dt>
+    <dt>Группа</dt>
     {% if entity.grupo.id is defined %}
     <dd><a href="{{ path('grupo_show', { 'id': entity.grupo.id }) }}">{{ entity.grupo.titulo }}</a></dd>
     {% else %}
     <dd>{{ entity.grupo }}</dd>
     {% endif %}
 
-    <dt>студентам</dt>
+    <dt>Студенты</dt>
     <dd>
         {% if entity.presencas %}
         <ul>
@@ -28,10 +28,10 @@
         {% endif %}
     </dd>
     
-    <dt>лекции</dt>
+    <dt>Статус</dt>
     <dd>{{ entity.dada|replace({'s': 'да', 'n': 'не'}) }}</dd>
     
-    <dt>примечания</dt>
+    <dt>Примечания</dt>
     <dd>{{ entity.observacao }}</dd>
 </dl>
 {% endblock %}
