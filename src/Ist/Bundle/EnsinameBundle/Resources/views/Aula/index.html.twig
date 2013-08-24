@@ -6,24 +6,24 @@
     <span class="pull-right">
         Филтр:
         <select id="grupos" class="input-small filtro">
-            <option value="0">группы</option>
+            <option value="0">Группы</option>
             {% for grupo in grupos %}
             <option>{{ grupo.titulo }}</option>
             {% endfor %}
         </select>
-        data mínima
+        С:
         <input type="text" id="dataMin" class="date input-small" maxlength="10">
-        data máxima
+        До:
         <input type="text" id="dataMax" class="date input-small" maxlength="10">
     </span>
 </p>
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>дате класс</th>
-            <th>группы</th>
-            <th>лекции</th>
-            <th>примечания</th>
+            <th>Дата класса</th>
+            <th>Группы</th>
+            <th>Статус</th>
+            <th>Примечания</th>
             <th>&nbsp;</th>
         </tr>
     </thead>
