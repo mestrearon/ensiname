@@ -6,13 +6,13 @@
     <span class="pull-right">
         Филтр:
         <select id="linguas" class="input-small filtro">
-            <option value="0">языки</option>
+            <option value="0">Языки</option>
             {% for lingua in linguas %}
             <option>{{ lingua.titulo }}</option>
             {% endfor %}
         </select>
         <select id="grupos" class="input-small filtro">
-            <option value="0">группы</option>
+            <option value="0">Название Группы</option>
             {% for grupo in grupos %}
             <option>{{ grupo.titulo }}</option>
             {% endfor %}
@@ -23,12 +23,12 @@
     <thead>
         <tr>
             <th>ФИО</th>
-            <th>телефон</th>
-            <th>Email</th>
-            <th>время</th>
-            <th>языки</th>
-            <th>группы</th>
-            <th>примечания</th>
+            <th>Телефон</th>
+            <th>E-mail</th>
+            <th>Расписание</th>
+            <th>Языки</th>
+            <th>Название Группы</th>
+            <th>Примечания</th>
             <th>&nbsp;</th>
         </tr>
     </thead>
