@@ -12,9 +12,9 @@
             {% endfor %}
         </select>
         С:
-        <input type="text" id="dataMin" class="date input-small" maxlength="10">
+        <input type="text" id="dataMin" class="input-small" maxlength="10" data-mask="00/00/0000" />
         До:
-        <input type="text" id="dataMax" class="date input-small" maxlength="10">
+        <input type="text" id="dataMax" class="input-small" maxlength="10" data-mask="00/00/0000" />
     </span>
 </p>
 <table class="table table-striped">
@@ -42,9 +42,7 @@
 {% endblock %}
 
 {% block javascripts %}
-<script type="text/javascript" src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
 <script type="text/javascript">
-$('.date').mask('11/11/1111');
 var filtraMin = false, filtraMax = false;
 var filtros = 0;
 function mostraTudo() {
