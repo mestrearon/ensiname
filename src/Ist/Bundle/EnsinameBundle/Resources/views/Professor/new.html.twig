@@ -3,8 +3,3 @@
 {% block content %}
 {{ include('IstEnsinameBundle:Professor:form.html.twig', { 'action': path('professor_create'), 'form': form, 'legend': 'Добавить преподавателя', 'method': 'POST' }) }}
 {% endblock %}
-
-{% block javascripts %}
-<script type="text/javascript" src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
-<script type="text/javascript"> $('.date').mask('11/11/1111'); </script>
-{% endblock %}
