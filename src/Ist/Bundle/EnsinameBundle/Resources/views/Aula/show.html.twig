@@ -5,7 +5,7 @@
     <dt>Преподаватель</dt>
     <dd>{{ entity.professor }}</dd>
 
-    <dt>Дата класса</dt>
+    <dt>Дата урока</dt>
     <dd>{{ entity.data }}</dd>
 
     <dt>Группа</dt>
@@ -28,8 +28,8 @@
         {% endif %}
     </dd>
     
-    <dt>Статус</dt>
-    <dd>{{ entity.dada|replace({'s': 'да', 'n': 'не'}) }}</dd>
+    <dt>Статус урока</dt>
+    <dd>{{ entity.dada|replace({'s': 'проведен', 'n': 'отменен'}) }}</dd>
     
     <dt>Примечания</dt>
     <dd>{{ entity.observacao }}</dd>
