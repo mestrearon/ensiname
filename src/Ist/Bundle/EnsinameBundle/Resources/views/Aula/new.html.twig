@@ -1,7 +1,7 @@
 {% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
 {% block content %}
-{{ include('IstEnsinameBundle:Aula:form.html.twig', { 'action': path('aula_create'), 'form': form, 'legend': 'Добавить новый класс', 'method': 'POST' }) }}
+{{ include('IstEnsinameBundle:Aula:form.html.twig', { 'action': path('aula_create'), 'form': form, 'legend': 'Добавить новый урок', 'method': 'POST' }) }}
 <input type="hidden" id="data" value="{{ data }}" />
 {% endblock %}
 
