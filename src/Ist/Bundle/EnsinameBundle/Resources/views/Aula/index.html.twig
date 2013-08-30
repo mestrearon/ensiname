@@ -32,7 +32,7 @@
         <tr>
             <td><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.data }}</a></td>
             <td>{{ entity.grupo }}</td>
-            <td>{{ entity.dada|replace({'s': 'да', 'n': 'не'}) }}</td>
+            <td>{{ entity.dada|replace({'s': 'проведен', 'n': 'отменен'}) }}</td>
             <td>{{ entity.observacao }}</td>
             <td><a href="{{ path('aula_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a></td>
         </tr>
