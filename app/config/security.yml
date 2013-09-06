@@ -18,7 +18,7 @@ security:
         in_memory:
             memory:
                 users:
-                    admin: { password: 1234, roles: 'ROLE_ADMIN' }
+                    admin: { password: derionunes68, roles: 'ROLE_ADMIN' }
         user_db:
             entity: { class: Ist\Bundle\EnsinameBundle\Entity\Professor, property: username }
 
