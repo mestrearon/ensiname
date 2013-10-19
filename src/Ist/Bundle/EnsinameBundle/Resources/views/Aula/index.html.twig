@@ -2,9 +2,9 @@
 
 {% block content %}
 <p>
-    <a href="{{ path('aula_new') }}" class="btn btn-primary">Новый</a>
+    <a href="{{ path('aula_new') }}" class="btn btn-primary">Добавить новый урок</a>
     <span class="pull-right">
-        Филтр:
+        Фильтр:
         <select id="grupos" class="input-small filtro">
             <option value="0">Группы</option>
             {% for grupo in grupos %}
