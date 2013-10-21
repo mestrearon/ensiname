@@ -27,22 +27,37 @@ class AulaController extends Controller
      */
     public function indexAction()
     {
-        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
-        }
-
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('IstEnsinameBundle:Aula')->findAll();
-        $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
-        if (!empty($entities))
-            foreach ($entities as &$entity)
-                if (!empty($grupos))
-                    foreach ($grupos as $grupo)
-                        if ($grupo->getId() == $entity->getGrupo())
-                            $entity->setGrupo($grupo->getTitulo());
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $entities = $em->getRepository('IstEnsinameBundle:Aula')->findAll();
+        }
+        if ($this->get('security.context')->isGranted('ROLE_PROF')) {
+            $entities = $em->getRepository('IstEnsinameBundle:Aula')->findBy(array('professor' => $this->get('security.context')->getToken()->getUser()->getId()));
+        }
+        if (empty($entities)) {
+            $entities = array();
+        }
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
+        }
+        if ($this->get('security.context')->isGranted('ROLE_PROF')) {
+            $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findBy(array('professor' => $this->get('security.context')->getToken()->getUser()->getId()));
+        }
+        if (empty($grupos)) {
+            $grupos = array();
+        }
+        foreach ($entities as &$entity) {
+            $temGrupo = false;
+            foreach ($grupos as $grupo)
+                if ($grupo->getId() == $entity->getGrupo()) {
+                    $entity->setGrupo($grupo->getTitulo());
+                    $temGrupo = true;   
+                }
+            if (!$temGrupo && $entity->getGrupo() != '')
+                $entity = null;
+        }
         return array(
-            'entities' => $entities,
+            'entities' => array_filter($entities),
             'grupos' => $grupos,
         );
     }
