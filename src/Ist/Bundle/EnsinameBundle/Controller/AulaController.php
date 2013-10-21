@@ -150,16 +150,17 @@ class AulaController extends Controller
      */
     public function showAction($id)
     {
-        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
-        }
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
 
         if (!$entity)
             throw $this->createNotFoundException('Unable to find Aula entity.');
+        
+        if ($this->get('security.context')->isGranted('ROLE_PROF') && ($entity->getProfessor() != $this->get('security.context')->getToken()->getUser()->getId())) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
 
         $professor = $em->getRepository('IstEnsinameBundle:Professor')->find($entity->getProfessor());
         $entity->setProfessor($professor->getNome());
