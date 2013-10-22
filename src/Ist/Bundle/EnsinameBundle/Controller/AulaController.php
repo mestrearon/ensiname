@@ -46,15 +46,45 @@ class AulaController extends Controller
         if (empty($grupos)) {
             $grupos = array();
         }
+        $professores = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
+        if (empty($professores)) {
+            $professores = array();
+        }
+        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+        if (empty($linguas)) {
+            $linguas = array();
+        }
         foreach ($entities as &$entity) {
-            $temGrupo = false;
-            foreach ($grupos as $grupo)
+            $g = null;
+            $l = null;
+            foreach ($grupos as $grupo) {
                 if ($grupo->getId() == $entity->getGrupo()) {
-                    $entity->setGrupo($grupo->getTitulo());
-                    $temGrupo = true;   
+                    $g = $grupo->getTitulo();
+                    foreach ($linguas as $lingua) {
+                        if ($lingua->getId() == $grupo->getLingua()) {
+                            $l = $lingua->getTitulo();
+                            break;
+                        }
+                    }
+                    break;
                 }
-            if (!$temGrupo && $entity->getGrupo() != '')
-                $entity = null;
+            }
+            $p = null;
+            foreach ($professores as $professor) {
+                if ($professor->getId() == $entity->getProfessor()) {
+                    $p = $professor->getNome();
+                    break;
+                }
+            }
+            $entity = array(
+                'id' => $entity->getId(),
+                'data' => $entity->getData(),
+                'grupo' => $g,
+                'professor' => $p,
+                'lingua' => $l,
+                'dada' => $entity->getDada(),
+                'observacao' => $entity->getObservacao(), 
+            );
         }
         return array(
             'entities' => array_filter($entities),
