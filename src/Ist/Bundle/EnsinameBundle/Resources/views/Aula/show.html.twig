@@ -6,7 +6,7 @@
     <dd>{{ entity.professor }}</dd>
 
     <dt>Дата урока</dt>
-    <dd>{{ entity.data }}</dd>
+    <dd>{{ entity.data|date("d/m/Y") }}</dd>
 
     <dt>Группа</dt>
     {% if entity.grupo.id is defined %}

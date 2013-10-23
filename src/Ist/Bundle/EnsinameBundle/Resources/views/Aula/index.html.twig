@@ -44,7 +44,7 @@
     {% for entity in entities %}
         <tr>
             <td class="contador"><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td class="data">{{ entity.data }}</td>
+            <td class="data">{{ entity.data|date("d/m/Y") }}</td>
             <td class="grupo">{{ entity.grupo }}</td>
             {% if ehAdmin %}
             <td class="professor">{{ entity.professor }}</td>

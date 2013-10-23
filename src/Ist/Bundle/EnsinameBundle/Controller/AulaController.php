@@ -29,10 +29,10 @@ class AulaController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $entities = $em->getRepository('IstEnsinameBundle:Aula')->findAll();
+            $entities = $em->getRepository('IstEnsinameBundle:Aula')->findBy(array(), array('data' => 'DESC'));
         }
         if ($this->get('security.context')->isGranted('ROLE_PROF')) {
-            $entities = $em->getRepository('IstEnsinameBundle:Aula')->findBy(array('professor' => $this->get('security.context')->getToken()->getUser()->getId()));
+            $entities = $em->getRepository('IstEnsinameBundle:Aula')->findBy(array('professor' => $this->get('security.context')->getToken()->getUser()->getId()), array('data' => 'DESC'));
         }
         if (empty($entities)) {
             $entities = array();
@@ -112,6 +112,7 @@ class AulaController extends Controller
                 $professor = $this->getUser()->getId();
 
             $entity->setProfessor($professor);
+            $entity->setData(new \DateTime($post['data']));
             $entity->setGrupo(isset($post['grupo']) ? $post['grupo'] : NULL);
             $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : NULL);
             $em = $this->getDoctrine()->getManager();

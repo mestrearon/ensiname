@@ -31,7 +31,7 @@ class Aula
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="data", type="string", length=255)
+     * @ORM\Column(name="data", type="date")
      */
     private $data;
 
