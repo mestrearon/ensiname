@@ -11,6 +11,14 @@
             <option>{{ grupo.titulo }}</option>
             {% endfor %}
         </select>
+        {% if ehAdmin %}
+        <select id="professores" class="input-small filtro">
+            <option value="0">professor</option>
+            {% for professor in professores %}
+            <option>{{ professor.nome }}</option>
+            {% endfor %}
+        </select>
+        {% endif %}
         С:
         <input type="text" id="dataMin" class="input-small" maxlength="10" data-mask="00/00/0000" />
         До:
@@ -23,7 +31,9 @@
             <th>#</th>
             <th>Дата урока</th>
             <th>Группы</th>
+            {% if ehAdmin %}
             <th>professor</th>
+            {% endif %}
             <th>lingua</th>
             <th>Статус урока</th>
             <th>Примечания</th>
@@ -36,7 +46,9 @@
             <td class="contador">{{ entity.id }}</a></td>
             <td class="data"><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.data }}</a></td>
             <td class="grupo">{{ entity.grupo }}</td>
+            {% if ehAdmin %}
             <td class="professor">{{ entity.professor }}</td>
+            {% endif %}
             <td class="lingua">{{ entity.lingua }}</td>
             <td>{{ entity.dada|replace({'s': 'проведен', 'n': 'отменен'}) }}</td>
             <td>{{ entity.observacao }}</td>
@@ -49,21 +61,25 @@
 
 {% block javascripts %}
 <script type="text/javascript">
-var filtraMin = false, filtraMax = false;
 var filtros = 0;
+function controlaFiltro() {
+    filtros++;
+    {% if ehAdmin %}
+    if (filtros < 4) {
+    {% else %}
+    if (filtros < 3) {
+    {% endif %}
+        return true;
+    } else {
+        filtros = 0;
+        contador();
+        return false;
+    }
+}
 function mostraTudo() {
     $('table tbody tr').each(function() {
         $(this).show();
     });
-}
-function controlaFiltro() {
-    filtros++;
-    if (filtros < 2) {
-        return true;
-    } else {
-        filtros = 0;
-        return false;
-    }
 }
 function contador() {
     var contador = 1;
@@ -74,104 +90,105 @@ function contador() {
     });
 }
 contador();
-$('#dataMin, #dataMax').keyup(function() {
-    var aplica = false;
-    if ($(this).val().length < 10) {
+$('#grupos').change(function() {
+    if (filtros == 0) {
         mostraTudo();
-        if ($(this).attr('id') == 'dataMin' && $('#dataMax').val().length == 10) {
-            $('#dataMax').keyup();
-        }
-        if ($(this).attr('id') == 'dataMax' && $('#dataMin').val().length == 10) {
-            $('#dataMin').keyup();
-        }
-        aplica = true;
     }
-    if ($(this).val().length == 10) {
-        var dataMin = $('#dataMin').val(), dataMax = $('#dataMax').val();
-        if (dataMin.length == 10) {
-            dataMin = dataMin.split('/');
-        }
-        if (dataMax.length == 10) {
-            var dataMax = dataMax.split('/');
-        }
+    var valor = $(this).val();
+    if (valor != '0') {
+        var coluna = 3;
         $('table tbody tr').each(function() {
-            var data = $(this).children(".data").children().html().split('/');
-            if (dataMin.length = 3) {
-                data[2] = parseInt(data[2]);
-                dataMin[2] = parseInt(dataMin[2]);
-                if (data[2] < dataMin[2]) {
-                    $(this).hide();
-                } else {
-                    if (data[2] == dataMin[2]) {
-                        data[1] = parseInt(data[1]);
-                        dataMin[1] = parseInt(dataMin[1]);
-                        if (data[1] < dataMin[1]) {
-                            $(this).hide();
-                        } else {
-                            if (data[1] == dataMin[1]) {
-                                if (parseInt(data[0]) < parseInt(dataMin[0])) {
-                                    $(this).hide();
-                                }
-                            }
-                        }
-                    }
+            var linha = $(this);
+            var atual = 0;
+            linha.children().each(function() {
+                var celula = $(this).html();
+                if ((coluna == ++atual) && (celula.indexOf(valor) < 0)) {
+                    linha.hide();
                 }
-            }
-            if (dataMax.length = 3) {
-                data[2] = parseInt(data[2]);
-                dataMax[2] = parseInt(dataMax[2]);
-                if (data[2] > dataMax[2]) {
-                    $(this).hide();
-                } else {
-                    if (data[2] == dataMax[2]) {
-                        data[1] = parseInt(data[1]);
-                        dataMax[1] = parseInt(dataMax[1]);
-                        if (data[1] > dataMax[1]) {
-                            $(this).hide();
-                        } else {
-                            if (data[1] == dataMax[1]) {
-                                if (parseInt(data[0]) > parseInt(dataMax[0])) {
-                                    $(this).hide();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            });
         });
-        aplica = true;
     }
-    if (aplica && controlaFiltro()) {
-        $('.filtro').change();
+    if (controlaFiltro()) {
+        {% if ehAdmin %}
+        $('#professores').change();
+        {% else %}
+        $('#dataMin').keyup();
+        {% endif %}
     }
-    contador();
 });
-$('.filtro').change(function() {
-    if ($('.filtro').val() == 0 && filtros == 0) {
+{% if ehAdmin %}
+$('#professores').change(function() {
+    if (filtros == 0) {
         mostraTudo();
     }
-    $('.filtro').each(function() {
-        var filtro = $(this).attr('id');
-        var valor = $(this).val();
-        if (valor != '0') {
-            var coluna = (filtro == 'grupos') ? 3 : 0;
-            $('table tbody tr').each(function() {
-                var linha = $(this);
-                var atual = 0;
-                linha.children().each(function() {
-                    var celula = $(this).html();
-                    if ((coluna == ++atual) && (celula.indexOf(valor) < 0)) {
-                        linha.hide();
-                    }
-                });
+    var valor = $(this).val();
+    if (valor != '0') {
+        var coluna = 4;
+        $('table tbody tr').each(function() {
+            var linha = $(this);
+            var atual = 0;
+            linha.children().each(function() {
+                var celula = $(this).html();
+                if ((coluna == ++atual) && (celula.indexOf(valor) < 0)) {
+                    linha.hide();
+                }
             });
-        }
-    });
+        });
+    }
     if (controlaFiltro()) {
         $('#dataMin').keyup();
+    }
+});
+{% endif %}
+$('#dataMin').keyup(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    if ($(this).val().length == 10) {
+        var dataMin = $(this).val().split('/');
+        dataMin[0] = parseInt(dataMin[0]);
+        dataMin[1] = parseInt(dataMin[1]);
+        dataMin[2] = parseInt(dataMin[2]);
+        $('table tbody tr').each(function() {
+            var data = $(this).children(".data").children().html().split('/');
+            data[0] = parseInt(data[0]);
+            data[1] = parseInt(data[1]);
+            data[2] = parseInt(data[2]);
+            if ((data[2] < dataMin[2])
+                    || ((data[2] == dataMin[2]) && (data[1] < dataMin[1]))
+                    || ((data[1] == dataMin[1]) && (data[0] < dataMin[0]))) {
+                $(this).hide();
+            }
+        });
+    }
+    if (controlaFiltro()) {
         $('#dataMax').keyup();
     }
-    contador();
+});
+$('#dataMax').keyup(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    if ($(this).val().length == 10) {
+        var dataMax = $(this).val().split('/');
+        dataMax[0] = parseInt(dataMax[0]);
+        dataMax[1] = parseInt(dataMax[1]);
+        dataMax[2] = parseInt(dataMax[2]);
+        $('table tbody tr').each(function() {
+            var data = $(this).children(".data").children().html().split('/');
+            data[0] = parseInt(data[0]);
+            data[1] = parseInt(data[1]);
+            data[2] = parseInt(data[2]);
+            if ((data[2] > dataMax[2])
+                    || ((data[2] == dataMax[2]) && (data[1] > dataMax[1]))
+                    || ((data[1] == dataMax[1]) && (data[0] > dataMax[0]))) {
+                $(this).hide();
+            }
+        });
+    }
+    if (controlaFiltro()) {
+        $('#grupos').change();
+    }
 });
 </script>
 {% endblock %}

@@ -37,12 +37,7 @@ class AulaController extends Controller
         if (empty($entities)) {
             $entities = array();
         }
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
-        }
-        if ($this->get('security.context')->isGranted('ROLE_PROF')) {
-            $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findBy(array('professor' => $this->get('security.context')->getToken()->getUser()->getId()));
-        }
+        $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
         if (empty($grupos)) {
             $grupos = array();
         }
@@ -89,6 +84,8 @@ class AulaController extends Controller
         return array(
             'entities' => array_filter($entities),
             'grupos' => $grupos,
+            'professores' => $professores,
+            'ehAdmin' => $this->get('security.context')->isGranted('ROLE_ADMIN'),
         );
     }
 
