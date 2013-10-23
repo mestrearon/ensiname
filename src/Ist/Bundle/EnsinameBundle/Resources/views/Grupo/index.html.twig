@@ -36,7 +36,10 @@
             <td>{{ entity.lingua }}</td>
             <td>{{ entity.professor }}</td>
             <td>{{ entity.horario }}</td>
-            <td><a href="{{ path('grupo_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a></td>
+            <td>
+                <a href="{{ path('grupo_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
+                <a href="{{ path('grupo_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

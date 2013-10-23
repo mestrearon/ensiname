@@ -43,8 +43,8 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td class="contador">{{ entity.id }}</a></td>
-            <td class="data"><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.data }}</a></td>
+            <td class="contador"><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td class="data">{{ entity.data }}</td>
             <td class="grupo">{{ entity.grupo }}</td>
             {% if ehAdmin %}
             <td class="professor">{{ entity.professor }}</td>
@@ -52,7 +52,10 @@
             <td class="lingua">{{ entity.lingua }}</td>
             <td>{{ entity.dada|replace({'s': 'проведен', 'n': 'отменен'}) }}</td>
             <td>{{ entity.observacao }}</td>
-            <td><a href="{{ path('aula_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a></td>
+            <td>
+                <a href="{{ path('aula_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
+                <a href="{{ path('aula_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

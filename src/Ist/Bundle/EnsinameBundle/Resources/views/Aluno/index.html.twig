@@ -48,7 +48,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td><a href="{{ path('aluno_edit', { 'id': entity.id }) }}">{{ entity.nome }}</a></td>
+            <td>{{ entity.nome }}</td>
             <td>{% if entity.nascimento %}{{ entity.nascimento }}{% endif %}</td>
             <td>{{ entity.fone }}</td>
             <td>{{ entity.email }}</td>
@@ -57,7 +57,10 @@
             <td>{{ alunos[entity.id] }}</td>
             <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен'}) }}</td>
             <td>{{ entity.observacao }}</td>
-            <td><a href="{{ path('aluno_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a></td>
+            <td>
+                <a href="{{ path('aluno_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
+                <a href="{{ path('aluno_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
