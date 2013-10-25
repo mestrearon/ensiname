@@ -34,7 +34,7 @@ class AulaType extends AbstractType
                 'multiple' => true,
             ))
             ->add('dada', 'choice', array(
-                'choices' => array('s' => 'да', 'n' => 'не'),
+                'choices' => array('s' => 'проведен', 'n' => 'отменен'),
                 'required' => true,))
             ->add('observacao')
         ;
