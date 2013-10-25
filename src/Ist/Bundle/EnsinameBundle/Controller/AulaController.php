@@ -118,7 +118,7 @@ class AulaController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'aula cadastrada com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Урок успешно зарегистрирован!');
             return $this->redirect($this->generateUrl($this->get('security.context')->isGranted('ROLE_ADMIN') ? 'aula' : 'aula_new'));
         }
 
@@ -319,7 +319,7 @@ class AulaController extends Controller
         $em->remove($entity);
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add('success', 'aula excluido com sucesso!');
+        $this->get('session')->getFlashBag()->add('success', 'Урок успешно удален!');
         return $this->redirect($this->generateUrl('aula'));
     }
 }
