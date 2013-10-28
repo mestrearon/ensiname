@@ -112,7 +112,16 @@ class AulaController extends Controller
                 $professor = $this->getUser()->getId();
 
             $entity->setProfessor($professor);
-            $entity->setData(new \DateTime($post['data']));
+        
+            try {
+                list($dia, $mes, $ano) = explode('/', $post['data']);
+                $entity->setData(new \DateTime($ano .'-'.$mes .'-'.$dia));
+            }
+            catch (\Exception $e) {
+                $this->get('session')->getFlashBag()->add('error', 'data invalida!');
+                return $this->newAction($entity);
+            }
+        
             $entity->setGrupo(isset($post['grupo']) ? $post['grupo'] : NULL);
             $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : NULL);
             $em = $this->getDoctrine()->getManager();
@@ -135,9 +144,9 @@ class AulaController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function newAction()
+    public function newAction($entity = null)
     {
-        $entity = new Aula();
+        $entity = empty($entity) ? new Aula() : $entity;
         $form   = $this->createForm(new AulaType(), $entity);
         $em = $this->getDoctrine()->getManager();
 
