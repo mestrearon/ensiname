@@ -53,7 +53,7 @@
             <td>{{ entity.dada|replace({'s': 'проведен', 'n': 'отменен'}) }}</td>
             <td>{{ entity.observacao }}</td>
             <td>
-                <a href="{{ path('aula_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
+                <!-- <a href="{{ path('aula_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a> -->
                 <a href="{{ path('aula_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a>
             </td>
         </tr>
