@@ -88,7 +88,7 @@ function contador() {
     var contador = 1;
     $('table tbody tr').each(function() {
         if ($(this).is(":visible")) {
-            $(this).children(".contador").html(contador++);
+            $(this).children(".contador").children("a").html(contador++);
         }
     });
 }

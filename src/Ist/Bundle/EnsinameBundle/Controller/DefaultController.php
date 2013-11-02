@@ -28,10 +28,6 @@ class DefaultController extends Controller
         if (isset($_SERVER['HTTP_REFERER']) && substr($_SERVER['HTTP_REFERER'], -5) == 'login')
             $this->get('session')->getFlashBag()->add('success', 'Добро пожаловать, '. $user = $this->getUser()->getUsername() .'!');
 
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
-            return $this->redirect($this->generateUrl('aula'));
-        
-        if ($this->get('security.context')->isGranted('ROLE_PROF'))
-            return $this->redirect($this->generateUrl('aula_new'));
+        return $this->redirect($this->generateUrl('aula'));
     }
 }
