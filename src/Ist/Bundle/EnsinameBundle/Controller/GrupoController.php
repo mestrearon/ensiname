@@ -138,13 +138,15 @@ class GrupoController extends Controller
 
         $alunos = explode(',', $entity->getAlunos());
 
-        foreach ($alunos as &$aluno)
+        foreach ($alunos as $aluno)
         {
             $_aluno = $em->getRepository('IstEnsinameBundle:Aluno')->find($aluno);
-            $aluno = $_aluno->getNome();
+
+            if ($_aluno)
+                $_alunos[] = $_aluno->getNome();
         }
 
-        $entity->setAlunos(implode(',', $alunos));
+        $entity->setAlunos(implode(',', (array) $_alunos));
 
         return array('entity' => $entity);
     }
