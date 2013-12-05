@@ -32,17 +32,14 @@ class LinguaController extends Controller
             return $this->redirect($this->generateUrl('index'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
         $em = $this->getDoctrine()->getManager();
-
         $entities = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
 
         return array(
             'entities' => $entities,
         );
     }
+
     /**
      * Creates a new Lingua entity.
      *
@@ -66,10 +63,8 @@ class LinguaController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($entity);
                 $em->flush();
-
                 $this->get('session')->getFlashBag()->add('success', 'Язык успешно зарегистрирован');
-
-                return $this->redirect($this->generateUrl('lingua_new'));
+                return $this->redirect($this->generateUrl('lingua'));
             }
             catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'Язык уже существует');
@@ -217,7 +212,7 @@ class LinguaController extends Controller
             'delete_form' => $deleteForm->createView(),
         );
     }
-    
+
     /**
      * Deletes a Lingua entity.
      *
