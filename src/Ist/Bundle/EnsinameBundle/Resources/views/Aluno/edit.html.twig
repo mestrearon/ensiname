@@ -1,10 +1,6 @@
-{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
-
-{% block content %}
-{{ include('IstEnsinameBundle:Aluno:form.html.twig', { 'action': path('aluno_update', { 'id': entity.id }), 'form': form, 'legend': 'изменить данные', 'method': 'PUT' }) }}
-{% endblock %}
-
-{% block javascripts %}
-<script type="text/javascript" src="http://igorescobar.github.io/jQuery-Mask-Plugin/js/jquery.mask.min.js"></script>
-<script type="text/javascript"> $('.date').mask('11/11/1111'); </script>
-{% endblock %}
+{{ include('IstEnsinameBundle:Aluno:form.html.twig', {
+	'action': path('aluno_update', { 'id': entity.id }),
+	'form': form,
+	'legend': 'изменить данные',
+	'method': 'PUT'
+}) }}

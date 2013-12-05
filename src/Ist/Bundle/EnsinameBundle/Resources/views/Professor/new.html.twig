@@ -3,3 +3,11 @@
 {% block content %}
 {{ include('IstEnsinameBundle:Professor:form.html.twig', { 'action': path('professor_create'), 'form': form, 'legend': 'Добавить преподавателя', 'method': 'POST' }) }}
 {% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$('.datepicker')
+    .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
+    .on('hide', function(e) { $(this).keyup(); });
+</script>
+{% endblock %}

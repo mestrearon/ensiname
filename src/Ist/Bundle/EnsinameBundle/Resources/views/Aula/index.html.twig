@@ -20,9 +20,9 @@
         </select>
         {% endif %}
         С:
-        <input type="text" id="dataMin" class="input-small" maxlength="10" data-mask="00/00/0000" />
+        <input type="text" id="dataMin" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" />
         До:
-        <input type="text" id="dataMax" class="input-small" maxlength="10" data-mask="00/00/0000" />
+        <input type="text" id="dataMax" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" />
     </span>
 </p>
 <table class="table table-striped">
@@ -64,6 +64,9 @@
 
 {% block javascripts %}
 <script type="text/javascript">
+$('.datepicker')
+    .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
+    .on('hide', function(e) { $(this).keyup(); });
 var filtros = 0;
 function controlaFiltro() {
     filtros++;

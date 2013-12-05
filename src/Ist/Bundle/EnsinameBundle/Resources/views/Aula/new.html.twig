@@ -7,6 +7,9 @@
 
 {% block javascripts %}
 <script type="text/javascript">
+$('.datepicker')
+    .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
+    .on('hide', function(e) { $(this).keyup(); });
 var data = $.parseJSON($('#data').val());
 {% if is_granted('ROLE_ADMIN') %}
 $('#ist_bundle_ensinamebundle_aulatype_professor option').each(function() {
