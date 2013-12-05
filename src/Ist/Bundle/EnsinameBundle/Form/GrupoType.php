@@ -5,6 +5,7 @@ namespace Ist\Bundle\EnsinameBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
 
 class GrupoType extends AbstractType
 {
@@ -29,6 +30,7 @@ class GrupoType extends AbstractType
             ->add('alunos', 'entity', array(
                 'class' => 'IstEnsinameBundle:Aluno',
                 'property' => 'nome',
+                'query_builder' => function(EntityRepository $er) { return $er->createQueryBuilder('u')->orderBy('u.nome', 'ASC'); },
                 'required' => true,
                 'expanded' => true,
                 'multiple' => true,
