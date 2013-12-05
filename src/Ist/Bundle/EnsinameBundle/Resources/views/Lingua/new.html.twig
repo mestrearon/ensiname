@@ -1,30 +1,6 @@
-{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
-
-{% block content %}
-<div class="container">
-    <form action="{{ path('lingua_create') }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
-        {{ form_errors(form) }}
-        <fieldset>
-            <legend>Добавить язык</legend>
-            <div class="control-group">
-                <label class="control-label" for="titulo">Язык</label>
-                <div class="controls">
-                    {{ form_widget(form.titulo) }}
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="observacao">Примечания</label>
-                <div class="controls">
-                    {{ form_widget(form.observacao) }}
-                </div>
-            </div>
-            {{ form_widget(form._token) }}
-            <div class="control-group">
-                <div class="controls">
-                    <button type="submit" class="btn">Добавить</button>
-                </div>
-            </div>
-        </fieldset>
-    </form>
-</div>
-{% endblock %}
+{{ include('IstEnsinameBundle:Lingua:form.html.twig', {
+    'action': path('aula_create'),
+    'form': form,
+    'legend': 'Добавить новый урок',
+    'method': 'POST'
+}) }}

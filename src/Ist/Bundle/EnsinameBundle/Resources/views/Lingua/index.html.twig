@@ -19,6 +19,7 @@
             <td>{{ entity.observacao }}</td>
             <td>
                 <a href="{{ path('lingua_show', { 'id': entity.id }) }}"><i class="icon-large icon-eye-open"></i></a>
+                <a href="{{ path('lingua_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
             </td>
         </tr>
         {% endfor %}

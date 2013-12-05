@@ -176,27 +176,22 @@ class LinguaController extends Controller
     {
         if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
             $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('lingua'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Lingua')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Lingua entity.');
+            $this->get('session')->getFlashBag()->add('info', 'invalid parameter');
+            return $this->redirect($this->generateUrl('lingua'));
         }
 
-        $editForm = $this->createForm(new LinguaType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $form = $this->createForm(new LinguaType(), $entity);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $form->createView(),
         );
     }
 
@@ -211,35 +206,32 @@ class LinguaController extends Controller
     {
         if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
             $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('lingua'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Lingua')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Lingua entity.');
+            $this->get('session')->getFlashBag()->add('info', 'invalid parameter');
+            return $this->redirect($this->generateUrl('lingua'));
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new LinguaType(), $entity);
-        $editForm->bind($request);
+        $form = $this->createForm(new LinguaType(), $entity);
+        $form->bind($request);
 
-        if ($editForm->isValid()) {
+        if ($form->isValid()) {
             $em->persist($entity);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('lingua_edit', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add('success', 'lingua editada com sucesso!');
+            return $this->redirect($this->generateUrl('lingua'));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', 'falha na edição da lingua!');
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $form->createView(),
         );
     }
 
