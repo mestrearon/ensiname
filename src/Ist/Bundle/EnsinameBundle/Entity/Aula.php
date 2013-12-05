@@ -66,7 +66,7 @@ class Aula
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -82,14 +82,14 @@ class Aula
     public function setProfessor($professor)
     {
         $this->professor = $professor;
-    
+
         return $this;
     }
 
     /**
      * Get professor
      *
-     * @return integer 
+     * @return integer
      */
     public function getProfessor()
     {
@@ -105,14 +105,14 @@ class Aula
     public function setData($data)
     {
         $this->data = $data;
-    
+
         return $this;
     }
 
     /**
      * Get data
      *
-     * @return string 
+     * @return string
      */
     public function getData()
     {
@@ -128,14 +128,14 @@ class Aula
     public function setGrupo($grupo)
     {
         $this->grupo = $grupo;
-    
+
         return $this;
     }
 
     /**
      * Get grupo
      *
-     * @return integer 
+     * @return integer
      */
     public function getGrupo()
     {
@@ -151,18 +151,28 @@ class Aula
     public function setPresencas($presencas)
     {
         $this->presencas = $presencas;
-    
+
         return $this;
     }
 
     /**
      * Get presencas
      *
-     * @return string 
+     * @return string
      */
     public function getPresencas()
     {
         return $this->presencas;
+    }
+
+    /**
+     * Has presencas
+     *
+     * @return boolean
+     */
+    public function hasPresencas()
+    {
+        return !empty($this->presencas);
     }
 
     /**
@@ -174,14 +184,14 @@ class Aula
     public function setDada($dada)
     {
         $this->dada = $dada;
-    
+
         return $this;
     }
 
     /**
      * Get dada
      *
-     * @return string 
+     * @return string
      */
     public function getDada()
     {
@@ -197,14 +207,14 @@ class Aula
     public function setObservacao($observacao)
     {
         $this->observacao = $observacao;
-    
+
         return $this;
     }
 
     /**
      * Get observacao
      *
-     * @return string 
+     * @return string
      */
     public function getObservacao()
     {

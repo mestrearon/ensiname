@@ -18,7 +18,11 @@ class AulaType extends AbstractType
                 'expanded' => false,
                 'multiple' => false,
             ))
-            ->add('data', 'text')
+            ->add('data', 'date', array(
+                'widget' => 'single_text',
+                'input' => 'datetime',
+                'format' => 'dd/MM/yyyy',
+            ))
             ->add('grupo', 'entity', array(
                 'class' => 'IstEnsinameBundle:Grupo',
                 'property' => 'titulo',
