@@ -230,6 +230,16 @@ class Professor implements UserInterface, \Serializable
     }
 
     /**
+     * Has linguas
+     *
+     * @return boolean 
+     */
+    public function hasLinguas()
+    {
+        return !empty($this->linguas);
+    }
+
+    /**
      * Set fone
      *
      * @param string $fone

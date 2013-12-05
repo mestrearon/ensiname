@@ -1,3 +1,6 @@
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
+
+{% block content %}
 <form action="{{ action }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
     <input type="hidden" name="_method" value="{{ method }}" />
     <fieldset>
@@ -64,3 +67,15 @@
         </div>
     </fieldset>
 </form>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+{% if password %}
+$('#ist_bundle_ensinamebundle_professortype_password').removeAttr('required');
+{% endif %}
+$('.datepicker')
+    .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
+    .on('hide', function(e) { $(this).keyup(); });
+</script>
+{% endblock %}

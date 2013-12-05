@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ist\Bundle\EnsinameBundle\Entity\Professor;
 use Ist\Bundle\EnsinameBundle\Form\ProfessorType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Professor controller.
@@ -174,24 +175,19 @@ class ProfessorController extends Controller
             return $this->redirect($this->generateUrl('index'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-        
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Professor')->find($id);
-
-        if (!$entity) {
+        
+        if (!$entity)
             throw $this->createNotFoundException('Unable to find Professor entity.');
-        }
-
-        $editForm = $this->createForm(new ProfessorType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
-
+        
+        $this->getLinguas($entity);
+        $entity->setPassword(null);
+        $form = $this->createForm(new ProfessorType(), $entity);
+        
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $form->createView(),
         );
     }
 
@@ -209,32 +205,38 @@ class ProfessorController extends Controller
             return $this->redirect($this->generateUrl('index'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Professor')->find($id);
 
-        if (!$entity) {
+        if (!$entity)
             throw $this->createNotFoundException('Unable to find Professor entity.');
-        }
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new ProfessorType(), $entity);
-        $editForm->bind($request);
+        $this->getLinguas($entity);
+        $form = $this->createForm(new ProfessorType(), $entity);
+        $form->bind($request);
 
-        if ($editForm->isValid()) {
+        if ($form->isValid()) {
+            $post = $request->request->get($form->getName());
+            
+            if (!empty($post['password'])) {
+                $factory = $this->get('security.encoder_factory');
+                $encoder = $factory->getEncoder($entity);
+                $password = $encoder->encodePassword($post['password'], $entity->getSalt());
+                $entity->setPassword($password);
+            }
+
+            $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
             $em->persist($entity);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('professor_edit', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add('success', 'Professor editado com sucesso! ');
+            return $this->redirect($this->generateUrl('professor'));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', 'Falha ao editar professor!');
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $form->createView(),
         );
     }
 
@@ -262,5 +264,14 @@ class ProfessorController extends Controller
 
         $this->get('session')->getFlashBag()->add('success', 'professor excluido com sucesso!');
         return $this->redirect($this->generateUrl('professor'));
+    }
+
+    private function getLinguas(&$entity)
+    {
+        $linguas = $entity->hasLinguas()
+            ? $this->getDoctrine()->getManager()->getRepository('IstEnsinameBundle:Lingua')->createQueryBuilder('a')->where('a.id in ('. $entity->getLinguas() .')')->getQuery()->getResult()
+            : array();
+        $collection = new ArrayCollection($linguas);
+        $entity->setLinguas($collection);
     }
 }
