@@ -19,6 +19,12 @@
             {% endfor %}
         </select>
         {% endif %}
+        <select id="linguas" class="input-small filtro">
+            <option value="0">lingua</option>
+            {% for lingua in linguas %}
+            <option>{{ lingua.titulo }}</option>
+            {% endfor %}
+        </select>
         <select id="status" class="input-small filtro">
             <option value="0">Статус урока</option>
             <option>проведен</option>
@@ -76,9 +82,9 @@ var filtros = 0;
 function controlaFiltro() {
     filtros++;
     {% if ehAdmin %}
-    if (filtros < 5) {
+    if (filtros < 6) {
     {% else %}
-    if (filtros < 4) {
+    if (filtros < 5) {
     {% endif %}
         return true;
     } else {
@@ -123,7 +129,7 @@ $('#grupos').change(function() {
         {% if ehAdmin %}
         $('#professores').change();
         {% else %}
-        $('#status').change();
+        $('#linguas').change();
         {% endif %}
     }
 });
@@ -147,10 +153,32 @@ $('#professores').change(function() {
         });
     }
     if (controlaFiltro()) {
-        $('#status').change();
+        $('#linguas').change();
     }
 });
 {% endif %}
+$('#linguas').change(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    var valor = $(this).val();
+    if (valor != '0') {
+        var coluna = 5;
+        $('table tbody tr').each(function() {
+            var linha = $(this);
+            var atual = 0;
+            linha.children().each(function() {
+                var celula = $(this).html();
+                if ((coluna == ++atual) && (celula.indexOf(valor) < 0)) {
+                    linha.hide();
+                }
+            });
+        });
+    }
+    if (controlaFiltro()) {
+        $('#status').change();
+    }
+});
 $('#status').change(function() {
     if (filtros == 0) {
         mostraTudo();

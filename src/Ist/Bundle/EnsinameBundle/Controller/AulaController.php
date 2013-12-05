@@ -85,6 +85,7 @@ class AulaController extends Controller
             'entities' => array_filter($entities),
             'grupos' => $grupos,
             'professores' => $professores,
+            'linguas' => $linguas,
             'ehAdmin' => $this->get('security.context')->isGranted('ROLE_ADMIN'),
         );
     }
