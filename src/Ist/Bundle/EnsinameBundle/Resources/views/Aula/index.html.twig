@@ -153,7 +153,7 @@ $('#dataMin').keyup(function() {
         dataMin[1] = parseInt(dataMin[1]);
         dataMin[2] = parseInt(dataMin[2]);
         $('table tbody tr').each(function() {
-            var data = $(this).children(".data").children().html().split('/');
+            var data = $(this).children(".data").html().split('/');
             data[0] = parseInt(data[0]);
             data[1] = parseInt(data[1]);
             data[2] = parseInt(data[2]);
@@ -178,7 +178,7 @@ $('#dataMax').keyup(function() {
         dataMax[1] = parseInt(dataMax[1]);
         dataMax[2] = parseInt(dataMax[2]);
         $('table tbody tr').each(function() {
-            var data = $(this).children(".data").children().html().split('/');
+            var data = $(this).children(".data").html().split('/');
             data[0] = parseInt(data[0]);
             data[1] = parseInt(data[1]);
             data[2] = parseInt(data[2]);
