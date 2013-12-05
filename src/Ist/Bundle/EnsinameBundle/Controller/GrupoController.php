@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ist\Bundle\EnsinameBundle\Entity\Grupo;
 use Ist\Bundle\EnsinameBundle\Form\GrupoType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Grupo controller.
@@ -162,27 +163,23 @@ class GrupoController extends Controller
     {
         if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
             $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('grupo'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Grupo entity.');
+            $this->get('session')->getFlashBag()->add('info', 'invalid parameter');
+            return $this->redirect($this->generateUrl('grupo'));
         }
 
-        $editForm = $this->createForm(new GrupoType(), $entity);
-        $deleteForm = $this->createDeleteForm($id);
+        $this->getAlunos($entity);
+        $form = $this->createForm(new GrupoType(), $entity);
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'form' => $form->createView(),
         );
     }
 
@@ -200,32 +197,35 @@ class GrupoController extends Controller
             return $this->redirect($this->generateUrl('index'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Grupo entity.');
+            $this->get('session')->getFlashBag()->add('info', 'invalid parameter');
+            return $this->redirect($this->generateUrl('grupo'));
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new GrupoType(), $entity);
-        $editForm->bind($request);
+        $this->getAlunos($entity);
+        $form = $this->createForm(new GrupoType(), $entity);
+        $form->bind($request);
 
-        if ($editForm->isValid()) {
+        if ($form->isValid()) {
+            $post = $request->request->get($form->getName());
+            $entity->setLingua($post['lingua']);
+            $entity->setProfessor($post['professor']);
+            $entity->setAlunos(isset($post['alunos']) ? implode(',', $post['alunos']) : null);
+            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-
-            return $this->redirect($this->generateUrl('grupo_edit', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add('success', 'grupo editado com sucesso!');
+            return $this->redirect($this->generateUrl('grupo'));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', 'falha na edição do grupo!');
         }
 
         return array(
-            'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'edit_form' => $form->createView(),
         );
     }
 
@@ -253,5 +253,14 @@ class GrupoController extends Controller
 
         $this->get('session')->getFlashBag()->add('success', 'grupo excluido com sucesso!');
         return $this->redirect($this->generateUrl('grupo'));
+    }
+
+    private function getAlunos(&$entity)
+    {
+        $presencas = $entity->hasAlunos()
+            ? $this->getDoctrine()->getManager()->getRepository('IstEnsinameBundle:Aluno')->createQueryBuilder('a')->where('a.id in ('. $entity->getAlunos() .')')->getQuery()->getResult()
+            : array();
+        $collection = new ArrayCollection($presencas);
+        $entity->setAlunos($collection);
     }
 }

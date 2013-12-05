@@ -60,7 +60,7 @@ class Grupo
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -76,14 +76,14 @@ class Grupo
     public function setTitulo($titulo)
     {
         $this->titulo = $titulo;
-    
+
         return $this;
     }
 
     /**
      * Get titulo
      *
-     * @return string 
+     * @return string
      */
     public function getTitulo()
     {
@@ -99,14 +99,14 @@ class Grupo
     public function setLingua($lingua)
     {
         $this->lingua = $lingua;
-    
+
         return $this;
     }
 
     /**
      * Get lingua
      *
-     * @return integer 
+     * @return integer
      */
     public function getLingua()
     {
@@ -122,14 +122,14 @@ class Grupo
     public function setProfessor($professor)
     {
         $this->professor = $professor;
-    
+
         return $this;
     }
 
     /**
      * Get professor
      *
-     * @return integer 
+     * @return integer
      */
     public function getProfessor()
     {
@@ -145,18 +145,28 @@ class Grupo
     public function setAlunos($alunos)
     {
         $this->alunos = $alunos;
-    
+
         return $this;
     }
 
     /**
      * Get alunos
      *
-     * @return string 
+     * @return string
      */
     public function getAlunos()
     {
         return $this->alunos;
+    }
+
+    /**
+     * Has alunos
+     *
+     * @return boolean
+     */
+    public function hasAlunos()
+    {
+        return !empty($this->alunos);
     }
 
     /**
@@ -168,14 +178,14 @@ class Grupo
     public function setHorario($horario)
     {
         $this->horario = $horario;
-    
+
         return $this;
     }
 
     /**
      * Get horario
      *
-     * @return string 
+     * @return string
      */
     public function getHorario()
     {
