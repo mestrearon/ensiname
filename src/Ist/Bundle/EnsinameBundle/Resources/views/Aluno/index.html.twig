@@ -54,7 +54,13 @@
             <td>{{ entity.email }}</td>
             <td>{{ entity.estudo|replace({'g': 'в группе', 'i': 'индивидуально'}) }}</td>
             <td>{{ entity.linguas }}</td>
-            <td>{{ alunos[entity.id] }}</td>
+            <td>
+                <ul class="inline">
+                    {% for grupo in alunos[entity.id] %}
+                    <li><a href="{{ path('grupo_show', { 'id': grupo.id }) }}">{{ grupo.titulo }}</a></li>
+                    {% endfor %}
+                </ul>
+            </td>
             <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен'}) }}</td>
             <td>{{ entity.observacao }}</td>
             <td>
