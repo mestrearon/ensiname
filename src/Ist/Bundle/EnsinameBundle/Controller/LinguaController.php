@@ -116,22 +116,52 @@ class LinguaController extends Controller
             return $this->redirect($this->generateUrl('index'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'not implemented');
-        return $this->redirect($this->generateUrl('index'));
-
         $em = $this->getDoctrine()->getManager();
-
         $entity = $em->getRepository('IstEnsinameBundle:Lingua')->find($id);
 
         if (!$entity) {
-            throw $this->createNotFoundException('Unable to find Lingua entity.');
+            $this->get('session')->getFlashBag()->add('info', 'invalid parameter');
+            return $this->redirect($this->generateUrl('lingua'));
         }
 
-        $deleteForm = $this->createDeleteForm($id);
+        $_alunos = $em->getRepository('IstEnsinameBundle:Aluno')->createQueryBuilder('a')->orderBy('a.nome', 'ASC')->getQuery()->getResult();
+        $alunos = array();
+
+        foreach ((array) $_alunos as $aluno) {
+            $linguas = explode(',', $aluno->getLinguas());
+            foreach ((array) $linguas as $lingua) {
+                if ($lingua == $entity->getId()) {
+                    $alunos[] = $aluno->getNome();
+                }
+            }
+        }
+
+        $_professores = $em->getRepository('IstEnsinameBundle:Professor')->createQueryBuilder('a')->orderBy('a.nome', 'ASC')->getQuery()->getResult();
+        $professores = array();
+
+        foreach ((array) $_professores as $professor) {
+            $linguas = explode(',', $professor->getLinguas());
+            foreach ((array) $linguas as $lingua) {
+                if ($lingua == $entity->getId()) {
+                    $professores[] = $professor->getNome();
+                }
+            }
+        }
+
+        $_grupos = $em->getRepository('IstEnsinameBundle:Grupo')->createQueryBuilder('a')->orderBy('a.titulo', 'ASC')->getQuery()->getResult();
+        $grupos = array();
+
+        foreach ((array) $_grupos as $grupo) {
+            if ($grupo->getLingua() == $entity->getId()) {
+                $grupos[] = $grupo->getTitulo();
+            }
+        }
 
         return array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),
+            'entity' => $entity,
+            'alunos' => $alunos,
+            'professores' => $professores,
+            'grupos' => $grupos,
         );
     }
 

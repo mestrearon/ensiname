@@ -17,7 +17,9 @@
         <tr>
             <td>{{ entity.titulo }}</td>
             <td>{{ entity.observacao }}</td>
-            <th>&nbsp;</th>
+            <td>
+                <a href="{{ path('lingua_show', { 'id': entity.id }) }}"><i class="icon-large icon-eye-open"></i></a>
+            </td>
         </tr>
         {% endfor %}
     </tbody>
