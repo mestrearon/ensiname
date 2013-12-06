@@ -11,7 +11,7 @@
             <option>{{ grupo.titulo }}</option>
             {% endfor %}
         </select>
-        {% if ehAdmin %}
+        {% if is_granted('ROLE_ADMIN') %}
         <select id="professores" class="input-small filtro">
             <option value="0">professor</option>
             {% for professor in professores %}
@@ -42,7 +42,7 @@
             <th>#</th>
             <th>Дата урока</th>
             <th>Группы</th>
-            {% if ehAdmin %}
+            {% if is_granted('ROLE_ADMIN') %}
             <th>professor</th>
             {% endif %}
             <th>lingua</th>
@@ -57,7 +57,7 @@
             <td class="contador"><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td class="data">{{ entity.data|date("d/m/Y") }}</td>
             <td class="grupo">{{ entity.grupo }}</td>
-            {% if ehAdmin %}
+            {% if is_granted('ROLE_ADMIN') %}
             <td class="professor">{{ entity.professor }}</td>
             {% endif %}
             <td class="lingua">{{ entity.lingua }}</td>
@@ -89,7 +89,7 @@ var filtros = 0;
 
 function controlaFiltro() {
     filtros++;
-    {% if ehAdmin %}
+    {% if is_granted('ROLE_ADMIN') %}
     if (filtros < 6) {
     {% else %}
     if (filtros < 5) {
@@ -138,15 +138,16 @@ $('#grupos').change(function() {
         });
     }
     if (controlaFiltro()) {
-        {% if ehAdmin %}
+        {% if is_granted('ROLE_ADMIN') %}
         $('#professores').change();
-        {% else %}
+        {% endif %}
+        {% if is_granted('ROLE_PROF') %}
         $('#linguas').change();
         {% endif %}
     }
 });
 
-{% if ehAdmin %}
+{% if is_granted('ROLE_ADMIN') %}
 $('#professores').change(function() {
     if (filtros == 0) {
         mostraTudo();

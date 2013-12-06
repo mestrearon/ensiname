@@ -87,7 +87,6 @@ class AulaController extends Controller
             'grupos' => $grupos,
             'professores' => $professores,
             'linguas' => $linguas,
-            'ehAdmin' => $this->get('security.context')->isGranted('ROLE_ADMIN'),
             'dataMin' => date('01/m/Y'),
             'dataMax' => date('t/m/Y'),
         );
