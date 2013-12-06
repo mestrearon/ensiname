@@ -29,34 +29,31 @@ class AulaController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+
         if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
             $entities = $em->getRepository('IstEnsinameBundle:Aula')->findBy(array(), array('data' => 'DESC'));
         }
+
         if ($this->get('security.context')->isGranted('ROLE_PROF')) {
             $entities = $em->getRepository('IstEnsinameBundle:Aula')->findBy(array('professor' => $this->get('security.context')->getToken()->getUser()->getId()), array('data' => 'DESC'));
         }
-        if (empty($entities)) {
-            $entities = array();
+
+        if (!is_array($entities)) {
+            $entities = array($entities);
         }
+
         $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
-        if (empty($grupos)) {
-            $grupos = array();
-        }
         $professores = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
-        if (empty($professores)) {
-            $professores = array();
-        }
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
-        if (empty($linguas)) {
-            $linguas = array();
-        }
+
         foreach ($entities as &$entity) {
             $g = null;
             $l = null;
-            foreach ($grupos as $grupo) {
+
+            foreach ((array) $grupos as $grupo) {
                 if ($grupo->getId() == $entity->getGrupo()) {
                     $g = $grupo->getTitulo();
-                    foreach ($linguas as $lingua) {
+                    foreach ((array) $linguas as $lingua) {
                         if ($lingua->getId() == $grupo->getLingua()) {
                             $l = $lingua->getTitulo();
                             break;
@@ -65,13 +62,16 @@ class AulaController extends Controller
                     break;
                 }
             }
+
             $p = null;
-            foreach ($professores as $professor) {
+
+            foreach ((array) $professores as $professor) {
                 if ($professor->getId() == $entity->getProfessor()) {
                     $p = $professor->getNome();
                     break;
                 }
             }
+
             $entity = array(
                 'id' => $entity->getId(),
                 'data' => $entity->getData(),
@@ -82,6 +82,7 @@ class AulaController extends Controller
                 'observacao' => $entity->getObservacao(),
             );
         }
+
         return array(
             'entities' => array_filter($entities),
             'grupos' => $grupos,
