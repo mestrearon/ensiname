@@ -2,7 +2,7 @@
 
 {% block content %}
 <form action="{{ action }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
-    <input type="hidden" name="_method" value="{{ method }}" />
+    <input type="hidden" name="_method" id="method" value="{{ method }}" />
     <input type="hidden" id="data" value="{{ data }}" />
     <fieldset>
         <legend>{{ legend }}</legend>
@@ -76,7 +76,7 @@ $('#ist_bundle_ensinamebundle_aulatype_professor').change(function() {
     var professorSelecionado = $(this).val();
     var grupoSelecionado = $('#ist_bundle_ensinamebundle_aulatype_grupo').val();
 console.log(grupoSelecionado);
-    var primeiro = grupoSelecionado ? false : true;
+    var primeiro = ($('#method').val() == "POST") ? true : (grupoSelecionado ? false : true);
 console.log(primeiro);
     $('#ist_bundle_ensinamebundle_aulatype_grupo option').each(function() {
         $(this).show();
@@ -111,7 +111,7 @@ $('#ist_bundle_ensinamebundle_aulatype_professor').change();
 {% if is_granted('ROLE_PROF') %}
 var grupoSelecionado = $('#ist_bundle_ensinamebundle_aulatype_grupo').val();
 console.log(grupoSelecionado);
-var primeiro = grupoSelecionado ? false : true;
+var primeiro = ($('#method').val() == "POST") ? true : (grupoSelecionado ? false : true);
 console.log(primeiro);
 $('#ist_bundle_ensinamebundle_aulatype_grupo option').each(function() {
     $(this).show();
