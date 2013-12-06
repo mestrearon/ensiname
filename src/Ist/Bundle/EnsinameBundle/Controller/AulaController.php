@@ -102,8 +102,9 @@ class AulaController extends Controller
      */
     public function createAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $entity  = new Aula();
-        $form = $this->createForm(new AulaType(), $entity);
+        $form = $this->createForm(new AulaType($em), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -128,11 +129,12 @@ class AulaController extends Controller
 
             $entity->setGrupo(isset($post['grupo']) ? $post['grupo'] : NULL);
             $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : NULL);
-            $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'Урок успешно зарегистрирован!');
-            return $this->redirect($this->generateUrl($this->get('security.context')->isGranted('ROLE_ADMIN') ? 'aula' : 'aula_new'));
+            return $this->redirect($this->generateUrl('aula'));
+        } else {
+            $this->get('session')->getFlashBag()->add('error', 'falha na criação da aula!');
         }
 
         return array(
@@ -151,7 +153,7 @@ class AulaController extends Controller
     public function newAction($entity = null)
     {
         $entity = empty($entity) ? new Aula() : $entity;
-        $form   = $this->createForm(new AulaType(), $entity);
+        $form   = $this->createForm(new AulaType($this->getDoctrine()->getManager()), $entity);
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
@@ -227,7 +229,7 @@ class AulaController extends Controller
         }
 
         $this->getPresencas($entity);
-        $form = $this->createForm(new AulaType(), $entity);
+        $form = $this->createForm(new AulaType($em), $entity);
 
         return array(
             'entity' => $entity,
@@ -254,7 +256,7 @@ class AulaController extends Controller
         }
 
         $this->getPresencas($entity);
-        $form = $this->createForm(new AulaType(), $entity);
+        $form = $this->createForm(new AulaType($em), $entity);
         $form->bind($request);
 
         if ($form->isValid()) {
@@ -326,26 +328,18 @@ class AulaController extends Controller
 
         $professores = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
 
-        if (empty($professores))
-            $professores = array();
-
         if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
             $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
 
         if ($this->get('security.context')->isGranted('ROLE_PROF'))
             $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findBy(array('professor' => $this->getUser()->getId()));
 
-        if (empty($grupos))
-            $grupos = array();
-
-        $data = array();
-
-        foreach ($professores as $professor)
-            foreach ($grupos as $grupo)
+        foreach ((array) $professores as $professor)
+            foreach ((array) $grupos as $grupo)
                 if ($professor->getId() == $grupo->getProfessor())
                     $data[$professor->getId()][$grupo->getId()] = explode(',', $grupo->getAlunos());
 
-        return $data;
+        return (array) $data;
     }
 
     private function getPresencas(&$entity)

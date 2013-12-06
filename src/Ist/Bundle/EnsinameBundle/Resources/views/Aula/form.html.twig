@@ -6,6 +6,7 @@
     <input type="hidden" id="data" value="{{ data }}" />
     <fieldset>
         <legend>{{ legend }}</legend>
+
         {% if is_granted('ROLE_ADMIN') %}
         <div class="control-group">
             <label class="control-label" for="professor">Преподаватель</label>
@@ -14,9 +15,11 @@
             </div>
         </div>
         {% endif %}
+
         {% if is_granted('ROLE_PROF') %}
         <input type="hidden" name="professor" id="professor" value="{{ app.user.id }}" />
         {% endif %}
+
         <div class="control-group">
             <label class="control-label" for="data">Дата урока</label>
             <div class="controls">
@@ -31,7 +34,7 @@
         </div>
         <div class="control-group">
             <label class="control-label" for="presencas">Студенты</label>
-            <div class="controls" id="presencas" style="height:100px;overflow:auto;">
+            <div class="controls" id="presencas" style="height:100px;width:220px;overflow:auto;">
                 {{ form_widget(form.presencas) }}
             </div>
         </div>
@@ -62,58 +65,22 @@
 $('.datepicker')
     .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
     .on('hide', function(e) { $(this).keyup(); });
+
 var data = $.parseJSON($('#data').val());
 
 {% if is_granted('ROLE_ADMIN') %}
-$('#ist_bundle_ensinamebundle_aulatype_professor option').each(function() {
-    var fica = false;
-    for (professor in data)
-        if ($(this).val() == professor)
-            fica = true
-    if (!fica) {
-        $(this).hide();
-        $(this).attr('disabled', 'disabled');
-    }
-});
-{% endif %}
-
-$('#ist_bundle_ensinamebundle_aulatype_grupo').change(function() {
-    var grupoSelecionado = $(this).val();
-    {% if is_granted('ROLE_ADMIN') %}
-    var professorSelecionado = $('#ist_bundle_ensinamebundle_aulatype_professor').val();
-    {% endif %}
-    {% if is_granted('ROLE_PROF') %}
-    var professorSelecionado = $('#professor').val();
-    {% endif %}
-    $('#presencas label').each(function() {
-        $(this).show();
-        var fica = false;
-        for (professor in data)
-            if (professorSelecionado == professor)
-                for (grupo in data[professor])
-                    if (grupoSelecionado == grupo)
-                        for (aluno in data[professor][grupo])
-                            if ($(this).attr('for').split("_").pop() == data[professor][grupo][aluno])
-                                fica = true;
-        if (!fica)
-            $(this).hide();
-    });
-});
-
-{% if is_granted('ROLE_ADMIN') %}
 $('#ist_bundle_ensinamebundle_aulatype_professor').change(function() {
+    $('#ist_bundle_ensinamebundle_aulatype_grupo').show();
+    $('#ist_bundle_ensinamebundle_aulatype_grupo').parent().children('.no-group').remove();
+    $('#presencas').parent().show();
     var professorSelecionado = $(this).val();
-{% endif %}
-
-{% if is_granted('ROLE_PROF') %}
-function controlaGrupo() {
-    var professorSelecionado = $('#professor').val();
-{% endif %}
-    var primeiro = true;
+    var grupoSelecionado = $('#ist_bundle_ensinamebundle_aulatype_grupo').val();
+console.log(grupoSelecionado);
+    var primeiro = grupoSelecionado ? false : true;
+console.log(primeiro);
     $('#ist_bundle_ensinamebundle_aulatype_grupo option').each(function() {
         $(this).show();
         $(this).removeAttr('disabled');
-        $(this).removeAttr('selected');
         var fica = false;
         for (professor in data)
             if (professorSelecionado == professor)
@@ -124,29 +91,81 @@ function controlaGrupo() {
             $(this).hide();
             $(this).attr('disabled', 'disabled');
         } else {
-            if (primeiro) {
+            if (primeiro || ($(this).val() == grupoSelecionado)) {
                 $(this).attr('selected', 'selected');
-                $(this).parent().val($(this).val());
                 primeiro = false;
             }
         }
     });
     if ($('#ist_bundle_ensinamebundle_aulatype_grupo option').size() == $('#ist_bundle_ensinamebundle_aulatype_grupo option[disabled="disabled"]').size()) {
-        $('#ist_bundle_ensinamebundle_aulatype_grupo').parent().append('<span>Нет группы, зарегистрированной для преподавателя</span>');
         $('#ist_bundle_ensinamebundle_aulatype_grupo').hide();
+        $('#ist_bundle_ensinamebundle_aulatype_grupo').parent().append('<span class="no-group">Нет группы, зарегистрированной для преподавателя</span>');
         $('#presencas').parent().hide();
+    } else {
+        $('#ist_bundle_ensinamebundle_aulatype_grupo').change();
     }
-
-    $('#ist_bundle_ensinamebundle_aulatype_grupo').change();
-{% if is_granted('ROLE_ADMIN') %}
 });
 $('#ist_bundle_ensinamebundle_aulatype_professor').change();
 {% endif %}
 
 {% if is_granted('ROLE_PROF') %}
-};
-controlaGrupo();
-$('#ist_bundle_ensinamebundle_aulatype_grupo').change();
+var grupoSelecionado = $('#ist_bundle_ensinamebundle_aulatype_grupo').val();
+console.log(grupoSelecionado);
+var primeiro = grupoSelecionado ? false : true;
+console.log(primeiro);
+$('#ist_bundle_ensinamebundle_aulatype_grupo option').each(function() {
+    $(this).show();
+    $(this).removeAttr('disabled');
+    var fica = false;
+    for (professor in data)
+        if ($('#professor').val() == professor)
+            for (grupo in data[professor])
+                if ($(this).val() == grupo)
+                    fica = true;
+    if (!fica) {
+        $(this).hide();
+        $(this).attr('disabled', 'disabled');
+    } else {
+        if (primeiro || ($(this).val() == grupoSelecionado)) {
+            $(this).attr('selected', 'selected');
+            primeiro = false;
+        }
+    }
+});
 {% endif %}
+
+$('#ist_bundle_ensinamebundle_aulatype_grupo').change(function() {
+    $('#presencas').parent().show();
+    var grupoSelecionado = $(this).val();
+
+    {% if is_granted('ROLE_ADMIN') %}
+    var professorSelecionado = $('#ist_bundle_ensinamebundle_aulatype_professor').val();
+    {% endif %}
+
+    {% if is_granted('ROLE_PROF') %}
+    var professorSelecionado = $('#professor').val();
+    {% endif %}
+
+    $('#presencas label').each(function() {
+        $(this).show();
+        $(this).removeAttr('disabled');
+        var fica = false;
+        for (professor in data)
+            if (professorSelecionado == professor)
+                for (grupo in data[professor])
+                    if (grupoSelecionado == grupo)
+                        for (aluno in data[professor][grupo])
+                            if ($(this).attr('for').split("_").pop() == data[professor][grupo][aluno])
+                                fica = true;
+        if (!fica) {
+            $(this).hide();
+            $(this).attr('disabled', 'disabled');
+        }
+    });
+    if ($('#presencas label').size() == $('#presencas label[disabled="disabled"]').size()) {
+        $('#presencas').parent().hide();
+    }
+});
+$('#ist_bundle_ensinamebundle_aulatype_grupo').change();
 </script>
 {% endblock %}
