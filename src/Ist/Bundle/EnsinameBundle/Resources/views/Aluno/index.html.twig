@@ -65,7 +65,7 @@
             <td>{{ entity.observacao }}</td>
             <td>
                 <a href="{{ path('aluno_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
-                <a href="{{ path('aluno_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a>
+                <a href="{{ path('aluno_delete', { 'id': entity.id }) }}" class="confirm"><i class="icon-large icon-remove"></i></a>
             </td>
         </tr>
     {% endfor %}
@@ -75,30 +75,34 @@
 
 {% block javascripts %}
 <script type="text/javascript">
-    $('.filtro').change(function(){
-        $('table tbody tr').each(function(){
-            $(this).show();
-        });
-        $('.filtro').each(function(){
-            var filtro = $(this).attr('id');
-            var valor = $(this).val();
-            if (valor != '0') {
-                var coluna = (filtro == 'estudo') ? 5 : (
-                    (filtro == 'linguas') ? 6 : (
-                        (filtro == 'grupos') ? 7 : (
-                            (filtro == 'status') ? 8 : 0)));
-                $('table tbody tr').each(function(){
-                    var linha = $(this);
-                    var atual = 0;
-                    linha.children().each(function(){
-                        var celula = $(this).html();
-                        if ((coluna == ++atual) && (celula.indexOf(valor) < 0)){
-                            linha.hide();
-                        }
-                    });
-                });
-            }
-        });
+$('.confirm').click(function(){
+    return confirm('Deseja mesmo excluir?');
+});
+
+$('.filtro').change(function(){
+    $('table tbody tr').each(function(){
+        $(this).show();
     });
+    $('.filtro').each(function(){
+        var filtro = $(this).attr('id');
+        var valor = $(this).val();
+        if (valor != '0') {
+            var coluna = (filtro == 'estudo') ? 5 : (
+                (filtro == 'linguas') ? 6 : (
+                    (filtro == 'grupos') ? 7 : (
+                        (filtro == 'status') ? 8 : 0)));
+            $('table tbody tr').each(function(){
+                var linha = $(this);
+                var atual = 0;
+                linha.children().each(function(){
+                    var celula = $(this).html();
+                    if ((coluna == ++atual) && (celula.indexOf(valor) < 0)){
+                        linha.hide();
+                    }
+                });
+            });
+        }
+    });
+});
 </script>
 {% endblock %}

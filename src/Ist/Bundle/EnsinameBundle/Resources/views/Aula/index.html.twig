@@ -65,7 +65,9 @@
             <td>{{ entity.observacao }}</td>
             <td>
                 <a href="{{ path('aula_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
-                <a href="{{ path('aula_delete', { 'id': entity.id }) }}"><i class="icon-large icon-remove"></i></a>
+                {% if is_granted('ROLE_ADMIN') %}
+                <a href="{{ path('aula_delete', { 'id': entity.id }) }}" class="confirm"><i class="icon-large icon-remove"></i></a>
+                {% endif %}
             </td>
         </tr>
     {% endfor %}
@@ -75,10 +77,16 @@
 
 {% block javascripts %}
 <script type="text/javascript">
+$('.confirm').click(function(){
+    return confirm('Deseja mesmo excluir?');
+});
+
 $('.datepicker')
     .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
     .on('hide', function(e) { $(this).keyup(); });
+
 var filtros = 0;
+
 function controlaFiltro() {
     filtros++;
     {% if ehAdmin %}
@@ -93,11 +101,13 @@ function controlaFiltro() {
         return false;
     }
 }
+
 function mostraTudo() {
     $('table tbody tr').each(function() {
         $(this).show();
     });
 }
+
 function contador() {
     var contador = 1;
     $('table tbody tr').each(function() {
@@ -106,7 +116,9 @@ function contador() {
         }
     });
 }
+
 contador();
+
 $('#grupos').change(function() {
     if (filtros == 0) {
         mostraTudo();
@@ -133,6 +145,7 @@ $('#grupos').change(function() {
         {% endif %}
     }
 });
+
 {% if ehAdmin %}
 $('#professores').change(function() {
     if (filtros == 0) {
@@ -157,6 +170,7 @@ $('#professores').change(function() {
     }
 });
 {% endif %}
+
 $('#linguas').change(function() {
     if (filtros == 0) {
         mostraTudo();
@@ -179,6 +193,7 @@ $('#linguas').change(function() {
         $('#status').change();
     }
 });
+
 $('#status').change(function() {
     if (filtros == 0) {
         mostraTudo();
@@ -201,6 +216,7 @@ $('#status').change(function() {
         $('#dataMin').keyup();
     }
 });
+
 $('#dataMin').keyup(function() {
     if (filtros == 0) {
         mostraTudo();
@@ -226,6 +242,7 @@ $('#dataMin').keyup(function() {
         $('#dataMax').keyup();
     }
 });
+
 $('#dataMax').keyup(function() {
     if (filtros == 0) {
         mostraTudo();
@@ -251,6 +268,7 @@ $('#dataMax').keyup(function() {
         $('#grupos').change();
     }
 });
+
 $('#dataMin').keyup();
 </script>
 {% endblock %}
