@@ -135,18 +135,8 @@ class AulaController extends Controller
                 $professor = $this->getUser()->getId();
 
             $entity->setProfessor($professor);
-
-            try {
-                list($dia, $mes, $ano) = explode('/', $post['data']);
-                $entity->setData(new \DateTime($ano .'-'.$mes .'-'.$dia));
-            }
-            catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', 'data invalida!');
-                return $this->newAction($entity);
-            }
-
-            $entity->setGrupo(isset($post['grupo']) ? $post['grupo'] : NULL);
-            $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : NULL);
+            $entity->setGrupo(isset($post['grupo']) ? $post['grupo'] : null);
+            $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : null);
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'Урок успешно зарегистрирован!');
@@ -269,18 +259,8 @@ class AulaController extends Controller
                 $professor = $this->getUser()->getId();
 
             $entity->setProfessor($professor);
-
-            try {
-                list($dia, $mes, $ano) = explode('/', $post['data']);
-                $entity->setData(new \DateTime($ano .'-'.$mes .'-'.$dia));
-            }
-            catch (\Exception $e) {
-                $this->get('session')->getFlashBag()->add('error', 'data invalida!');
-                return $this->newAction($entity);
-            }
-
-            $entity->setGrupo(isset($post['grupo']) ? $post['grupo'] : NULL);
-            $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : NULL);
+            $entity->setGrupo(isset($post['grupo']) ? $post['grupo'] : null);
+            $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : null);
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
