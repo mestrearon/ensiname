@@ -160,44 +160,40 @@ class AulaController extends Controller
      */
     public function showAction($id)
     {
-
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
 
-        if (!$entity)
-            throw $this->createNotFoundException('Unable to find Aula entity.');
-
-        if ($this->get('security.context')->isGranted('ROLE_PROF') && ($entity->getProfessor() != $this->get('security.context')->getToken()->getUser()->getId())) {
+        if (!$entity
+                || ($this->get('security.context')->isGranted('ROLE_PROF')
+                    && ($entity->getProfessor() != $this->getUser()->getId()))) {
             $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
+            return $this->redirect($this->generateUrl('aula'));
         }
 
         $professor = $em->getRepository('IstEnsinameBundle:Professor')->find($entity->getProfessor());
-        $entity->setProfessor($professor->getNome());
-        if ($entity->getGrupo())
-            $grupo = $em->getRepository('IstEnsinameBundle:Grupo')->find($entity->getGrupo());
 
-        if (isset($grupo))
+        if ($professor)
+            $entity->setProfessor($professor->getNome());
+
+        $grupo = $em->getRepository('IstEnsinameBundle:Grupo')->find($entity->getGrupo());
+
+        if ($grupo)
             $entity->setGrupo(array(
                 'id' => $grupo->getId(),
                 'titulo' => $grupo->getTitulo(),
             ));
 
-        if ($entity->getPresencas())
+        $presencas = (array) explode(',', $entity->getPresencas());
+
+        foreach ($presencas as &$presenca)
         {
-            $presencas = explode(',', $entity->getPresencas());
+            $_presenca = $em->getRepository('IstEnsinameBundle:Aluno')->find($presenca);
 
-            foreach ($presencas as &$presenca)
-            {
-                $_presenca = $em->getRepository('IstEnsinameBundle:Aluno')->find($presenca);
-
-                if ($_presenca)
-                    $presenca = $_presenca->getNome();
-            }
-
-            $entity->setPresencas($presencas);
+            if ($_presenca)
+                $presenca = $_presenca->getNome();
         }
 
+        $entity->setPresencas($presencas);
         return array('entity' => $entity);
     }
 
@@ -213,14 +209,15 @@ class AulaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
 
-        if (!$entity || $this->get('security.context')->isGranted('ROLE_PROF') && ($entity->getProfessor() != $this->getUser()->getId())) {
+        if (!$entity
+                || ($this->get('security.context')->isGranted('ROLE_PROF')
+                    && ($entity->getProfessor() != $this->getUser()->getId()))) {
             $this->get('session')->getFlashBag()->add('error', 'not authorized');
             return $this->redirect($this->generateUrl('aula'));
         }
 
-        $this->getPresencas($entity);
+        $this->setPresencas($entity);
         $form = $this->createForm(new AulaType($em), $entity);
-
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
@@ -240,12 +237,14 @@ class AulaController extends Controller
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
 
-        if (!$entity || $this->get('security.context')->isGranted('ROLE_PROF') && ($entity->getProfessor() != $this->getUser()->getId())) {
+        if (!$entity
+                || ($this->get('security.context')->isGranted('ROLE_PROF')
+                    && ($entity->getProfessor() != $this->getUser()->getId()))) {
             $this->get('session')->getFlashBag()->add('error', 'not authorized');
             return $this->redirect($this->generateUrl('aula'));
         }
 
-        $this->getPresencas($entity);
+        $this->setPresencas($entity);
         $form = $this->createForm(new AulaType($em), $entity);
         $form->bind($request);
 
@@ -284,20 +283,16 @@ class AulaController extends Controller
      */
     public function deleteAction($id)
     {
-        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            $this->get('session')->getFlashBag()->add('error', 'not authorized');
-            return $this->redirect($this->generateUrl('index'));
-        }
-
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
 
-        if (!$entity)
-            throw $this->createNotFoundException('Unable to find Aula entity.');
+        if (!$entity || !$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('aula'));
+        }
 
         $em->remove($entity);
         $em->flush();
-
         $this->get('session')->getFlashBag()->add('success', 'Урок успешно удален!');
         return $this->redirect($this->generateUrl('aula'));
     }
@@ -312,7 +307,8 @@ class AulaController extends Controller
             $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
 
         if ($this->get('security.context')->isGranted('ROLE_PROF'))
-            $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findBy(array('professor' => $this->getUser()->getId()));
+            $grupos = $em->getRepository('IstEnsinameBundle:Grupo')
+                ->findBy(array('professor' => $this->getUser()->getId()));
 
         foreach ((array) $professores as $professor)
             foreach ((array) $grupos as $grupo)
@@ -322,12 +318,15 @@ class AulaController extends Controller
         return (array) $data;
     }
 
-    private function getPresencas(&$entity)
+    private function setPresencas(&$entity)
     {
-        $presencas = $entity->hasPresencas()
-            ? $this->getDoctrine()->getManager()->getRepository('IstEnsinameBundle:Aluno')->createQueryBuilder('a')->where('a.id in ('. $entity->getPresencas() .')')->getQuery()->getResult()
-            : array();
-        $collection = new ArrayCollection($presencas);
-        $entity->setPresencas($collection);
+        $presencas = array();
+
+        if ($entity->hasPresencas())
+            $presencas = $this->getDoctrine()->getManager()->getRepository('IstEnsinameBundle:Aluno')
+                ->createQueryBuilder('a')->where('a.id in ('. $entity->getPresencas() .')')->getQuery()
+                ->getResult();
+
+        $entity->setPresencas(new ArrayCollection($presencas));
     }
 }
