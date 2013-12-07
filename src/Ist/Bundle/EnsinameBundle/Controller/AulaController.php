@@ -94,6 +94,24 @@ class AulaController extends Controller
     }
 
     /**
+     * Displays a form to create a new Aula entity.
+     *
+     * @Route("/new", name="aula_new")
+     * @Method("GET")
+     * @Template()
+     */
+    public function newAction($entity = null)
+    {
+        $entity = empty($entity) ? new Aula() : $entity;
+        $form   = $this->createForm(new AulaType($this->getDoctrine()->getManager()), $entity);
+        return array(
+            'entity' => $entity,
+            'form' => $form->createView(),
+            'data' => json_encode($this->getData()),
+        );
+    }
+
+    /**
      * Creates a new Aula entity.
      *
      * @Route("/", name="aula_create")
@@ -140,24 +158,6 @@ class AulaController extends Controller
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
-        );
-    }
-
-    /**
-     * Displays a form to create a new Aula entity.
-     *
-     * @Route("/new", name="aula_new")
-     * @Method("GET")
-     * @Template()
-     */
-    public function newAction($entity = null)
-    {
-        $entity = empty($entity) ? new Aula() : $entity;
-        $form   = $this->createForm(new AulaType($this->getDoctrine()->getManager()), $entity);
-        return array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-            'data' => json_encode($this->getData()),
         );
     }
 
