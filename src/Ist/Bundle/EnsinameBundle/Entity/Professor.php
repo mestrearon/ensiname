@@ -32,7 +32,7 @@ class Professor implements UserInterface, \Serializable
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nascimento", type="string", length=255)
+     * @ORM\Column(name="nascimento", type="date")
      */
     private $nascimento;
 
@@ -153,7 +153,7 @@ class Professor implements UserInterface, \Serializable
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -169,14 +169,14 @@ class Professor implements UserInterface, \Serializable
     public function setNome($nome)
     {
         $this->nome = $nome;
-    
+
         return $this;
     }
 
     /**
      * Get nome
      *
-     * @return string 
+     * @return string
      */
     public function getNome()
     {
@@ -192,14 +192,14 @@ class Professor implements UserInterface, \Serializable
     public function setNascimento($nascimento)
     {
         $this->nascimento = $nascimento;
-    
+
         return $this;
     }
 
     /**
      * Get nascimento
      *
-     * @return string 
+     * @return string
      */
     public function getNascimento()
     {
@@ -215,14 +215,14 @@ class Professor implements UserInterface, \Serializable
     public function setLinguas($linguas)
     {
         $this->linguas = $linguas;
-    
+
         return $this;
     }
 
     /**
      * Get linguas
      *
-     * @return string 
+     * @return string
      */
     public function getLinguas()
     {
@@ -232,7 +232,7 @@ class Professor implements UserInterface, \Serializable
     /**
      * Has linguas
      *
-     * @return boolean 
+     * @return boolean
      */
     public function hasLinguas()
     {
@@ -248,14 +248,14 @@ class Professor implements UserInterface, \Serializable
     public function setFone($fone)
     {
         $this->fone = $fone;
-    
+
         return $this;
     }
 
     /**
      * Get fone
      *
-     * @return string 
+     * @return string
      */
     public function getFone()
     {
@@ -271,14 +271,14 @@ class Professor implements UserInterface, \Serializable
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -294,14 +294,14 @@ class Professor implements UserInterface, \Serializable
     public function setHorario($horario)
     {
         $this->horario = $horario;
-    
+
         return $this;
     }
 
     /**
      * Get horario
      *
-     * @return string 
+     * @return string
      */
     public function getHorario()
     {
@@ -317,14 +317,14 @@ class Professor implements UserInterface, \Serializable
     public function setObservacao($observacao)
     {
         $this->observacao = $observacao;
-    
+
         return $this;
     }
 
     /**
      * Get observacao
      *
-     * @return string 
+     * @return string
      */
     public function getObservacao()
     {
@@ -340,7 +340,7 @@ class Professor implements UserInterface, \Serializable
     public function setUsername($username)
     {
         $this->username = $username;
-    
+
         return $this;
     }
 
@@ -353,7 +353,7 @@ class Professor implements UserInterface, \Serializable
     public function setSalt($salt)
     {
         $this->salt = $salt;
-    
+
         return $this;
     }
 
@@ -366,7 +366,7 @@ class Professor implements UserInterface, \Serializable
     public function setPassword($password)
     {
         $this->password = $password;
-    
+
         return $this;
     }
 }

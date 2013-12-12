@@ -49,7 +49,7 @@
     {% for entity in entities %}
         <tr>
             <td>{{ entity.nome }}</td>
-            <td>{% if entity.nascimento %}{{ entity.nascimento }}{% endif %}</td>
+            <td>{% if entity.nascimento %}{{ entity.nascimento|date("d/m/Y") }}{% endif %}</td>
             <td>{{ entity.fone }}</td>
             <td>{{ entity.email }}</td>
             <td>{{ entity.estudo|replace({'g': 'в группе', 'i': 'индивидуально'}) }}</td>

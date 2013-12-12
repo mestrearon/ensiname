@@ -31,7 +31,7 @@ class Aluno
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="nascimento", type="string", length=255)
+     * @ORM\Column(name="nascimento", type="date")
      */
     private $nascimento;
 
@@ -80,7 +80,7 @@ class Aluno
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -96,14 +96,14 @@ class Aluno
     public function setNome($nome)
     {
         $this->nome = $nome;
-    
+
         return $this;
     }
 
     /**
      * Get nome
      *
-     * @return string 
+     * @return string
      */
     public function getNome()
     {
@@ -119,14 +119,14 @@ class Aluno
     public function setNascimento($nascimento)
     {
         $this->nascimento = $nascimento;
-    
+
         return $this;
     }
 
     /**
      * Get nascimento
      *
-     * @return string 
+     * @return string
      */
     public function getNascimento()
     {
@@ -142,14 +142,14 @@ class Aluno
     public function setLinguas($linguas)
     {
         $this->linguas = $linguas;
-    
+
         return $this;
     }
 
     /**
      * Get linguas
      *
-     * @return string 
+     * @return string
      */
     public function getLinguas()
     {
@@ -159,7 +159,7 @@ class Aluno
     /**
      * Has linguas
      *
-     * @return string 
+     * @return string
      */
     public function hasLinguas()
     {
@@ -175,14 +175,14 @@ class Aluno
     public function setEstudo($estudo)
     {
         $this->estudo = $estudo;
-    
+
         return $this;
     }
 
     /**
      * Get estudo
      *
-     * @return string 
+     * @return string
      */
     public function getEstudo()
     {
@@ -198,14 +198,14 @@ class Aluno
     public function setFone($fone)
     {
         $this->fone = $fone;
-    
+
         return $this;
     }
 
     /**
      * Get fone
      *
-     * @return string 
+     * @return string
      */
     public function getFone()
     {
@@ -221,14 +221,14 @@ class Aluno
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -244,14 +244,14 @@ class Aluno
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -267,14 +267,14 @@ class Aluno
     public function setObservacao($observacao)
     {
         $this->observacao = $observacao;
-    
+
         return $this;
     }
 
     /**
      * Get observacao
      *
-     * @return string 
+     * @return string
      */
     public function getObservacao()
     {

@@ -12,7 +12,11 @@ class ProfessorType extends AbstractType
     {
         $builder
             ->add('nome')
-            ->add('nascimento', 'text')
+            ->add('nascimento', 'date', array(
+                'widget' => 'single_text',
+                'input' => 'datetime',
+                'format' => 'dd/MM/yyyy',
+            ))
             ->add('linguas', 'entity', array(
                 'class' => 'IstEnsinameBundle:Lingua',
                 'property' => 'titulo',
