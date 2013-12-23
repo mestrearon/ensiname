@@ -16,6 +16,7 @@ class GrupoType extends AbstractType
             ->add('lingua', 'entity', array(
                 'class' => 'IstEnsinameBundle:Lingua',
                 'property' => 'titulo',
+                'query_builder' => function(EntityRepository $er) { return $er->createQueryBuilder('u')->orderBy('u.titulo', 'ASC'); },
                 'required' => true,
                 'expanded' => false,
                 'multiple' => false,
@@ -23,6 +24,7 @@ class GrupoType extends AbstractType
             ->add('professor', 'entity', array(
                 'class' => 'IstEnsinameBundle:Professor',
                 'property' => 'nome',
+                'query_builder' => function(EntityRepository $er) { return $er->createQueryBuilder('u')->orderBy('u.nome', 'ASC'); },
                 'required' => true,
                 'expanded' => false,
                 'multiple' => false,
