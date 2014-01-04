@@ -87,23 +87,18 @@ class AlunoController extends Controller
         $form->bind($request);
         $post = $request->request->get($form->getName());
         $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
-        $isValid = true;
-        if (isset($post['nascimento'])) {
-            if (preg_match('/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', $post['nascimento'], $matches)) {
-                $entity->setNascimento($matches[1] .'/'. $matches[2] .'/'. $matches[3]);
-            } else {
-                $isValid = false;
-            }
-        }
-        if ($form->isValid() && $isValid) {
+
+        if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'Студент успешно зарегистрирован!');
+
             return $this->redirect($this->generateUrl('aluno'));
         } else {
             $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать студента!');
         }
+
         return array(
             'entity' => $entity,
             'form'   => $form->createView(),
