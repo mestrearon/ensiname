@@ -79,7 +79,7 @@ class GrupoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'grupo criado com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Новая группа успешно добавлена!');
             return $this->redirect($this->generateUrl('grupo'));
         }
         return array(
@@ -217,10 +217,10 @@ class GrupoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'grupo editado com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Информация о группе успешно обновлена!');
             return $this->redirect($this->generateUrl('grupo'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'falha na edição do grupo!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при обновлении группы!');
         }
 
         return array(
@@ -251,7 +251,7 @@ class GrupoController extends Controller
         $em->remove($entity);
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add('success', 'grupo excluido com sucesso!');
+        $this->get('session')->getFlashBag()->add('success', 'Группа успешно удалена!');
         return $this->redirect($this->generateUrl('grupo'));
     }
 
