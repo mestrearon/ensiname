@@ -95,10 +95,10 @@ class ProfessorController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Professor cadastrado com sucesso! ');
+                $this->get('session')->getFlashBag()->add('success', 'Новый преподаватель успешно добавлен! ');
             return $this->redirect($this->generateUrl('professor'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'Falha ao cadastrar professor!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при добавлении преподавателя!');
         }
         return array(
             'entity' => $entity,
@@ -228,10 +228,10 @@ class ProfessorController extends Controller
             $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Professor editado com sucesso! ');
+            $this->get('session')->getFlashBag()->add('success', 'Информация о преподавателе успешно обновлена! ');
             return $this->redirect($this->generateUrl('professor'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'Falha ao editar professor!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при обновлении преподавателя!');
         }
 
         return array(
@@ -262,7 +262,7 @@ class ProfessorController extends Controller
         $em->remove($entity);
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add('success', 'professor excluido com sucesso!');
+        $this->get('session')->getFlashBag()->add('success', 'Преподаватель успешно исключен!');
         return $this->redirect($this->generateUrl('professor'));
     }
 
