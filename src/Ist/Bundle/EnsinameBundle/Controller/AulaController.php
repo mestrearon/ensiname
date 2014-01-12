@@ -139,10 +139,10 @@ class AulaController extends Controller
             $entity->setPresencas(isset($post['presencas']) ? implode(',', $post['presencas']) : null);
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Урок успешно зарегистрирован!');
+            $this->get('session')->getFlashBag()->add('success', 'Новый урок успешно добавлен!');
             return $this->redirect($this->generateUrl('aula'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'falha na criação da aula!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при добавлении урока!');
         }
 
         return array(
@@ -263,10 +263,10 @@ class AulaController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'aula editada com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Информация об уроке успешно обновлена!');
             return $this->redirect($this->generateUrl('aula'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'falha ao editar a aula!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при обновлении урока!');
         }
 
         return array(
