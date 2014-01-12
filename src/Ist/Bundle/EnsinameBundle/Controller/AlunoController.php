@@ -92,11 +92,11 @@ class AlunoController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Студент успешно зарегистрирован!');
+            $this->get('session')->getFlashBag()->add('success', 'Новый студент успешно добавлен!');
 
             return $this->redirect($this->generateUrl('aluno'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать студента!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при добавлении студента!');
         }
 
         return array(
@@ -221,10 +221,10 @@ class AlunoController extends Controller
             $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Студент успешно edited!');
+            $this->get('session')->getFlashBag()->add('success', 'Информация о преподавателе успешно обновлена!');
             return $this->redirect($this->generateUrl('aluno'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'invalid data!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при обновдении студента!');
         }
         return array(
             'entity'      => $entity,
@@ -255,7 +255,7 @@ class AlunoController extends Controller
         $em->remove($entity);
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add('success', 'aluno excluido com sucesso!');
+        $this->get('session')->getFlashBag()->add('success', 'Студент успешно исключен!');
         return $this->redirect($this->generateUrl('aluno'));
     }
 }
