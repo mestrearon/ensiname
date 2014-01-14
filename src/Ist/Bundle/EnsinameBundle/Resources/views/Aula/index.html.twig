@@ -6,21 +6,21 @@
     <span class="pull-right">
         Фильтр:
         <select id="grupos" class="input-small filtro">
-            <option value="0">Группы</option>
+            <option value="0">Группа</option>
             {% for grupo in grupos %}
             <option>{{ grupo.titulo }}</option>
             {% endfor %}
         </select>
         {% if is_granted('ROLE_ADMIN') %}
         <select id="professores" class="input-small filtro">
-            <option value="0">professor</option>
+            <option value="0">Преподаватель</option>
             {% for professor in professores %}
             <option>{{ professor.nome }}</option>
             {% endfor %}
         </select>
         {% endif %}
         <select id="linguas" class="input-small filtro">
-            <option value="0">lingua</option>
+            <option value="0">Язык</option>
             {% for lingua in linguas %}
             <option>{{ lingua.titulo }}</option>
             {% endfor %}
@@ -30,9 +30,9 @@
             <option>проведен</option>
             <option>отменен</option>
         </select>
-        С:
+        С …:
         <input type="text" id="dataMin" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" value="{{ dataMin }}" />
-        До:
+        До …:
         <input type="text" id="dataMax" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" value="{{ dataMax }}" />
     </span>
 </p>
@@ -41,11 +41,11 @@
         <tr>
             <th>#</th>
             <th>Дата урока</th>
-            <th>Группы</th>
+            <th>Группа</th>
             {% if is_granted('ROLE_ADMIN') %}
-            <th>professor</th>
+            <th>Преподаватель</th>
             {% endif %}
-            <th>lingua</th>
+            <th>Язык</th>
             <th>Статус урока</th>
             <th>Примечания</th>
             <th>&nbsp;</th>
@@ -78,7 +78,7 @@
 {% block javascripts %}
 <script type="text/javascript">
 $('.confirm').click(function(){
-    return confirm('Deseja mesmo excluir?');
+    return confirm('Удалить?');
 });
 
 $('.datepicker')
