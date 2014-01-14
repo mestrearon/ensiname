@@ -63,14 +63,14 @@ class LinguaController extends Controller
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($entity);
                 $em->flush();
-                $this->get('session')->getFlashBag()->add('success', 'Язык успешно зарегистрирован');
+                $this->get('session')->getFlashBag()->add('success', 'Новый язык успешно добавлен');
                 return $this->redirect($this->generateUrl('lingua'));
             }
             catch (\Exception $e) {
                 $this->get('session')->getFlashBag()->add('error', 'Язык уже существует');
             }
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'Не удалось зарегистрировать язык');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при добавлении языка');
         }
 
         return array(
@@ -223,10 +223,10 @@ class LinguaController extends Controller
         if ($form->isValid()) {
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'lingua editada com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Информация о языке успешно обновлена!');
             return $this->redirect($this->generateUrl('lingua'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'falha na edição da lingua!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при обновлении языка!');
         }
 
         return array(
