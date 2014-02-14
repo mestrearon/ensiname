@@ -27,12 +27,27 @@ class InteressadoController extends Controller
      */
     public function indexAction()
     {
-        $this->get('session')->getFlashBag()->add('error', 'not authorized');
-        return $this->redirect($this->generateUrl('index'));
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
 
         $em = $this->getDoctrine()->getManager();
+        $entities = $em->getRepository('IstEnsinameBundle:Interessado')->createQueryBuilder('a')->orderBy('a.nome', 'ASC')->getQuery()->getResult();
+        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
 
-        $entities = $em->getRepository('IstEnsinameBundle:Interessado')->findAll();
+        if (!empty($entities)) {
+            foreach ($entities as &$entity) {
+                foreach (explode(',', $entity->getLinguas()) as $lingua_ent)
+                    if (!empty($lingua_ent) &&!empty($linguas))
+                        foreach ($linguas as $lingua)
+                            if ($lingua_ent == $lingua->getId())
+                                $lingua_new[] = $lingua->getTitulo();
+                $lingua_new = isset($lingua_new) ? $lingua_new : array();
+                $entity->setLinguas(implode(',', $lingua_new));
+                unset($lingua_new);
+            }
+        }
 
         return array(
             'entities' => $entities,
@@ -66,7 +81,7 @@ class InteressadoController extends Controller
 
             $this->get('session')->getFlashBag()->add('success', 'Interessado criado com sucesso!');
 
-            return $this->redirect($this->generateUrl('interessado_new'));
+            return $this->redirect($this->generateUrl('interessado'));
         } else {
             $this->get('session')->getFlashBag()->add('error', 'Falha na criação do Interessado!');
         }
@@ -78,12 +93,12 @@ class InteressadoController extends Controller
     }
 
     /**
-    * Creates a form to create a Interessado entity.
-    *
-    * @param Interessado $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to create a Interessado entity.
+     *
+     * @param Interessado $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createCreateForm(Interessado $entity)
     {
         $form = $this->createForm(new InteressadoType(), $entity, array(

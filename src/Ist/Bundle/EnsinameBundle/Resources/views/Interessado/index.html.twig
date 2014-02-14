@@ -1,61 +1,44 @@
-{% extends '::base.html.twig' %}
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
-{% block body -%}
-    <h1>Interessado list</h1>
+{% block content %}
+<p>
+    <a href="{{ path('interessado_new') }}" class="btn btn-primary">Novo</a>
+</p>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Fone</th>
+            <th>Email</th>
+            <th>Linguas</th>
+            <th>Fonte</th>
+            <th>Estudo</th>
+            <th>Inicio</th>
+            <th>Horario</th>
+            <th>Chamada</th>
+            <th>Status</th>
+            <th>Observacao</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td>{{ entity.nome }}</td>
+            <td>{{ entity.fone }}</td>
+            <td>{{ entity.email }}</td>
+            <td>{{ entity.linguas }}</td>
+            <td>{{ entity.fonte }}</td>
+            <td>{{ entity.estudo|replace({'g': 'в группе', 'i': 'индивидуально', 's': 'skype'}) }}</td>
+            <td>{% if entity.inicio %}{{ entity.inicio|date('d/m/Y') }}{% endif %}</td>
+            <td>{{ entity.horario }}</td>
+            <td>{% if entity.chamada %}{{ entity.chamada|date('d/m/Y') }}{% endif %}</td>
+            <td>{{ entity.status|replace({'l': 'ligou', 'c': 'concordou', 'd': 'discordou', 'r': 'recontactar', 'd': 'desinteressou', 'i': 'iniciou'}) }}</td>
+            <td>{{ entity.observacao }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
 
-    <table class="records_list">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nome</th>
-                <th>Fone</th>
-                <th>Email</th>
-                <th>Linguas</th>
-                <th>Fonte</th>
-                <th>Estudo</th>
-                <th>Inicio</th>
-                <th>Horario</th>
-                <th>Chamada</th>
-                <th>Status</th>
-                <th>Observacao</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for entity in entities %}
-            <tr>
-                <td><a href="{{ path('interessado_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{{ entity.nome }}</td>
-                <td>{{ entity.fone }}</td>
-                <td>{{ entity.email }}</td>
-                <td>{{ entity.linguas }}</td>
-                <td>{{ entity.fonte }}</td>
-                <td>{{ entity.estudo }}</td>
-                <td>{% if entity.inicio %}{{ entity.inicio|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.horario }}</td>
-                <td>{% if entity.chamada %}{{ entity.chamada|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.status }}</td>
-                <td>{{ entity.observacao }}</td>
-                <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('interessado_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('interessado_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-        <ul>
-        <li>
-            <a href="{{ path('interessado_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+{% block javascripts %}
+{% endblock %}
