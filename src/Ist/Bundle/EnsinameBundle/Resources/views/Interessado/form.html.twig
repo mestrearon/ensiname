@@ -1,0 +1,91 @@
+{% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
+
+{% block content %}
+<form action="{{ action }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
+    <input type="hidden" name="_method" value="{{ method }}" />
+    <fieldset>
+        <legend>{{ legend }}</legend>
+        <div class="control-group">
+            <label class="control-label" for="nome">ФИО</label>
+            <div class="controls">
+                {{ form_widget(form.nome) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="fone">Телефон</label>
+            <div class="controls">
+                {{ form_widget(form.fone) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="email">Е-mail</label>
+            <div class="controls">
+                {{ form_widget(form.email) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="linguas">Изучаемый язык</label>
+            <div class="controls">
+                {{ form_widget(form.linguas) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="fonte">Fonte</label>
+            <div class="controls">
+                {{ form_widget(form.fonte) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="estudo">Форма обучения</label>
+            <div class="controls">
+                {{ form_widget(form.estudo) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inicio">Data de interesse para iniciar</label>
+            <div class="controls">
+                {{ form_widget(form.inicio, {'attr': {'data-mask': '00/00/0000', 'class': 'datepicker'}}) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="horario">Horário de chamada</label>
+            <div class="controls">
+                {{ form_widget(form.horario) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="chamada">Data de chamada</label>
+            <div class="controls">
+                {{ form_widget(form.chamada, {'attr': {'data-mask': '00/00/0000', 'class': 'datepicker'}}) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="status">Статус</label>
+            <div class="controls">
+                {{ form_widget(form.status) }}
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="observacao">Примечания</label>
+            <div class="controls">
+                {{ form_widget(form.observacao) }}
+            </div>
+        </div>
+        {{ form_widget(form._token) }}
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn">Добавить</button>
+            </div>
+        </div>
+    </fieldset>
+</form>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$('.datepicker')
+    .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
+    .on('hide', function(e) { $(this).keyup(); });
+</script>
+{% endblock %}
+
