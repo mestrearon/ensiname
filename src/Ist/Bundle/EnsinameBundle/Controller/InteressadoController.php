@@ -51,6 +51,7 @@ class InteressadoController extends Controller
 
         return array(
             'entities' => $entities,
+            'linguas' => $linguas,
         );
     }
 

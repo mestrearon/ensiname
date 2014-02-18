@@ -3,6 +3,30 @@
 {% block content %}
 <p>
     <a href="{{ path('interessado_new') }}" class="btn btn-primary">Novo</a>
+    <span class="pull-right">
+        Фильтр:
+        <select id="linguas" class="input-small filtro">
+            <option value="0">Язык</option>
+            {% for lingua in linguas %}
+            <option>{{ lingua.titulo }}</option>
+            {% endfor %}
+        </select>
+        <select id="status" class="input-small filtro">
+            <option value="0">Статус урока</option>
+            <option>ligou</option>
+            <option>concordou</option>
+            <option>discordou</option>
+            <option>recontactar</option>
+            <option>desinteressou</option>
+            <option>iniciou</option>
+        </select>
+        С …:
+        <input type="text" id="dataMin" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" />
+        До …:
+        <input type="text" id="dataMax" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" />
+        Fonte:
+        <input type="text" id="fonte" class="input-small" />
+    </span>
 </p>
 <table class="table table-striped">
     <thead>
@@ -27,11 +51,11 @@
             <td>{{ entity.fone }}</td>
             <td>{{ entity.email }}</td>
             <td>{{ entity.linguas }}</td>
-            <td>{{ entity.fonte }}</td>
+            <td class="fonte">{{ entity.fonte }}</td>
             <td>{{ entity.estudo|replace({'g': 'в группе', 'i': 'индивидуально', 's': 'skype'}) }}</td>
             <td>{% if entity.inicio %}{{ entity.inicio|date('d/m/Y') }}{% endif %}</td>
             <td>{{ entity.horario }}</td>
-            <td>{% if entity.chamada %}{{ entity.chamada|date('d/m/Y') }}{% endif %}</td>
+            <td class="data">{% if entity.chamada %}{{ entity.chamada|date('d/m/Y') }}{% endif %}</td>
             <td>{{ entity.status|replace({'l': 'ligou', 'c': 'concordou', 'd': 'discordou', 'r': 'recontactar', 'd': 'desinteressou', 'i': 'iniciou'}) }}</td>
             <td>{{ entity.observacao }}</td>
         </tr>
@@ -41,4 +65,140 @@
 {% endblock %}
 
 {% block javascripts %}
+<script type="text/javascript">
+$('.datepicker')
+    .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
+    .on('hide', function(e) { $(this).keyup(); });
+
+var filtros = 0;
+
+function controlaFiltro() {
+    filtros++;
+    if (filtros < 5) {
+        return true;
+    } else {
+        filtros = 0;
+        return false;
+    }
+}
+
+function mostraTudo() {
+    $('table tbody tr').each(function() {
+        $(this).show();
+    });
+}
+
+$('#linguas').change(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    var valor = $(this).val();
+    if (valor != '0') {
+        var coluna = 4;
+        $('table tbody tr').each(function() {
+            var linha = $(this);
+            var atual = 0;
+            linha.children().each(function() {
+                var celula = $(this).html();
+                if ((coluna == ++atual) && (celula.indexOf(valor) < 0)) {
+                    linha.hide();
+                }
+            });
+        });
+    }
+    if (controlaFiltro()) {
+        $('#status').change();
+    }
+});
+
+$('#status').change(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    var valor = $(this).val();
+    if (valor != '0') {
+        var coluna = 10;
+        $('table tbody tr').each(function() {
+            var linha = $(this);
+            var atual = 0;
+            linha.children().each(function() {
+                var celula = $(this).html();
+                if ((coluna == ++atual) && (celula.indexOf(valor) < 0)) {
+                    linha.hide();
+                }
+            });
+        });
+    }
+    if (controlaFiltro()) {
+        $('#dataMin').keyup();
+    }
+});
+
+$('#dataMin').keyup(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    if ($(this).val().length == 10) {
+        var dataMin = $(this).val().split('/');
+        dataMin[0] = parseInt(dataMin[0]);
+        dataMin[1] = parseInt(dataMin[1]);
+        dataMin[2] = parseInt(dataMin[2]);
+        $('table tbody tr').each(function() {
+            var data = $(this).children(".data").html().split('/');
+            data[0] = parseInt(data[0]);
+            data[1] = parseInt(data[1]);
+            data[2] = parseInt(data[2]);
+            if ((data[2] < dataMin[2])
+                    || ((data[2] == dataMin[2]) && (data[1] < dataMin[1]))
+                    || ((data[1] == dataMin[1]) && (data[0] < dataMin[0]))) {
+                $(this).hide();
+            }
+        });
+    }
+    if (controlaFiltro()) {
+        $('#dataMax').keyup();
+    }
+});
+
+$('#dataMax').keyup(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    if ($(this).val().length == 10) {
+        var dataMax = $(this).val().split('/');
+        dataMax[0] = parseInt(dataMax[0]);
+        dataMax[1] = parseInt(dataMax[1]);
+        dataMax[2] = parseInt(dataMax[2]);
+        $('table tbody tr').each(function() {
+            var data = $(this).children(".data").html().split('/');
+            data[0] = parseInt(data[0]);
+            data[1] = parseInt(data[1]);
+            data[2] = parseInt(data[2]);
+            if ((data[2] > dataMax[2])
+                    || ((data[2] == dataMax[2]) && (data[1] > dataMax[1]))
+                    || ((data[1] == dataMax[1]) && (data[0] > dataMax[0]))) {
+                $(this).hide();
+            }
+        });
+    }
+    if (controlaFiltro()) {
+        $('#fonte').keyup();
+    }
+});
+
+$('#fonte').keyup(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    var fonte = $(this).val();
+    $('table tbody tr').each(function() {
+        if ($(this).children(".fonte").html().search(fonte) == -1) {
+            $(this).hide();
+        }
+    });
+    if (controlaFiltro()) {
+        $('#linguas').change();
+    }
+});
+</script>
 {% endblock %}
