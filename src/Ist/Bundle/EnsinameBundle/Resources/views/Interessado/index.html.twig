@@ -31,6 +31,7 @@
 <table class="table table-striped">
     <thead>
         <tr>
+            <th>#</th>
             <th>Nome</th>
             <th>Fone</th>
             <th>Email</th>
@@ -47,6 +48,7 @@
     <tbody>
     {% for entity in entities %}
         <tr>
+            <td class="contador">{{ entity.id }}</td>
             <td>{{ entity.nome }}</td>
             <td>{{ entity.fone }}</td>
             <td>{{ entity.email }}</td>
@@ -78,6 +80,7 @@ function controlaFiltro() {
         return true;
     } else {
         filtros = 0;
+        contador();
         return false;
     }
 }
@@ -88,13 +91,24 @@ function mostraTudo() {
     });
 }
 
+function contador() {
+    var contador = 1;
+    $('table tbody tr').each(function() {
+        if ($(this).is(":visible")) {
+            $(this).children(".contador").html(contador++);
+        }
+    });
+}
+
+contador();
+
 $('#linguas').change(function() {
     if (filtros == 0) {
         mostraTudo();
     }
     var valor = $(this).val();
     if (valor != '0') {
-        var coluna = 4;
+        var coluna = 5;
         $('table tbody tr').each(function() {
             var linha = $(this);
             var atual = 0;
@@ -117,7 +131,7 @@ $('#status').change(function() {
     }
     var valor = $(this).val();
     if (valor != '0') {
-        var coluna = 10;
+        var coluna = 11;
         $('table tbody tr').each(function() {
             var linha = $(this);
             var atual = 0;
