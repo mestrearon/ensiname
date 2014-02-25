@@ -178,7 +178,11 @@ $('#linguas').change(function() {
     }
     var valor = $(this).val();
     if (valor != '0') {
+        {% if is_granted('ROLE_ADMIN') %}
         var coluna = 5;
+        {% else %}
+        var coluna = 4;
+        {% endif %}
         $('table tbody tr').each(function() {
             var linha = $(this);
             var atual = 0;
@@ -201,7 +205,11 @@ $('#status').change(function() {
     }
     var valor = $(this).val();
     if (valor != '0') {
+        {% if is_granted('ROLE_ADMIN') %}
         var coluna = 6;
+        {% else %}
+        var coluna = 5;
+        {% endif %}
         $('table tbody tr').each(function() {
             var linha = $(this);
             var atual = 0;
