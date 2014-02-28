@@ -2,7 +2,7 @@
 
 {% block content %}
 <p>
-    <a href="{{ path('interessado_new') }}" class="btn btn-primary">Novo</a>
+    <a href="{{ path('interessado_new') }}" class="btn btn-primary">Добавить заявку</a>
     <span class="pull-right">
         Фильтр:
         <select id="linguas" class="input-small filtro">
@@ -13,12 +13,12 @@
         </select>
         <select id="status" class="input-small filtro">
             <option value="0">Статус урока</option>
-            <option>ligou</option>
-            <option>concordou</option>
-            <option>discordou</option>
-            <option>recontactar</option>
-            <option>desinteressou</option>
-            <option>iniciou</option>
+            <option>позвонил</option>
+            <option>согласил</option>
+            <option>не согласил</option>
+            <option>перезвонить</option>
+            <option>больше не интересуется</option>
+            <option>начал</option>
         </select>
         С …:
         <input type="text" id="dataMin" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" />
@@ -32,17 +32,17 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Nome</th>
-            <th>Fone</th>
-            <th>Email</th>
-            <th>Linguas</th>
-            <th>Fonte</th>
-            <th>Estudo</th>
-            <th>Inicio</th>
-            <th>Horario</th>
-            <th>Chamada</th>
-            <th>Status</th>
-            <th>Observacao</th>
+            <th>ФИО</th>
+            <th>Телефон</th>
+            <th>E-mail</th>
+            <th>Язык</th>
+            <th>Источник</th>
+            <th>Обучение</th>
+            <th>Начала</th>
+            <th>Время</th>
+            <th>Дата заявки</th>
+            <th>Статус</th>
+            <th>Коментарии</th>
         </tr>
     </thead>
     <tbody>
