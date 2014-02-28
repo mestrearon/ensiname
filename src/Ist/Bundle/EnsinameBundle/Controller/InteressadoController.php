@@ -33,7 +33,7 @@ class InteressadoController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
-        $entities = $em->getRepository('IstEnsinameBundle:Interessado')->createQueryBuilder('a')->orderBy('a.nome', 'ASC')->getQuery()->getResult();
+        $entities = $em->getRepository('IstEnsinameBundle:Interessado')->createQueryBuilder('a')->orderBy('a.chamada', 'DESC')->getQuery()->getResult();
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
 
         if (!empty($entities)) {
