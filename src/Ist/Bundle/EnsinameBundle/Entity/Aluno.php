@@ -78,6 +78,13 @@ class Aluno
     private $observacao;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="ferias", type="date")
+     */
+    private $ferias;
+
+    /**
      * Get id
      *
      * @return integer
@@ -279,5 +286,28 @@ class Aluno
     public function getObservacao()
     {
         return $this->observacao;
+    }
+
+    /**
+     * Set ferias
+     *
+     * @param string $ferias
+     * @return Aluno
+     */
+    public function setFerias($ferias)
+    {
+        $this->ferias = $ferias;
+
+        return $this;
+    }
+
+    /**
+     * Get ferias
+     *
+     * @return string
+     */
+    public function getFerias()
+    {
+        return $this->ferias;
     }
 }

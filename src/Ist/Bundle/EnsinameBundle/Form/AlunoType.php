@@ -33,6 +33,11 @@ class AlunoType extends AbstractType
                 'choices' => array('a' => 'активен', 'p' => 'пауза', 'd' => 'не активен'),
                 'required' => true,))
             ->add('observacao')
+            ->add('ferias', 'date', array(
+                'widget' => 'single_text',
+                'input' => 'datetime',
+                'format' => 'dd/MM/yyyy',
+            ))
         ;
     }
 
