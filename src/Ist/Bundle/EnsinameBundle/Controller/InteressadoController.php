@@ -268,46 +268,26 @@ class InteressadoController extends Controller
     /**
      * Deletes a Interessado entity.
      *
-     * @Route("/{id}", name="interessado_delete")
-     * @Method("DELETE")
+     * @Route("/{id}/delete", name="interessado_delete")
+     * @Method("GET")
      */
-    public function deleteAction(Request $request, $id)
+    public function deleteAction($id)
     {
-        $this->get('session')->getFlashBag()->add('error', 'not authorized');
-        return $this->redirect($this->generateUrl('index'));
-
-        $form = $this->createDeleteForm($id);
-        $form->handleRequest($request);
-
-        if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $entity = $em->getRepository('IstEnsinameBundle:Interessado')->find($id);
-
-            if (!$entity) {
-                throw $this->createNotFoundException('Unable to find Interessado entity.');
-            }
-
-            $em->remove($entity);
-            $em->flush();
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
         }
 
-        return $this->redirect($this->generateUrl('interessado'));
-    }
+        $em = $this->getDoctrine()->getManager();
+        $entity = $em->getRepository('IstEnsinameBundle:Interessado')->find($id);
 
-    /**
-     * Creates a form to delete a Interessado entity by id.
-     *
-     * @param mixed $id The entity id
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-    private function createDeleteForm($id)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('interessado_delete', array('id' => $id)))
-            ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+        if (!$entity)
+            throw $this->createNotFoundException('Unable to find Interessado entity.');
+
+        $em->remove($entity);
+        $em->flush();
+
+        $this->get('session')->getFlashBag()->add('success', 'interessado excluído com sucesso!');
+        return $this->redirect($this->generateUrl('interessado'));
     }
 }

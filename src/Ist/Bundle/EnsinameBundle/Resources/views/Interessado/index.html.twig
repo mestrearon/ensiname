@@ -63,6 +63,7 @@
             <td>{{ entity.observacao }}</td>
             <td>
                 <a href="{{ path('interessado_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
+                <a href="{{ path('interessado_delete', { 'id': entity.id }) }}" class="confirm"><i class="icon-large icon-remove"></i></a>
             </td>
         </tr>
     {% endfor %}
@@ -72,6 +73,10 @@
 
 {% block javascripts %}
 <script type="text/javascript">
+$('.confirm').click(function(){
+    return confirm('Удалить?');
+});
+
 $('.datepicker')
     .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
     .on('hide', function(e) { $(this).keyup(); });
