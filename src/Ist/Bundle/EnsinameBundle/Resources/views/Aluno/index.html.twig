@@ -11,13 +11,13 @@
             <option>индивидуально</option>
         </select>
         <select id="linguas" class="input-small filtro">
-            <option value="0">Языки</option>
+            <option value="0">Язык</option>
             {% for lingua in linguas %}
             <option>{{ lingua.titulo }}</option>
             {% endfor %}
         </select>
         <select id="grupos" class="input-small filtro">
-            <option value="0">Группы</option>
+            <option value="0">Группа</option>
             {% for grupo in grupos %}
             <option>{{ grupo.titulo }}</option>
             {% endfor %}
@@ -39,8 +39,8 @@
             <th>Телефон</th>
             <th>E-mail</th>
             <th>Форма обучения</th>
-            <th>Языки</th>
-            <th>Группы</th>
+            <th>Язык</th>
+            <th>Группа</th>
             <th>Статус</th>
             <th>Примечания</th>
             <th>&nbsp;</th>
@@ -63,7 +63,7 @@
                     {% endfor %}
                 </ul>
             </td>
-            <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен', 'f': 'sair de férias'}) }}</td>
+            <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен', 'f': 'отпуск'}) }}</td>
             <td>{{ entity.observacao }}</td>
             <td>
                 <a href="{{ path('aluno_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
