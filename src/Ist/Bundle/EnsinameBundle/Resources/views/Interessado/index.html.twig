@@ -43,6 +43,7 @@
             <th>Дата заявки</th>
             <th>Статус</th>
             <th>Коментарии</th>
+            <th>&nbsp;</th>
         </tr>
     </thead>
     <tbody>
@@ -60,6 +61,9 @@
             <td class="data">{% if entity.chamada %}{{ entity.chamada|date('d/m/Y') }}{% endif %}</td>
             <td>{{ entity.status|replace({'l': 'ligou', 'c': 'concordou', 'd': 'discordou', 'r': 'recontactar', 'd': 'desinteressou', 'i': 'iniciou'}) }}</td>
             <td>{{ entity.observacao }}</td>
+            <td>
+                <a href="{{ path('interessado_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

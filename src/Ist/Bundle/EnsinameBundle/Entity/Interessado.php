@@ -101,7 +101,7 @@ class Interessado
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -117,14 +117,14 @@ class Interessado
     public function setNome($nome)
     {
         $this->nome = $nome;
-    
+
         return $this;
     }
 
     /**
      * Get nome
      *
-     * @return string 
+     * @return string
      */
     public function getNome()
     {
@@ -140,14 +140,14 @@ class Interessado
     public function setFone($fone)
     {
         $this->fone = $fone;
-    
+
         return $this;
     }
 
     /**
      * Get fone
      *
-     * @return string 
+     * @return string
      */
     public function getFone()
     {
@@ -163,14 +163,14 @@ class Interessado
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
 
     /**
      * Get email
      *
-     * @return string 
+     * @return string
      */
     public function getEmail()
     {
@@ -186,18 +186,28 @@ class Interessado
     public function setLinguas($linguas)
     {
         $this->linguas = $linguas;
-    
+
         return $this;
     }
 
     /**
      * Get linguas
      *
-     * @return string 
+     * @return string
      */
     public function getLinguas()
     {
         return $this->linguas;
+    }
+
+    /**
+     * Has linguas
+     *
+     * @return string
+     */
+    public function hasLinguas()
+    {
+        return !empty($this->linguas);
     }
 
     /**
@@ -209,14 +219,14 @@ class Interessado
     public function setFonte($fonte)
     {
         $this->fonte = $fonte;
-    
+
         return $this;
     }
 
     /**
      * Get fonte
      *
-     * @return string 
+     * @return string
      */
     public function getFonte()
     {
@@ -232,14 +242,14 @@ class Interessado
     public function setEstudo($estudo)
     {
         $this->estudo = $estudo;
-    
+
         return $this;
     }
 
     /**
      * Get estudo
      *
-     * @return string 
+     * @return string
      */
     public function getEstudo()
     {
@@ -255,14 +265,14 @@ class Interessado
     public function setInicio($inicio)
     {
         $this->inicio = $inicio;
-    
+
         return $this;
     }
 
     /**
      * Get inicio
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getInicio()
     {
@@ -278,14 +288,14 @@ class Interessado
     public function setHorario($horario)
     {
         $this->horario = $horario;
-    
+
         return $this;
     }
 
     /**
      * Get horario
      *
-     * @return string 
+     * @return string
      */
     public function getHorario()
     {
@@ -301,14 +311,14 @@ class Interessado
     public function setChamada($chamada)
     {
         $this->chamada = $chamada;
-    
+
         return $this;
     }
 
     /**
      * Get chamada
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getChamada()
     {
@@ -324,14 +334,14 @@ class Interessado
     public function setStatus($status)
     {
         $this->status = $status;
-    
+
         return $this;
     }
 
     /**
      * Get status
      *
-     * @return string 
+     * @return string
      */
     public function getStatus()
     {
@@ -347,14 +357,14 @@ class Interessado
     public function setObservacao($observacao)
     {
         $this->observacao = $observacao;
-    
+
         return $this;
     }
 
     /**
      * Get observacao
      *
-     * @return string 
+     * @return string
      */
     public function getObservacao()
     {

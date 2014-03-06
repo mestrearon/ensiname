@@ -1,16 +1,6 @@
-{% extends '::base.html.twig' %}
-
-{% block body -%}
-    <h1>Interessado edit</h1>
-
-    {{ form(edit_form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('interessado') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
-{% endblock %}
+{{ include('IstEnsinameBundle:Interessado:form.html.twig', {
+    'action': path('interessado_update', { 'id': entity.id }),
+    'form': form,
+    'legend': 'edição de interessado',
+    'method': 'PUT'
+}) }}

@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Ist\Bundle\EnsinameBundle\Entity\Interessado;
 use Ist\Bundle\EnsinameBundle\Form\InteressadoType;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Interessado controller.
@@ -172,8 +173,10 @@ class InteressadoController extends Controller
      */
     public function editAction($id)
     {
-        $this->get('session')->getFlashBag()->add('error', 'not authorized');
-        return $this->redirect($this->generateUrl('index'));
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
 
         $em = $this->getDoctrine()->getManager();
 
@@ -184,30 +187,38 @@ class InteressadoController extends Controller
         }
 
         $editForm = $this->createEditForm($entity);
-        $deleteForm = $this->createDeleteForm($id);
 
         return array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form'   => $editForm->createView(),
         );
     }
 
     /**
-    * Creates a form to edit a Interessado entity.
-    *
-    * @param Interessado $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Interessado entity.
+     *
+     * @param Interessado $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Interessado $entity)
     {
+        $em = $this->getDoctrine()->getManager();
+
+        $linguas = $entity->hasLinguas()
+            ? $em->getRepository('IstEnsinameBundle:Lingua')->createQueryBuilder('a')->where('a.id in ('. $entity->getLinguas() .')')->getQuery()->getResult()
+            : array();
+
+        $collection = new ArrayCollection($linguas);
+
+        $entity->setLinguas($collection);
+
         $form = $this->createForm(new InteressadoType(), $entity, array(
             'action' => $this->generateUrl('interessado_update', array('id' => $entity->getId())),
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        // $form->add('submit', 'submit', array('label' => 'Update'));
 
         return $form;
     }
@@ -221,8 +232,10 @@ class InteressadoController extends Controller
      */
     public function updateAction(Request $request, $id)
     {
-        $this->get('session')->getFlashBag()->add('error', 'not authorized');
-        return $this->redirect($this->generateUrl('index'));
+        if (!$this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            $this->get('session')->getFlashBag()->add('error', 'not authorized');
+            return $this->redirect($this->generateUrl('index'));
+        }
 
         $em = $this->getDoctrine()->getManager();
 
@@ -232,20 +245,23 @@ class InteressadoController extends Controller
             throw $this->createNotFoundException('Unable to find Interessado entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
         $editForm = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
+            $post = $request->request->get($editForm->getName());
+            $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('interessado_edit', array('id' => $id)));
+            $this->get('session')->getFlashBag()->add('success', 'interessado editado com sucesso!');
+            return $this->redirect($this->generateUrl('interessado'));
         }
+
+        $this->get('session')->getFlashBag()->add('error', 'falha ao editar interessado!');
 
         return array(
             'entity'      => $entity,
-            'edit_form'   => $editForm->createView(),
-            'delete_form' => $deleteForm->createView(),
+            'form'   => $editForm->createView(),
         );
     }
 
