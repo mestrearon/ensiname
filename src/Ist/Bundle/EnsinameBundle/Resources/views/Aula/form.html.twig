@@ -25,6 +25,16 @@
             <div class="controls">
                 {{ form_widget(form.data, {'attr': {'data-mask': '00/00/0000', 'class': 'datepicker'}}) }}
             </div>
+        </div><div class="control-group">
+            <label class="control-label" for="inicio">Время начала</label>
+            <div class="controls">
+                {{ form_widget(form.inicio, {'attr': {'data-mask': '00:00', 'class': 'timepicker'}}) }}
+            </div>
+        </div><div class="control-group">
+            <label class="control-label" for="fim">Время окончании</label>
+            <div class="controls">
+                {{ form_widget(form.fim, {'attr': {'data-mask': '00:00', 'class': 'timepicker'}}) }}
+            </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="grupo">Группа</label>
@@ -66,6 +76,14 @@ $('.datepicker')
     .datepicker({ orientation: "top right", format: "dd/mm/yyyy", autoclose: true })
     .on('hide', function(e) { $(this).keyup(); });
 
+$('.timepicker').timepicker({
+    minuteStep: 1,
+    showInputs: false,
+    disableFocus: false,
+    showMeridian: false,
+    defaultTime: false
+});
+
 var data = $.parseJSON($('#data').val());
 
 {% if is_granted('ROLE_ADMIN') %}
@@ -75,9 +93,7 @@ $('#ist_bundle_ensinamebundle_aulatype_professor').change(function() {
     $('#presencas').parent().show();
     var professorSelecionado = $(this).val();
     var grupoSelecionado = $('#ist_bundle_ensinamebundle_aulatype_grupo').val();
-console.log(grupoSelecionado);
     var primeiro = ($('#method').val() == "POST") ? true : (grupoSelecionado ? false : true);
-console.log(primeiro);
     $('#ist_bundle_ensinamebundle_aulatype_grupo option').each(function() {
         $(this).show();
         $(this).removeAttr('disabled');
@@ -110,9 +126,7 @@ $('#ist_bundle_ensinamebundle_aulatype_professor').change();
 
 {% if is_granted('ROLE_PROF') %}
 var grupoSelecionado = $('#ist_bundle_ensinamebundle_aulatype_grupo').val();
-console.log(grupoSelecionado);
 var primeiro = ($('#method').val() == "POST") ? true : (grupoSelecionado ? false : true);
-console.log(primeiro);
 $('#ist_bundle_ensinamebundle_aulatype_grupo option').each(function() {
     $(this).show();
     $(this).removeAttr('disabled');
@@ -167,5 +181,16 @@ $('#ist_bundle_ensinamebundle_aulatype_grupo').change(function() {
     }
 });
 $('#ist_bundle_ensinamebundle_aulatype_grupo').change();
+
+$("form").submit(function(event) {
+    var inicio = parseInt($('#ist_bundle_ensinamebundle_aulatype_inicio').val().replace(':', '')),
+        fim = parseInt($('#ist_bundle_ensinamebundle_aulatype_fim').val().replace(':', ''));
+    if (fim >= inicio) {
+        return;
+    }
+    $('#ist_bundle_ensinamebundle_aulatype_inicio').focus();
+    alert('a hora de fim não pode ser menor que a hora de inicio!');
+    event.preventDefault();
+});
 </script>
 {% endblock %}

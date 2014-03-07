@@ -191,4 +191,9 @@ class Grupo
     {
         return $this->horario;
     }
+
+    public function __toString()
+    {
+        return $this->getTitulo();
+    }
 }

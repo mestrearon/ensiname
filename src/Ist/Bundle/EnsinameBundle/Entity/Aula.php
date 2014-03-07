@@ -36,6 +36,20 @@ class Aula
     private $data;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="inicio", type="string", length=5)
+     */
+    private $inicio;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="fim", type="string", length=5)
+     */
+    private $fim;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="grupo", type="integer", nullable=true)
@@ -219,5 +233,51 @@ class Aula
     public function getObservacao()
     {
         return $this->observacao;
+    }
+
+    /**
+     * Set inicio
+     *
+     * @param string $inicio
+     * @return Aula
+     */
+    public function setInicio($inicio)
+    {
+        $this->inicio = $inicio;
+    
+        return $this;
+    }
+
+    /**
+     * Get inicio
+     *
+     * @return string 
+     */
+    public function getInicio()
+    {
+        return $this->inicio;
+    }
+
+    /**
+     * Set fim
+     *
+     * @param string $fim
+     * @return Aula
+     */
+    public function setFim($fim)
+    {
+        $this->fim = $fim;
+    
+        return $this;
+    }
+
+    /**
+     * Get fim
+     *
+     * @return string 
+     */
+    public function getFim()
+    {
+        return $this->fim;
     }
 }

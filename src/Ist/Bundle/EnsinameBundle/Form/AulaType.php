@@ -67,11 +67,14 @@ class AulaType extends AbstractType
                 'input' => 'datetime',
                 'format' => 'dd/MM/yyyy',
             ))
+            ->add('inicio')
+            ->add('fim')
             ->add('grupo', 'entity', $grupoOptions)
             ->add('presencas', 'entity', $presencasOptions)
             ->add('dada', 'choice', array(
                 'choices' => array('s' => 'проведен', 'n' => 'отменен'),
-                'required' => true,))
+                'required' => true,
+            ))
             ->add('observacao')
         ;
     }

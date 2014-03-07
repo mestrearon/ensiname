@@ -124,9 +124,13 @@ class AulaController extends Controller
         $entity  = new Aula();
         $form = $this->createForm(new AulaType($em), $entity);
         $form->bind($request);
+        $post = $request->request->get($form->getName());
+        $inicio = str_replace(':', null, $post['inicio']);
+        $fim = str_replace(':', null, $post['fim']);
 
-        if ($form->isValid()) {
-            $post = $request->request->get($form->getName());
+        if ($fim < $inicio) {
+            $this->get('session')->getFlashBag()->add('error', 'a hora de fim não pode ser menor que a hora de inicio!');
+        } elseif ($form->isValid()) {
 
             if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
                 $professor = $post['professor'];
@@ -145,10 +149,7 @@ class AulaController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'Ошибка при добавлении урока!');
         }
 
-        return array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
-        );
+        return $this->newAction($entity);
     }
 
     /**
@@ -207,7 +208,8 @@ class AulaController extends Controller
     public function editAction($id)
     {
         $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('IstEnsinameBundle:Aula')->find($id);
+
+        $entity = is_string($id) ? $em->getRepository('IstEnsinameBundle:Aula')->find($id) : $id;
 
         if (!$entity
                 || ($this->get('security.context')->isGranted('ROLE_PROF')
@@ -247,10 +249,13 @@ class AulaController extends Controller
         $this->setPresencas($entity);
         $form = $this->createForm(new AulaType($em), $entity);
         $form->bind($request);
+        $post = $request->request->get($form->getName());
+        $inicio = str_replace(':', null, $post['inicio']);
+        $fim = str_replace(':', null, $post['fim']);
 
-        if ($form->isValid()) {
-            $post = $request->request->get($form->getName());
-
+        if ($fim < $inicio) {
+            $this->get('session')->getFlashBag()->add('error', 'a hora de fim não pode ser menor que a hora de inicio!');
+        } elseif ($form->isValid()) {
             if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
                 $professor = $post['professor'];
 
@@ -269,10 +274,7 @@ class AulaController extends Controller
             $this->get('session')->getFlashBag()->add('error', 'Ошибка при обновлении урока!');
         }
 
-        return array(
-            'entity' => $entity,
-            'form' => $form->createView(),
-        );
+        return $this->editAction($entity);
     }
 
     /**
@@ -323,10 +325,14 @@ class AulaController extends Controller
         $presencas = array();
 
         if ($entity->hasPresencas())
+            $presencas = $entity->getPresencas();
+
+        if (is_string($presencas))
             $presencas = $this->getDoctrine()->getManager()->getRepository('IstEnsinameBundle:Aluno')
-                ->createQueryBuilder('a')->where('a.id in ('. $entity->getPresencas() .')')->getQuery()
+                ->createQueryBuilder('a')->where('a.id in ('. $presencas .')')->getQuery()
                 ->getResult();
 
-        $entity->setPresencas(new ArrayCollection($presencas));
+        if (is_array($presencas))
+            $entity->setPresencas(new ArrayCollection($presencas));
     }
 }
