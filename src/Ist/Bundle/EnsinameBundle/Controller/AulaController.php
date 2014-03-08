@@ -75,6 +75,7 @@ class AulaController extends Controller
             $entity = array(
                 'id' => $entity->getId(),
                 'data' => $entity->getData(),
+                'horario' => $entity->getInicio() .' - '. $entity->getFim(),
                 'grupo' => $g,
                 'professor' => $p,
                 'lingua' => $l,

@@ -41,6 +41,7 @@
         <tr>
             <th>#</th>
             <th>Дата урока</th>
+            <th>Время</th>
             <th>Группа</th>
             {% if is_granted('ROLE_ADMIN') %}
             <th>Преподаватель</th>
@@ -56,6 +57,7 @@
         <tr>
             <td class="contador"><a href="{{ path('aula_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td class="data">{{ entity.data|date("d/m/Y") }}</td>
+            <td class="horario">{{ entity.horario }}</td>
             <td class="grupo">{{ entity.grupo }}</td>
             {% if is_granted('ROLE_ADMIN') %}
             <td class="professor">{{ entity.professor }}</td>
