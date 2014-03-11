@@ -1,5 +1,22 @@
 {% extends 'IstEnsinameBundle:Default:dashboard.html.twig' %}
 
+{% block stylesheets %}
+<style>
+body {
+    margin-bottom: 100px;
+}
+
+footer {
+    position: fixed;
+    background-color: #f5f5f5;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: 10px;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <p>
     <a href="{{ path('aula_new') }}" class="btn btn-primary">Добавить новый урок</a>
@@ -81,6 +98,14 @@
 </table>
 {% endblock %}
 
+{% block footer %}
+<footer>
+    <div class="container">
+        <p>somatório dinâmico das diferenças de horário das aulas: <b id="somatorio"></b></p>
+    </div>
+</footer>
+{% endblock %}
+
 {% block javascripts %}
 <script type="text/javascript">
 $('.confirm').click(function(){
@@ -121,6 +146,41 @@ function contador() {
             $(this).children(".contador").children("a").html(contador++);
         }
     });
+    somatorio();
+}
+
+function somatorio() {
+    var somatorio = 0;
+    $('table tbody tr').each(function() {
+        if ($(this).is(":visible")) {
+            var horario = $(this).children(".horario").html();
+            if (typeof horario == 'string' || horario instanceof String) {
+                horario = horario.split(' - ');
+                if (horario[0].length > 3) {
+                    var inicio = horario[0].split(':');
+                    var horaInicio = parseInt(inicio[0]);
+                    var minutoInicio = parseInt(inicio[1]);
+                    var dateInicio = new Date(2000, 0, 1,  horaInicio, minutoInicio);
+                }
+                if (horario[1].length > 3) {
+                    var fim = horario[1].split(':');
+                    var horaFim = parseInt(fim[0]);
+                    var minutoFim = parseInt(fim[1]);
+                    var dateFim = new Date(2000, 0, 1, horaFim, minutoFim);
+                    somatorio += dateFim - dateInicio;
+                }
+            }
+        }
+    });
+
+    var hh = Math.floor(somatorio / 1000 / 60 / 60);
+    somatorio -= hh * 1000 * 60 * 60;
+    var mm = Math.floor(somatorio / 1000 / 60);
+    somatorio -= mm * 1000 * 60;
+    var ss = Math.floor(somatorio / 1000);
+    somatorio -= ss * 1000;
+
+    $('#somatorio').html(hh +':'+ ("0" + mm).slice(-2));
 }
 
 contador();
