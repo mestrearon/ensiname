@@ -34,6 +34,10 @@
         <input type="text" id="dataMin" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" value="{{ dataMin }}" />
         До …:
         <input type="text" id="dataMax" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" value="{{ dataMax }}" />
+        С …:
+        <input type="text" id="horarioMin" class="input-mini timepicker" maxlength="5" data-mask="00:00" />
+        До …:
+        <input type="text" id="horarioMax" class="input-mini timepicker" maxlength="5" data-mask="00:00" />
     </span>
 </p>
 <table class="table table-striped">
@@ -92,9 +96,9 @@ var filtros = 0;
 function controlaFiltro() {
     filtros++;
     {% if is_granted('ROLE_ADMIN') %}
-    if (filtros < 6) {
+    if (filtros < 8) {
     {% else %}
-    if (filtros < 5) {
+    if (filtros < 7) {
     {% endif %}
         return true;
     } else {
@@ -127,7 +131,7 @@ $('#grupos').change(function() {
     }
     var valor = $(this).val();
     if (valor != '0') {
-        var coluna = 3;
+        var coluna = 4;
         $('table tbody tr').each(function() {
             var linha = $(this);
             var atual = 0;
@@ -156,7 +160,7 @@ $('#professores').change(function() {
     }
     var valor = $(this).val();
     if (valor != '0') {
-        var coluna = 4;
+        var coluna = 5;
         $('table tbody tr').each(function() {
             var linha = $(this);
             var atual = 0;
@@ -181,9 +185,9 @@ $('#linguas').change(function() {
     var valor = $(this).val();
     if (valor != '0') {
         {% if is_granted('ROLE_ADMIN') %}
-        var coluna = 5;
+        var coluna = 6;
         {% else %}
-        var coluna = 4;
+        var coluna = 5;
         {% endif %}
         $('table tbody tr').each(function() {
             var linha = $(this);
@@ -208,9 +212,9 @@ $('#status').change(function() {
     var valor = $(this).val();
     if (valor != '0') {
         {% if is_granted('ROLE_ADMIN') %}
-        var coluna = 6;
+        var coluna = 7;
         {% else %}
-        var coluna = 5;
+        var coluna = 6;
         {% endif %}
         $('table tbody tr').each(function() {
             var linha = $(this);
@@ -260,10 +264,56 @@ $('#dataMax').keyup(function() {
         });
     }
     if (controlaFiltro()) {
+        $('#horarioMin').keyup();
+    }
+});
+
+$('#horarioMin').keyup(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    if ($(this).val().length == 5) {
+        var horarioMin = parseInt($(this).val().replace(':', ''));
+        $('table tbody tr').each(function() {
+            var horario = $(this).children(".horario").html();
+            if (typeof horario == 'string' || horario instanceof String) {
+                horario = horario.split(' - ');
+                var inicio = parseInt(horario[0].replace(':', ''));
+                var fim = parseInt(horario[1].replace(':', ''));
+                if ((inicio < horarioMin) && (fim < horarioMin)) {
+                    $(this).hide();
+                }
+            }
+        });
+    }
+    if (controlaFiltro()) {
+        $('#horarioMax').keyup();
+    }
+});
+
+$('#horarioMax').keyup(function() {
+    if (filtros == 0) {
+        mostraTudo();
+    }
+    if ($(this).val().length == 5) {
+        var horarioMin = parseInt($(this).val().replace(':', ''));
+        $('table tbody tr').each(function() {
+            var horario = $(this).children(".horario").html();
+            if (typeof horario == 'string' || horario instanceof String) {
+                horario = horario.split(' - ');
+                var inicio = parseInt(horario[0].replace(':', ''));
+                var fim = parseInt(horario[1].replace(':', ''));
+                if ((inicio > horarioMin) && (fim > horarioMin)) {
+                    $(this).hide();
+                }
+            }
+        });
+    }
+    if (controlaFiltro()) {
         $('#grupos').change();
     }
 });
 
-$('#dataMin').keyup();
+$('#grupos').change();
 </script>
 {% endblock %}
