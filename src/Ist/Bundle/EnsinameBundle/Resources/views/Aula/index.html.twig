@@ -84,7 +84,7 @@ footer {
             <td class="professor">{{ entity.professor }}</td>
             {% endif %}
             <td class="lingua">{{ entity.lingua }}</td>
-            <td>{{ entity.dada|replace({'s': 'проведен', 'n': 'отменен'}) }}</td>
+            <td class="status">{{ entity.dada|replace({'s': 'проведен', 'n': 'отменен'}) }}</td>
             <td>{{ entity.observacao }}</td>
             <td>
                 <a href="{{ path('aula_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
@@ -101,7 +101,20 @@ footer {
 {% block footer %}
 <footer>
     <div class="container">
-        <p>somatório dinâmico das diferenças de horário das aulas: <b id="somatorio"></b></p>
+        <div class="row">
+            <div class="span3">
+                <p>Время <b id="somatorio"></b></p>
+            </div>
+            <div class="span3">
+                <p>урока <b id="total"></b></p>
+            </div>
+            <div class="span3">
+                <p>проведен <b id="dadas"></b></p>
+            </div>
+            <div class="span3">
+                <p>отменен <b id="canceladas"></b></p>
+            </div>
+        </div>
     </div>
 </footer>
 {% endblock %}
@@ -140,13 +153,14 @@ function mostraTudo() {
 }
 
 function contador() {
-    var contador = 1;
+    var contador = 0;
     $('table tbody tr').each(function() {
         if ($(this).is(":visible")) {
-            $(this).children(".contador").children("a").html(contador++);
+            $(this).children(".contador").children("a").html(++contador);
         }
     });
     somatorio();
+    $('#total').html(contador);
 }
 
 function somatorio() {
@@ -181,6 +195,25 @@ function somatorio() {
     somatorio -= ss * 1000;
 
     $('#somatorio').html(hh +':'+ ("0" + mm).slice(-2));
+    status();
+}
+
+function status() {
+    var dadas = 0,
+        canceladas = 0;
+    $('table tbody tr').each(function() {
+        if ($(this).is(":visible")) {
+            var status = $(this).children(".status").html();
+            if (status == 'проведен') {
+                dadas++;
+            }
+            if (status == 'отменен') {
+                canceladas++;
+            }
+        }
+    });
+    $('#dadas').html(dadas);
+    $('#canceladas').html(canceladas);
 }
 
 contador();
