@@ -54,6 +54,7 @@ class GrupoController extends Controller
             'professores' => $professores,
         );
     }
+
     /**
      * Creates a new Grupo entity.
      *
@@ -170,11 +171,24 @@ class GrupoController extends Controller
         $entity = $em->getRepository('IstEnsinameBundle:Grupo')->find($id);
 
         if (!$entity) {
-            $this->get('session')->getFlashBag()->add('info', 'invalid parameter');
+            $this->get('session')->getFlashBag()->add('info', 'invalid group');
             return $this->redirect($this->generateUrl('grupo'));
         }
 
+        $lingua = $em->getRepository('IstEnsinameBundle:Lingua')->find($entity->getLingua());
+
+        if ($lingua) {
+            $entity->setLingua($lingua);
+        }
+
+        $professor = $em->getRepository('IstEnsinameBundle:Professor')->find($entity->getProfessor());
+
+        if ($professor) {
+            $entity->setProfessor($professor);
+        }
+
         $this->getAlunos($entity);
+
         $form = $this->createForm(new GrupoType(), $entity);
 
         return array(
