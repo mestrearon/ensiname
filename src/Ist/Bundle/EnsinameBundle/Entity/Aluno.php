@@ -310,4 +310,14 @@ class Aluno
     {
         return $this->ferias;
     }
+
+    /**
+     * Has ferias
+     *
+     * @return boolean
+     */
+    public function hasFerias()
+    {
+        return !empty($this->ferias);
+    }
 }
