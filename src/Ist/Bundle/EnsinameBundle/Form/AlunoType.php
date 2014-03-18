@@ -26,17 +26,20 @@ class AlunoType extends AbstractType
             ))
             ->add('estudo', 'choice', array(
                 'choices' => array('g' => 'в группе', 'i' => 'индивидуально'),
-                'required' => true,))
+                'required' => true,
+            ))
             ->add('fone', 'text')
             ->add('email', 'email')
             ->add('status', 'choice', array(
                 'choices' => array('a' => 'активен', 'p' => 'пауза', 'd' => 'не активен', 'f' => 'sair de férias'),
-                'required' => true,))
+                'required' => true,
+            ))
             ->add('observacao')
             ->add('ferias', 'date', array(
                 'widget' => 'single_text',
                 'input' => 'datetime',
                 'format' => 'dd/MM/yyyy',
+                'required' => false,
             ))
         ;
     }

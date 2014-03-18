@@ -80,7 +80,7 @@ class Aluno
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="ferias", type="date")
+     * @ORM\Column(name="ferias", type="date", nullable=true)
      */
     private $ferias;
 
