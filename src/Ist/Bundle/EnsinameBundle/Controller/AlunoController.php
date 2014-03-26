@@ -222,10 +222,10 @@ class AlunoController extends Controller
             $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
             $em->persist($entity);
             $em->flush();
-            $this->get('session')->getFlashBag()->add('success', 'Информация о преподавателе успешно обновлена!');
+            $this->get('session')->getFlashBag()->add('success', 'Информация о студенте успешно обновлена!');
             return $this->redirect($this->generateUrl('aluno'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'Ошибка при обновдении студента!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при обновлении студента!');
         }
         return array(
             'entity'      => $entity,
