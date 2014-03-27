@@ -63,7 +63,7 @@
                     {% endfor %}
                 </ul>
             </td>
-            <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен', 'f': 'отпуск'}) }}</td>
+            <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен', 'f': 'командировка'}) }}</td>
             <td>{{ entity.observacao }}</td>
             <td>
                 <a href="{{ path('aluno_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
