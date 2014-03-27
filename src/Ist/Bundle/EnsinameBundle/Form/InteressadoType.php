@@ -47,12 +47,12 @@ class InteressadoType extends AbstractType
             ))
             ->add('status', 'choice', array(
                 'choices' => array(
-                    'l' => 'ligou',
-                    'c' => 'concordou',
-                    'd' => 'discordou',
-                    'r' => 'recontactar',
-                    'd' => 'desinteressou',
-                    'i' => 'iniciou',
+                    'l' => 'В обработке',
+                    'c' => 'Согласие',
+                    'd' => 'Отказ',
+                    'r' => 'Перезвонить',
+                    'd' => 'Больше не интересуется',
+                    'i' => 'Начал',
                 ),
                 'required' => true,
             ))
