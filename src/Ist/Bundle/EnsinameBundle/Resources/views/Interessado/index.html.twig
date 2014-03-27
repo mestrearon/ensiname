@@ -12,13 +12,13 @@
             {% endfor %}
         </select>
         <select id="status" class="input-small filtro">
-            <option value="0">Статус урока</option>
-            <option>позвонил</option>
-            <option>согласил</option>
-            <option>не согласил</option>
-            <option>перезвонить</option>
-            <option>больше не интересуется</option>
-            <option>начал</option>
+            <option value="0">Статус заявки</option>
+            <option>В обработке</option>
+            <option>Согласие</option>
+            <option>Отказ</option>
+            <option>Перезвонить</option>
+            <option>Больше не интересуется</option>
+            <option>Начал</option>
         </select>
         С …:
         <input type="text" id="dataMin" class="input-small datepicker" maxlength="10" data-mask="00/00/0000" />
@@ -59,7 +59,7 @@
             <td>{% if entity.inicio %}{{ entity.inicio|date('d/m/Y') }}{% endif %}</td>
             <td>{{ entity.horario }}</td>
             <td class="data">{% if entity.chamada %}{{ entity.chamada|date('d/m/Y') }}{% endif %}</td>
-            <td>{{ entity.status|replace({'l': 'ligou', 'c': 'concordou', 'd': 'discordou', 'r': 'recontactar', 'd': 'desinteressou', 'i': 'iniciou'}) }}</td>
+            <td>{{ entity.status|replace({'l': 'В обработке', 'c': 'Согласие', 'd': 'Отказ', 'r': 'Перезвонить', 'd': 'Больше не интересуется', 'i': 'Начал'}) }}</td>
             <td>{{ entity.observacao }}</td>
             <td>
                 <a href="{{ path('interessado_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
