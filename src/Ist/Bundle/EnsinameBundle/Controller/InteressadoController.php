@@ -81,11 +81,11 @@ class InteressadoController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'Interessado criado com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Заявка успешно добавлена!');
 
             return $this->redirect($this->generateUrl('interessado'));
         } else {
-            $this->get('session')->getFlashBag()->add('error', 'Falha na criação do Interessado!');
+            $this->get('session')->getFlashBag()->add('error', 'Ошибка при добавлении заявки!');
         }
 
         return array(
@@ -253,11 +253,11 @@ class InteressadoController extends Controller
             $entity->setLinguas(isset($post['linguas']) ? implode(',', $post['linguas']) : null);
             $em->flush();
 
-            $this->get('session')->getFlashBag()->add('success', 'interessado editado com sucesso!');
+            $this->get('session')->getFlashBag()->add('success', 'Заявка успешно отредактирована!');
             return $this->redirect($this->generateUrl('interessado'));
         }
 
-        $this->get('session')->getFlashBag()->add('error', 'falha ao editar interessado!');
+        $this->get('session')->getFlashBag()->add('error', 'Ошибка при редактировании заявки!');
 
         return array(
             'entity'      => $entity,
@@ -287,7 +287,7 @@ class InteressadoController extends Controller
         $em->remove($entity);
         $em->flush();
 
-        $this->get('session')->getFlashBag()->add('success', 'interessado excluído com sucesso!');
+        $this->get('session')->getFlashBag()->add('success', 'Заявка успешно удалена!');
         return $this->redirect($this->generateUrl('interessado'));
     }
 }
