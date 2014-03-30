@@ -24,13 +24,13 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="linguas">Изучаемый язык</label>
+            <label class="control-label" for="linguas">Язык</label>
             <div class="controls">
                 {{ form_widget(form.linguas) }}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="fonte">Источник</label>
+            <label class="control-label" for="fonte">Откуда поступила заявка</label>
             <div class="controls">
                 {{ form_widget(form.fonte) }}
             </div>
@@ -42,7 +42,7 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="inicio">Желательная дата начала уроков</label>
+            <label class="control-label" for="inicio">Дата регистрации заявки</label>
             <div class="controls">
                 {{ form_widget(form.inicio, {'attr': {'data-mask': '00/00/0000', 'class': 'datepicker'}}) }}
             </div>
@@ -54,19 +54,19 @@
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="chamada">Дата заявки</label>
+            <label class="control-label" for="chamada">Дата начала обучения</label>
             <div class="controls">
                 {{ form_widget(form.chamada, {'attr': {'data-mask': '00/00/0000', 'class': 'datepicker'}}) }}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="status">Статус</label>
+            <label class="control-label" for="status">Статус заявки</label>
             <div class="controls">
                 {{ form_widget(form.status) }}
             </div>
         </div>
         <div class="control-group">
-            <label class="control-label" for="observacao">Комментарии</label>
+            <label class="control-label" for="observacao">Примечания</label>
             <div class="controls">
                 {{ form_widget(form.observacao) }}
             </div>
