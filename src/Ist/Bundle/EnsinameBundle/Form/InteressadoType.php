@@ -50,9 +50,7 @@ class InteressadoType extends AbstractType
                     'l' => 'В обработке',
                     'c' => 'Согласие',
                     'd' => 'Отказ',
-                    'r' => 'Перезвонить',
                     'd' => 'Больше не интересуется',
-                    'i' => 'Начал',
                 ),
                 'required' => true,
             ))
