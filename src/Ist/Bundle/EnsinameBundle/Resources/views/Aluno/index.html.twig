@@ -109,8 +109,14 @@ $('.filtro').change(function(){
                 var atual = 0;
                 linha.children().each(function(){
                     var celula = $(this).html();
-                    if ((coluna == ++atual) && (celula.indexOf(valor) < 0)){
-                        linha.hide();
+                    if (filtro == 'status') {
+                        if ((coluna == ++atual) && (celula != valor)) {
+                            linha.hide();
+                        }
+                    } else {
+                        if ((coluna == ++atual) && (celula.indexOf(valor) < 0)) {
+                            linha.hide();
+                        }
                     }
                 });
             });
