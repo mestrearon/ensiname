@@ -31,7 +31,7 @@ class AlunoType extends AbstractType
             ->add('fone', 'text')
             ->add('email', 'email')
             ->add('status', 'choice', array(
-                'choices' => array('a' => 'активен', 'p' => 'пауза', 'd' => 'не активен', 'f' => 'командировка'),
+                'choices' => array('a' => 'активен', 'p' => 'пауза', 'd' => 'не активен', 'f' => 'В командировке'),
                 'required' => true,
             ))
             ->add('observacao')
