@@ -43,6 +43,7 @@
             <th>Группа</th>
             <th>Статус</th>
             <th>Примечания</th>
+            <th>retorno das férias</th>
             <th>&nbsp;</th>
         </tr>
     </thead>
@@ -65,6 +66,7 @@
             </td>
             <td>{{ entity.status|replace({'a': 'активен', 'p': 'пауза', 'd': 'не активен', 'f': 'командировка'}) }}</td>
             <td>{{ entity.observacao }}</td>
+            <td>{% if entity.ferias %}{{ entity.ferias|date("d/m/Y") }}{% endif %}</td>
             <td>
                 <a href="{{ path('aluno_edit', { 'id': entity.id }) }}"><i class="icon-large icon-edit"></i></a>
                 <a href="{{ path('aluno_delete', { 'id': entity.id }) }}" class="confirm"><i class="icon-large icon-remove"></i></a>
