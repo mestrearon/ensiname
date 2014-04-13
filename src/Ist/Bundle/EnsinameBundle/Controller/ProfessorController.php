@@ -37,6 +37,7 @@ class ProfessorController extends Controller
         $entities = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
         $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
         $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
+        $professores = array();
         if (!empty($entities))
             foreach ($entities as &$entity) {
                 foreach (explode(',', $entity->getLinguas()) as $lingua_ent)
@@ -144,7 +145,7 @@ class ProfessorController extends Controller
 
         $this->get('session')->getFlashBag()->add('error', 'not implemented');
         return $this->redirect($this->generateUrl('index'));
-        
+
         $em = $this->getDoctrine()->getManager();
 
         $entity = $em->getRepository('IstEnsinameBundle:Professor')->find($id);
@@ -177,14 +178,14 @@ class ProfessorController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('IstEnsinameBundle:Professor')->find($id);
-        
+
         if (!$entity)
             throw $this->createNotFoundException('Unable to find Professor entity.');
-        
+
         $this->getLinguas($entity);
         $entity->setPassword(null);
         $form = $this->createForm(new ProfessorType(), $entity);
-        
+
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
@@ -217,7 +218,7 @@ class ProfessorController extends Controller
 
         if ($form->isValid()) {
             $post = $request->request->get($form->getName());
-            
+
             if (!empty($post['password'])) {
                 $factory = $this->get('security.encoder_factory');
                 $encoder = $factory->getEncoder($entity);

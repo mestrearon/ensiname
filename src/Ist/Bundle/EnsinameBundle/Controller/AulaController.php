@@ -305,6 +305,7 @@ class AulaController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $professores = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
+        $data = array();
 
         if ($this->get('security.context')->isGranted('ROLE_ADMIN'))
             $grupos = $em->getRepository('IstEnsinameBundle:Grupo')->findAll();
@@ -318,7 +319,7 @@ class AulaController extends Controller
                 if ($professor->getId() == $grupo->getProfessor())
                     $data[$professor->getId()][$grupo->getId()] = explode(',', $grupo->getAlunos());
 
-        return (array) $data;
+        return $data;
     }
 
     private function setPresencas(&$entity)
