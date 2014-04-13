@@ -102,17 +102,14 @@ footer {
 <footer>
     <div class="container">
         <div class="row">
-            <div class="span3">
-                <p>Время <b id="somatorio"></b></p>
+            <div class="span4">
+                <p>урока <b id="total_num"></b> - <b id="total_hor"></b></p>
             </div>
-            <div class="span3">
-                <p>урока <b id="total"></b></p>
+            <div class="span4">
+                <p>проведен <b id="dadas_num"></b> - <b id="dadas_hor"></b></p>
             </div>
-            <div class="span3">
-                <p>проведен <b id="dadas"></b></p>
-            </div>
-            <div class="span3">
-                <p>отменен <b id="canceladas"></b></p>
+            <div class="span4">
+                <p>отменен <b id="canceladas_num"></b> - <b id="canceladas_hor"></b></p>
             </div>
         </div>
     </div>
@@ -164,56 +161,64 @@ function contador() {
 }
 
 function somatorio() {
-    var somatorio = 0;
+    var total_num = 0,
+        total_hor = 0,
+        dadas_num = 0,
+        dadas_hor = 0,
+        canceladas_num = 0,
+        canceladas_hor = 0;
     $('table tbody tr').each(function() {
         if ($(this).is(":visible")) {
-            var horario = $(this).children(".horario").html();
+            var horario = $(this).children(".horario").html(),
+                status = $(this).children(".status").html(),
+                dateInicio = 0,
+                dateFim = 0,
+                diferenca = 0;
             if (typeof horario == 'string' || horario instanceof String) {
                 horario = horario.split(' - ');
                 if (horario[0].length > 3) {
                     var inicio = horario[0].split(':');
                     var horaInicio = parseInt(inicio[0]);
                     var minutoInicio = parseInt(inicio[1]);
-                    var dateInicio = new Date(2000, 0, 1,  horaInicio, minutoInicio);
+                    dateInicio = new Date(2000, 0, 1,  horaInicio, minutoInicio);
                 }
                 if (horario[1].length > 3) {
                     var fim = horario[1].split(':');
                     var horaFim = parseInt(fim[0]);
                     var minutoFim = parseInt(fim[1]);
-                    var dateFim = new Date(2000, 0, 1, horaFim, minutoFim);
-                    somatorio += dateFim - dateInicio;
+                    dateFim = new Date(2000, 0, 1, horaFim, minutoFim);
                 }
+                diferenca += dateFim - dateInicio;
             }
+            if (status == 'проведен') {
+                dadas_num++;
+                dadas_hor += diferenca;
+            }
+            if (status == 'отменен') {
+                canceladas_num++;
+                canceladas_hor += diferenca;
+            }
+            total_num++;
+            total_hor += diferenca;
         }
     });
 
+    $('#total_num').html(total_num);
+    $('#total_hor').html(montaHorario(total_hor));
+    $('#dadas_num').html(dadas_num);
+    $('#dadas_hor').html(montaHorario(dadas_hor));
+    $('#canceladas_num').html(canceladas_num);
+    $('#canceladas_hor').html(montaHorario(canceladas_hor));
+}
+
+function montaHorario(somatorio) {
     var hh = Math.floor(somatorio / 1000 / 60 / 60);
     somatorio -= hh * 1000 * 60 * 60;
     var mm = Math.floor(somatorio / 1000 / 60);
     somatorio -= mm * 1000 * 60;
     var ss = Math.floor(somatorio / 1000);
     somatorio -= ss * 1000;
-
-    $('#somatorio').html(hh +':'+ ("0" + mm).slice(-2));
-    status();
-}
-
-function status() {
-    var dadas = 0,
-        canceladas = 0;
-    $('table tbody tr').each(function() {
-        if ($(this).is(":visible")) {
-            var status = $(this).children(".status").html();
-            if (status == 'проведен') {
-                dadas++;
-            }
-            if (status == 'отменен') {
-                canceladas++;
-            }
-        }
-    });
-    $('#dadas').html(dadas);
-    $('#canceladas').html(canceladas);
+    return hh +':'+ ("0" + mm).slice(-2);
 }
 
 contador();
