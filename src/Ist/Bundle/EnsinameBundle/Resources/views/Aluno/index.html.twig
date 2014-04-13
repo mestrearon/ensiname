@@ -49,7 +49,7 @@
     </thead>
     <tbody>
     {% for entity in entities %}
-        <tr {% if entity.ferias|date("Ymd") >= "now"|date("Ymd") and entity.status != "f" %}class="error"{% endif %}>
+        <tr {% if entity.status in ["f", "p"] %}class="error"{% endif %}>
             <td class="contador">{{ entity.id }}</td>
             <td>{{ entity.nome }}</td>
             <td>{% if entity.nascimento %}{{ entity.nascimento|date("d/m/Y") }}{% endif %}</td>
