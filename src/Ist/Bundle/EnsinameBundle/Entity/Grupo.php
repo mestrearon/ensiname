@@ -38,14 +38,14 @@ class Grupo
     /**
      * @var integer
      *
-     * @ORM\Column(name="professor", type="integer")
+     * @ORM\Column(name="professor", type="integer", nullable=true)
      */
     private $professor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="alunos", type="text")
+     * @ORM\Column(name="alunos", type="text", nullable=true)
      */
     private $alunos;
 
@@ -134,6 +134,16 @@ class Grupo
     public function getProfessor()
     {
         return $this->professor;
+    }
+
+    /**
+     * Has professor
+     *
+     * @return boolean
+     */
+    public function hasProfessor()
+    {
+        return !empty($this->professor);
     }
 
     /**

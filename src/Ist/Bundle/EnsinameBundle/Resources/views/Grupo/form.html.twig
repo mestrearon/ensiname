@@ -3,6 +3,8 @@
 {% block content %}
 <form action="{{ action }}" method="post" {{ form_enctype(form) }} class="form-horizontal">
     <input type="hidden" name="_method" value="{{ method }}" />
+    <input type="hidden" id="professores" name="professores" value="{{ professores }}" />
+    <input type="hidden" id="alunos" name="alunos" value="{{ alunos }}" />
     <fieldset>
         <legend>{{ legend }}</legend>
         <div class="control-group">
@@ -13,19 +15,19 @@
         </div>
         <div class="control-group">
             <label class="control-label" for="lingua">Язык</label>
-            <div class="controls">
+            <div class="controls linguas">
                 {{ form_widget(form.lingua) }}
             </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="professor">Преподаватель</label>
-            <div class="controls">
+            <div class="controls professores">
                 {{ form_widget(form.professor) }}
             </div>
         </div>
         <div class="control-group">
             <label class="control-label" for="alunos">Студенты</label>
-            <div class="controls" style="height:100px;width:220px;overflow:auto;">
+            <div class="controls alunos" style="height:100px;width:220px;overflow:auto;">
                 {{ form_widget(form.alunos) }}
             </div>
         </div>
@@ -43,4 +45,70 @@
         </div>
     </fieldset>
 </form>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$('.linguas select').change(function() {
+    var lingua = $(this).val(),
+        professores = $.parseJSON($('#professores').val()),
+        alunos = $.parseJSON($('#alunos').val());
+
+    $('.professores option').each(function() {
+        var professor = $(this).val(),
+            fica = false;
+
+        $(this).show();
+        $(this).removeAttr('disabled');
+
+        for (l in professores)
+            if (l == lingua)
+                for (p in professores[l])
+                    if (professores[l][p] == professor)
+                        fica = true;
+        if (!fica) {
+            $(this).hide();
+            $(this).attr('disabled', 'disabled');
+        }
+    });
+
+    if ($('.professores option').size() == $('.professores option:disabled').size()) {
+        $('.professores select').hide();
+        $('.professores span').remove();
+        $('.professores').append('<span>não existem professores cadastrados para a língua selecionada...</span>');
+    } else {
+        $('.professores select').show();
+        $('.professores span').remove();
+        $('.professores option:enabled').first().attr('selected', 'selected');
+    }
+
+    $('.alunos label').each(function() {
+        var aluno = $(this).children('input[type=checkbox]').val(),
+            fica = false;
+
+        $(this).show();
+        $(this).children('input[type=checkbox]').removeAttr('checked');
+
+        for (l in alunos)
+            if (l == lingua)
+                for (a in alunos[l])
+                    if (alunos[l][a] == aluno)
+                        fica = true;
+
+        if (!fica)
+            $(this).hide();
+    });
+
+    if ($('.alunos label:visible').size() == 0) {
+        $('.alunos select').hide();
+        $('.alunos span').remove();
+        $('.alunos').append('<span>não existem alunos cadastrados para a língua selecionada...</span>');
+    } else {
+        $('.alunos select').show();
+        $('.alunos span').remove();
+    }
+});
+
+$('.linguas select').change();
+</script>
 {% endblock %}
