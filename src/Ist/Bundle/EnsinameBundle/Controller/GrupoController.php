@@ -209,19 +209,39 @@ class GrupoController extends Controller
             $entity->setLingua($lingua);
         }
 
-        $professor = $em->getRepository('IstEnsinameBundle:Professor')->find($entity->getProfessor());
-
-        if ($professor) {
+        if ($entity->hasProfessor()) {
+            $professor = $em->getRepository('IstEnsinameBundle:Professor')->find($entity->getProfessor());
             $entity->setProfessor($professor);
         }
 
         $this->getAlunos($entity);
 
         $form = $this->createForm(new GrupoType(), $entity);
+        $linguas = $em->getRepository('IstEnsinameBundle:Lingua')->findAll();
+        $professores = $em->getRepository('IstEnsinameBundle:Professor')->findAll();
+        $_professores = array();
+        $alunos = $em->getRepository('IstEnsinameBundle:Aluno')->findAll();
+        $_alunos = array();
+
+        foreach ($linguas as $lingua) {
+            foreach ($professores as $professor) {
+                if (in_array($lingua->getId(), explode(',', $professor->getLinguas()))) {
+                    $_professores[$lingua->getId()][] = $professor->getId();
+                }
+            }
+
+            foreach ($alunos as $aluno) {
+                if (in_array($lingua->getId(), explode(',', $aluno->getLinguas()))) {
+                    $_alunos[$lingua->getId()][] = $aluno->getId();
+                }
+            }
+        }
 
         return array(
             'entity' => $entity,
             'form' => $form->createView(),
+            'professores' => json_encode($_professores),
+            'alunos' => json_encode($_alunos),
         );
     }
 
