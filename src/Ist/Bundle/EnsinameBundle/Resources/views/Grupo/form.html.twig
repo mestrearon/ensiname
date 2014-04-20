@@ -75,7 +75,7 @@ $('.linguas select').change(function() {
     if ($('.professores option').size() == $('.professores option:disabled').size()) {
         $('.professores select').hide();
         $('.professores span').remove();
-        $('.professores').append('<span>não existem professores cadastrados para a língua selecionada...</span>');
+        $('.professores').append('<span>Нет преподавателей этого языка...</span>');
     } else {
         $('.professores select').show();
         $('.professores span').remove();
@@ -102,7 +102,7 @@ $('.linguas select').change(function() {
     if ($('.alunos label:visible').size() == 0) {
         $('.alunos select').hide();
         $('.alunos span').remove();
-        $('.alunos').append('<span>não existem alunos cadastrados para a língua selecionada...</span>');
+        $('.alunos').append('<span>Нет учеников, изучающих этот язык...</span>');
     } else {
         $('.alunos select').show();
         $('.alunos span').remove();
