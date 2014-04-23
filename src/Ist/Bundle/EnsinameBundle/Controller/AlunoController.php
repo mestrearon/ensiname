@@ -57,7 +57,6 @@ class AlunoController extends Controller
                 $grupo_new = isset($grupo_new) ? $grupo_new : array();
                 $alunos[$entity->getId()] = $grupo_new;
                 unset($grupo_new);
-                $entity->setFerias($entity->hasFerias() ? $entity->getFerias() : '01/01/0001');
             }
         }
 
